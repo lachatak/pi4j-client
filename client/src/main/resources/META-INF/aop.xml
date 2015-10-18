@@ -1,0 +1,15 @@
+<aspectj>
+
+    <aspects>
+        <!--<aspect name="org.kaloz.pi4j.client.aspect.RegisterAspect"/>-->
+        <aspect name="org.kaloz.pi4j.client.aspect.GpioAspect"/>
+        <aspect name="org.kaloz.pi4j.client.aspect.GpioUtilAspect"/>
+        <aspect name="org.kaloz.pi4j.client.aspect.GpioInterruptAspect"/>
+    </aspects>
+
+    <weaver options="-XnoInline -Xlint:ignore">
+        <include within="com.pi4j..*"/>
+        <include within="org.kaloz.pi4j.client.aspect.*"/>
+    </weaver>
+
+</aspectj>
