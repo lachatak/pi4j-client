@@ -15,6 +15,7 @@ object Version {
   val logBack       = "1.1.3"
   val rxScala       = "0.25.0"
   val aspectj       = "1.8.7"
+  val jnativehook   = "2.0.2"
 }
 
 object Library {
@@ -32,6 +33,7 @@ object Library {
   val rxScala         = "io.reactivex"                %% "rxscala"                       % Version.rxScala
   val aspectjweaver   = "org.aspectj"                 % "aspectjweaver"                  % Version.aspectj
   val aspectjrt       = "org.aspectj"                 % "aspectjrt"                      % Version.aspectj
+  val jnativehook     = "com.1stleg"                  % "jnativehook"                    % Version.jnativehook
 
 }
 
@@ -43,6 +45,7 @@ object Dependencies {
     config,
     akkaActor,
     aspectjweaver,
+    jnativehook,
     aspectjrt,
     pi4jCore,
     logBack,

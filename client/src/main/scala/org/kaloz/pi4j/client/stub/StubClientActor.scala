@@ -1,26 +1,26 @@
 package org.kaloz.pi4j.client.stub
 
 import akka.actor.Actor.emptyBehavior
-import akka.actor.{Actor, ActorLogging, Props}
-import org.kaloz.pi4j.client.common.Pi4jClientMessages._
-import org.kaloz.pi4j.client.common.Pi4jClientMessages.PinDirection._
-import org.kaloz.pi4j.client.common.Pi4jClientMessages.PinEdge._
-import org.kaloz.pi4j.client.common.Pi4jClientMessages.PinValue._
-import org.kaloz.pi4j.client.common.Pi4jClientMessages.PinMode._
-import org.kaloz.pi4j.client.common.Pi4jClientMessages.PudMode._
+import akka.actor._
+import org.kaloz.pi4j.client.common.Pi4jClientMessages.GpioInterruptMessages._
 import org.kaloz.pi4j.client.common.Pi4jClientMessages.GpioMessages._
 import org.kaloz.pi4j.client.common.Pi4jClientMessages.GpioUtilMessages._
-import org.kaloz.pi4j.client.common.Pi4jClientMessages.GpioInterruptMessages._
+import org.kaloz.pi4j.client.common.Pi4jClientMessages.PinDirection._
+import org.kaloz.pi4j.client.common.Pi4jClientMessages.PinEdge._
+import org.kaloz.pi4j.client.common.Pi4jClientMessages.PinMode._
+import org.kaloz.pi4j.client.common.Pi4jClientMessages.PinValue._
+import org.kaloz.pi4j.client.common.Pi4jClientMessages.PudMode._
+import org.kaloz.pi4j.client.common.Pi4jClientMessages._
 
-class StubClientActor extends Actor with ActorLogging {
+class StubClientActor extends Actor with ActorLogging with Configuration {
 
   case class Pin(exported: Boolean = false,
                  direction: PinDirection = DirectionOut,
-                 edge: PinEdge = None,
+                 edge: PinEdge = EdgeNone,
                  mode: PinMode = Input,
-                 pud: PudMode = Off,
+                 pud: PudMode = PudOff,
                  value: PinValue = Low,
-                 enableCallback: Boolean = false)
+                 enableCallback: Option[ActorRef] = None)
 
   override def receive = emptyBehavior
 
@@ -49,29 +49,42 @@ class StubClientActor extends Actor with ActorLogging {
     case DigitalWriteCommand(pin, value) =>
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(value = value))))
       sender ! Done
+    case DigitalReadRequest(pin) =>
+      sender ! DigitalReadResponse(pins.getOrElse(pin, Pin()).value)
+
 
     case IsPinSupportedRequest(pin) => sender ! IsPinSupportedResponse(1)
     case IsExportedRequest(pin) => sender ! IsExportedResponse(pins.getOrElse(pin, Pin()).exported)
     case ExportCommand(pin, direction) =>
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(exported = true, direction = direction))))
       sender ! Done
+
     case UnexportCommand(pin) =>
-      context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(exported = false))))
+      val newPins = pins - pin
+      context.become(handlePins(newPins))
       sender ! Done
+      //Once we removed all the previously exported pins shutdown the stub system
+      if (newPins.isEmpty) {
+        log.warning("Last pin is unexported. Shuting down...")
+        context.system.shutdown()
+      }
     case SetEdgeDetectionRequest(pin, edge) =>
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(edge = edge))))
       //verify
       sender ! SetEdgeDetectionResponse(false)
     case GetDirectionRequest(pin) => sender ! GetDirectionReponse(pins.getOrElse(pin, Pin()).direction)
 
+
     case EnablePinStateChangeCallbackRequest(pin) =>
       val before = pins.getOrElse(pin, Pin()).enableCallback
-      context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(enableCallback = true))))
-      sender ! EnablePinStateChangeCallbackResponse(if (before == true) 0 else 1)
+      val pinStateChangeActor = context.system.actorOf(PinStateChangeActor.props(pin, keyMap(pin)))
+      context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(enableCallback = Some(pinStateChangeActor)))))
+      sender ! EnablePinStateChangeCallbackResponse(if (before != None) 0 else 1)
     case DisablePinStateChangeCallbackRequest(pin) =>
       val before = pins.getOrElse(pin, Pin()).enableCallback
-      context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(enableCallback = false))))
-      sender ! DisablePinStateChangeCallbackResponse(if (before == false) 0 else 1)
+      before.foreach(_ ! PoisonPill)
+      context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(enableCallback = None))))
+      sender ! DisablePinStateChangeCallbackResponse(if (before == None) 0 else 1)
 
     case message: GpioMessage => throw new NotImplementedError(s"$message is missing!!")
   }

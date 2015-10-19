@@ -28,6 +28,10 @@ object Pi4jClientMessages {
 
     case class DigitalWriteCommand(pin: Int, value: PinValue) extends GpioCommand
 
+    case class DigitalReadRequest(pin: Int) extends GpioRequest
+
+    case class DigitalReadResponse(value: PinValue) extends GpioResponse
+
     case class PullUpDnControlCommand(pin: Int, pud: PudMode) extends GpioCommand
 
     case class PwmWriteCommand(pin: Int, value: PinValue) extends GpioCommand
@@ -120,23 +124,23 @@ object Pi4jClientMessages {
 
     sealed trait PudMode
 
-    case object Off extends PudMode
+    case object PudOff extends PudMode
 
-    case object Up extends PudMode
+    case object PudUp extends PudMode
 
-    case object Down extends PudMode
+    case object PudDown extends PudMode
 
     implicit def intToPudMode(pudMode: Int): PudMode = pudMode match {
-      case Gpio.PUD_OFF => Off
-      case Gpio.PUD_UP => Up
-      case Gpio.PUD_DOWN => Down
+      case Gpio.PUD_OFF => PudOff
+      case Gpio.PUD_UP => PudUp
+      case Gpio.PUD_DOWN => PudDown
       case x: Int => throw new NotImplementedError(s"$x pudMode is not implemented!!")
     }
 
     implicit def pudModeToInt(pudMode: PudMode): Int = pudMode match {
-      case Off => Gpio.PUD_OFF
-      case Up => Gpio.PUD_UP
-      case Down => Gpio.PUD_DOWN
+      case PudOff => Gpio.PUD_OFF
+      case PudUp => Gpio.PUD_UP
+      case PudDown => Gpio.PUD_DOWN
     }
   }
 
@@ -172,27 +176,27 @@ object Pi4jClientMessages {
 
     sealed trait PinEdge
 
-    case object None extends PinEdge
+    case object EdgeNone extends PinEdge
 
-    case object Both extends PinEdge
+    case object EdgeBoth extends PinEdge
 
-    case object Falling extends PinEdge
+    case object EdgeFalling extends PinEdge
 
-    case object Rising extends PinEdge
+    case object EdgeRising extends PinEdge
 
     implicit def intToPinEdge(pinEdge: Int): PinEdge = pinEdge match {
-      case GpioUtil.EDGE_NONE => None
-      case GpioUtil.EDGE_BOTH => Both
-      case GpioUtil.EDGE_FALLING => Falling
-      case GpioUtil.EDGE_RISING => Rising
+      case GpioUtil.EDGE_NONE => EdgeNone
+      case GpioUtil.EDGE_BOTH => EdgeBoth
+      case GpioUtil.EDGE_FALLING => EdgeFalling
+      case GpioUtil.EDGE_RISING => EdgeRising
       case x: Int => throw new NotImplementedError(s"$x pinEdge is not implemented!!")
     }
 
     implicit def pinEdgeToInt(pinEdge: PinEdge): Int = pinEdge match {
-      case None => GpioUtil.EDGE_NONE
-      case Both => GpioUtil.EDGE_BOTH
-      case Falling => GpioUtil.EDGE_FALLING
-      case Rising => GpioUtil.EDGE_RISING
+      case EdgeNone => GpioUtil.EDGE_NONE
+      case EdgeBoth => GpioUtil.EDGE_BOTH
+      case EdgeFalling => GpioUtil.EDGE_FALLING
+      case EdgeRising => GpioUtil.EDGE_RISING
     }
   }
 

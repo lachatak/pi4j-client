@@ -26,6 +26,10 @@ object BaseSettings {
     shellPrompt := { s => "[" + scala.Console.BLUE + Project.extract(s).currentProject.id + scala.Console.RESET + "] $ "}
   ) ++
   ResolverSettings.settings ++
-  Testing.settings
+  Testing.settings ++
+  Aliases.controlGpioExample ++
+  Aliases.listenGpioExample ++
+  Aliases.shutdownGpioExample ++
+  Aliases.triggerGpioExample
 
 }

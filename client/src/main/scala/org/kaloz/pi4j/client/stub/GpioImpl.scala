@@ -34,7 +34,7 @@ class GpioImpl(stubClientActor: ActorRef) extends Gpio {
 
   def pwmWrite(pin: Int, value: Int): Unit = Await.result((stubClientActor ? PwmWriteCommand(pin, value)).mapTo[Done.type], 1 minute)
 
-  def digitalRead(pin: Int): Int = ???
+  def digitalRead(pin: Int): Int = Await.result((stubClientActor ? DigitalReadRequest(pin)).mapTo[DigitalReadResponse], 1 minute).value
 
   def analogRead(pin: Int): Int = ???
 
