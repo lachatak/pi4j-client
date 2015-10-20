@@ -11,11 +11,11 @@ object ShutdownGpioExample extends App {
   pin.setShutdownOptions(true, PinState.LOW, PinPullResistance.OFF)
 
   println("--> GPIO state should be: ON")
-  println("    This program will automatically terminate in 10 seconds,")
+  println("    This program will automatically terminate in 2 seconds,")
   println("    or you can use the CTRL-C keystroke to terminate at any time.")
   println("    When the program terminates, the GPIO state should be shutdown and set to: OFF")
 
-  Thread.sleep(10000)
+  Thread.sleep(2000)
   println(" .. shutting down now ...")
 
   gpio.shutdown

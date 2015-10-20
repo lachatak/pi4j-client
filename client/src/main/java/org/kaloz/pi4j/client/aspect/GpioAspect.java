@@ -55,4 +55,10 @@ public class GpioAspect {
         gpio.pwmWrite(pin, value);
     }
 
+    @Around(value = "execution (public void com.pi4j.io.gpio.GpioController.shutdown())")
+    public void shutdown(ProceedingJoinPoint point) throws Throwable {
+        logger.debug("GpioController.shutdown is called");
+        point.proceed();
+        AbstractClientFactory.shutdown();
+    }
 }

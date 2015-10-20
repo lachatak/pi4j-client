@@ -60,14 +60,8 @@ class StubClientActor extends Actor with ActorLogging with Configuration {
       sender ! Done
 
     case UnexportCommand(pin) =>
-      val newPins = pins - pin
-      context.become(handlePins(newPins))
+      context.become(handlePins(pins - pin))
       sender ! Done
-      //Once we removed all the previously exported pins shutdown the stub system
-      if (newPins.isEmpty) {
-        log.warning("Last pin is unexported. Shuting down...")
-        context.system.shutdown()
-      }
     case SetEdgeDetectionRequest(pin, edge) =>
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(edge = edge))))
       //verify

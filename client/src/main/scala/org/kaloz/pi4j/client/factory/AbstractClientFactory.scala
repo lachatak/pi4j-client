@@ -19,4 +19,5 @@ object AbstractClientFactory {
   lazy val gpioUtil: GpioUtil = factory.gpioUtil
   lazy val gpioInterrupt: GpioInterrupt = factory.gpioInterrupt
 
+  def shutdown() :Unit = factory.shutdown
 }

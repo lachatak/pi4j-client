@@ -3,7 +3,7 @@ import Keys._
 
 object BaseSettings {
 
-  lazy val settings =
+  lazy val defaultSettings =
   Seq(
     version := "1.0.0",
     organization := "org.kaloz.pi4j.client",
@@ -26,10 +26,10 @@ object BaseSettings {
     shellPrompt := { s => "[" + scala.Console.BLUE + Project.extract(s).currentProject.id + scala.Console.RESET + "] $ "}
   ) ++
   ResolverSettings.settings ++
-  Testing.settings ++
-  Aliases.controlGpioExample ++
-  Aliases.listenGpioExample ++
-  Aliases.shutdownGpioExample ++
-  Aliases.triggerGpioExample
+  Aliases.aliases
 
+  //Required by Aspects
+  lazy val clientSettings = defaultSettings ++ Seq(
+    javacOptions += "-g"
+  )
 }

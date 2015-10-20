@@ -8,4 +8,5 @@ object RemoteClientFactory extends ClientFactory {
   lazy val gpioUtil = new GpioUtilImpl
   lazy val gpioInterrupt = new GpioInterruptImpl
 
+  def shutdown: Unit = {}
 }

@@ -9,4 +9,6 @@ trait ClientFactory {
   def gpioUtil: GpioUtil
 
   def gpioInterrupt: GpioInterrupt
+
+  def shutdown: Unit
 }
