@@ -7,6 +7,7 @@ If your answer for any of the questions is yes than you know that none of them i
 This project is based on the [pi4j](http://pi4j.com/) java library. 
 - It provides a **stub** pi4j client to be able to test your application without having a physical Raspberry Pi at hand.
 - It provides a **client** and a **server** artifact to be able to run your pi4j application in a remote mode where your application is running on your own machine with the **client** where it communicates with the **server** deployed to your Raspberry Pi.
+
 ## How to run
 Since it is using [Aspectj](https://eclipse.org/aspectj/) and [Load-Time Weaving](https://eclipse.org/aspectj/doc/released/devguide/ltw.html) to achieve its goal you have to use **javaagent** to run your application.
 ```
