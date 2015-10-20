@@ -13,12 +13,15 @@ Since it is using [Aspectj](https://eclipse.org/aspectj/) and [Load-Time Weaving
 java -javagent:aspectjweaver.java -jar -Dpi4j.client.mode=stub YOUR_ARTIFACT.jar
 ```
 ## Supported client modes
+
 ### stub
 - Simulates Raspberry Pi hardware in a local machine
 - Captures any local native calls related to GPIO management and handles them internally 
-- Maps INPUT pins to a keyboard button to mimic digital input pins. 
+- Maps INPUT pins to a keyboard button to mimic digital input pins.
+
 ### remote
 - Captures any local native calls related to GPIO management and forwards the requests to a remote server which is running on the Raspberry Pi where the request is handled. Response is feeded back to the client.   
+
 ## Design
 TBD
 
