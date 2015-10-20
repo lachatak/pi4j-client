@@ -3,6 +3,7 @@
 - Have you ever tried to run your Raspberry Pi pi4j based java application on your own machine?
 - Have you ever tried to continuously deploy new version of your Raspberry Pi pi4j based java application to the Raspberry via Wifi?
 If your answer for any of the questions is yes than you know that none of them is plain sail. The project addresses the above mentioned problems.
+
 ## Goal of this project
 This project is based on the [pi4j](http://pi4j.com/) java library. 
 - It provides a **stub** pi4j client to be able to test your application without having a physical Raspberry Pi at hand.
