@@ -6,7 +6,7 @@ import org.kaloz.pi4j.client.stub.StubClientFactory
 import org.kaloz.pi4j.client.{Gpio, GpioInterrupt, GpioUtil}
 
 
-object AbstractClientFactory {
+object AbstractClientFactory extends ClientFactory {
 
   lazy val factory: ClientFactory =
     System.getProperty("pi4j.client.mode", "pi") match {
@@ -19,5 +19,5 @@ object AbstractClientFactory {
   lazy val gpioUtil: GpioUtil = factory.gpioUtil
   lazy val gpioInterrupt: GpioInterrupt = factory.gpioInterrupt
 
-  def shutdown() :Unit = factory.shutdown
+  def shutdown(): Unit = factory.shutdown
 }
