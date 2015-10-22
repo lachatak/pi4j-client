@@ -41,26 +41,16 @@ object Dependencies {
 
   import Library._
 
-  val client = deps(
+  val core = deps(
     config,
-    akkaActor,
-    aspectjweaver,
-    jnativehook,
+    scalazCore,
     aspectjrt,
+    aspectjweaver,
     pi4jCore,
-    logBack,
-    config,
-    mockito       	% "test",
-    scalaTest     	% "test"
-  )
-
-  val server = deps(
-    config,
     scalaLogging,
-    pi4jCore,
     logBack,
-    mockito       	% "test",
-    scalaTest     	% "test"
+    mockito       	  % "test",
+    scalaTest     	  % "test"
   )
 
   val common = deps(
@@ -71,6 +61,53 @@ object Dependencies {
     mockito       	  % "test",
     scalaTest     	  % "test"
   )
+
+  val console = deps(
+    config,
+    akkaActor,
+    jnativehook,
+    pi4jCore,
+    logBack,
+    mockito       	% "test",
+    scalaTest     	% "test"
+  )
+  
+  val web = deps(
+    config,
+    pi4jCore,
+    logBack,
+    mockito       	% "test",
+    scalaTest     	% "test"
+  )
+
+  val mock = deps(
+    config,
+    pi4jCore,
+    logBack,
+    mockito       	% "test",
+    scalaTest     	% "test"
+  )
+
+  val remoteClient = deps(
+    config,
+    akkaActor,
+    pi4jCore,
+    logBack,
+    config,
+    mockito       	% "test",
+    scalaTest     	% "test"
+  )
+  
+  val remoteServer = deps(
+    config,
+    scalaLogging,
+    pi4jCore,
+    logBack,
+    mockito       	% "test",
+    scalaTest     	% "test"
+  )
+
+
 
   private def deps(modules: ModuleID*): Seq[Setting[_]] = Seq(libraryDependencies ++= modules)
 }
