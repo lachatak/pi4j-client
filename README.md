@@ -30,7 +30,7 @@ More detailed description can be found the in the [examples](examples) sub-modul
 ### mock (PLANNED)
 - Simulates Raspberry Pi hardware in a local machine
 - Captures any local native calls related to GPIO management and handles them internally based on your provided pin behavior.
-- 
+
 ### remote (PLANNED)
 - Captures any local native calls related to GPIO management and forwards the requests to a remote server which is running on the Raspberry Pi where the request is handled. Response is feeded back to the client.   
 
