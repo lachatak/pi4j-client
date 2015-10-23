@@ -5,11 +5,13 @@ object BaseSettings {
 
   lazy val defaultSettings =
     Seq(
-      version := "1.0.0",
+      version := "0.1.0-SNAPSHOT",
       organization := "org.kaloz.pi4j.client",
-      description := "Pi4j Client Project for stubing, remoting and mocking",
+      description := "Pi4j Client Project",
       scalaVersion := "2.11.7",
+      licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")),
       homepage := Some(url("http://kaloz.org")),
+      crossPaths := false,
       scalacOptions := Seq(
         "-encoding", "utf8",
         "-feature",
@@ -26,7 +28,9 @@ object BaseSettings {
       shellPrompt := { s => "[" + scala.Console.BLUE + Project.extract(s).currentProject.id + scala.Console.RESET + "] $ " }
     ) ++
       ResolverSettings.settings ++
-      Aliases.aliases
+      Aliases.aliases ++
+      Publish.settings ++
+      Release.settings
 
   //Required by Aspects
   lazy val coreSettings = defaultSettings ++ Seq(
