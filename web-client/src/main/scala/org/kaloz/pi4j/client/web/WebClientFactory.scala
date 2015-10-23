@@ -4,9 +4,9 @@ import org.kaloz.pi4j.client.factory.ClientFactory
 
 class WebClientFactory extends ClientFactory {
 
-  lazy val gpio = new GpioImpl
-  lazy val gpioUtil = new GpioUtilImpl
-  lazy val gpioInterrupt = new GpioInterruptImpl
+  lazy val gpio = new WebGpio
+  lazy val gpioUtil = new WebGpioUtil
+  lazy val gpioInterrupt = new WebGpioInterrupt
 
   def shutdown: Unit = {}
 }

@@ -4,9 +4,9 @@ import org.kaloz.pi4j.client.factory.ClientFactory
 
 class MockClientFactory extends ClientFactory {
 
-  lazy val gpio = new GpioImpl
-  lazy val gpioUtil = new GpioUtilImpl
-  lazy val gpioInterrupt = new GpioInterruptImpl
+  lazy val gpio = new MockGpio
+  lazy val gpioUtil = new MockGpioUtil
+  lazy val gpioInterrupt = new MockGpioInterrupt
 
   def shutdown: Unit = {}
 }

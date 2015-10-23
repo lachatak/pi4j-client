@@ -71,7 +71,7 @@ object Dependencies {
     mockito       	% "test",
     scalaTest     	% "test"
   )
-  
+
   val web = deps(
     config,
     pi4jCore,
