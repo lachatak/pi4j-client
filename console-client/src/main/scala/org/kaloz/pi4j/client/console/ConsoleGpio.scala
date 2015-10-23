@@ -2,6 +2,7 @@ package org.kaloz.pi4j.client.console
 
 import akka.actor.ActorRef
 import akka.pattern.ask
+import akka.util.Timeout
 import org.kaloz.pi4j.client.Gpio
 import org.kaloz.pi4j.client.messages.ClientMessages.GpioMessages._
 import org.kaloz.pi4j.client.messages.ClientMessages.PinMode._
@@ -13,6 +14,8 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 
 class ConsoleGpio(stubClientActor: ActorRef) extends Gpio {
+
+  implicit val timeout = Timeout(1 minutes)
 
   override def wiringPiSetup: Int = Await.result((stubClientActor ? WiringPiSetupRequest).mapTo[WiringPiSetupResponse], 1 minute).status
 

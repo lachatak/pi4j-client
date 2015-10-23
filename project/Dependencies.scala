@@ -107,14 +107,6 @@ object Dependencies {
     scalaTest     	% "test"
   )
 
-  val pi = deps(
-    config,
-    pi4jCore,
-    logBack,
-    mockito       	% "test",
-    scalaTest     	% "test"
-  )
-
 
 
   private def deps(modules: ModuleID*): Seq[Setting[_]] = Seq(libraryDependencies ++= modules)

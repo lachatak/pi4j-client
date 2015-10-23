@@ -52,15 +52,8 @@ lazy val remoteServer = Project("remote-server", file("remote-server"))
   .settings(Testing.settings: _*)
   .settings(Assembly.remoteServerAssemblySettings: _*)
 
-lazy val piClient = Project("pi-client", file("pi-client"))
-  .dependsOn(common)
-  .settings(BaseSettings.defaultSettings: _*)
-  .settings(Dependencies.web: _*)
-  .settings(Testing.settings: _*)
-  .disablePlugins(sbtassembly.AssemblyPlugin)
-
 lazy val examples = Project("examples", file("examples"))
-  .dependsOn(core, common, consoleClient, webClient, mockClient, remoteClient, piClient)
+  .dependsOn(core, common, consoleClient, webClient, mockClient, remoteClient)
   .settings(BaseSettings.exampleSettings: _*)
   .settings(Assembly.exampleAssemblySettings: _*)
 

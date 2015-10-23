@@ -2,6 +2,7 @@ package org.kaloz.pi4j.client.console
 
 import akka.actor.ActorRef
 import akka.pattern.ask
+import akka.util.Timeout
 import org.kaloz.pi4j.client.GpioUtil
 import org.kaloz.pi4j.client.messages.ClientMessages.GpioUtilMessages._
 import org.kaloz.pi4j.client.messages.ClientMessages.PinDirection._
@@ -12,6 +13,8 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 
 class ConsoleGpioUtil(stubClientActor: ActorRef) extends GpioUtil {
+
+  implicit val timeout = Timeout(1 minutes)
 
   override def export(pin: Int, direction: Int): Unit = Await.result((stubClientActor ? ExportCommand(pin, direction)).mapTo[Done.type], 1 minute)
 

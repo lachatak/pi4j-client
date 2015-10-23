@@ -40,11 +40,6 @@ object Assembly {
       assemblyJarName in assembly := "pi4j-remote-server.jar"
     )
 
-  lazy val piClientAssemblySettings =
-    Seq(
-      assemblyJarName in assembly := "pi4j-pi-client.jar"
-    ) ++ assemblySettings
-
   lazy val exampleAssemblySettings =
     Seq(
       assemblyJarName in assembly := "pi4j-client-examples.jar"
