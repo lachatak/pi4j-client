@@ -9,9 +9,9 @@ class ConsoleClientFactory extends ClientFactory {
 
   private lazy val stubClientActor = system.actorOf(StubClientActor.props)
 
-  lazy val gpio = new GpioImpl(stubClientActor)
-  lazy val gpioUtil = new GpioUtilImpl(stubClientActor)
-  lazy val gpioInterrupt = new GpioInterruptImpl(stubClientActor)
+  lazy val gpio = new ConsoleGpio(stubClientActor)
+  lazy val gpioUtil = new ConsoleGpioUtil(stubClientActor)
+  lazy val gpioInterrupt = new ConsoleGpioInterrupt(stubClientActor)
 
   def shutdown(): Unit = system.shutdown()
 

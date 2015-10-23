@@ -71,7 +71,7 @@ object Dependencies {
     mockito       	% "test",
     scalaTest     	% "test"
   )
-  
+
   val web = deps(
     config,
     pi4jCore,
@@ -101,6 +101,14 @@ object Dependencies {
   val remoteServer = deps(
     config,
     scalaLogging,
+    pi4jCore,
+    logBack,
+    mockito       	% "test",
+    scalaTest     	% "test"
+  )
+
+  val pi = deps(
+    config,
     pi4jCore,
     logBack,
     mockito       	% "test",

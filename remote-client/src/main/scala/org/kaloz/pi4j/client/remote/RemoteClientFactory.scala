@@ -4,9 +4,9 @@ import org.kaloz.pi4j.client.factory.ClientFactory
 
 class RemoteClientFactory extends ClientFactory {
 
-  lazy val gpio = new GpioImpl
-  lazy val gpioUtil = new GpioUtilImpl
-  lazy val gpioInterrupt = new GpioInterruptImpl
+  lazy val gpio = new RemoteClientGpio
+  lazy val gpioUtil = new RemoteClientGpioUtil
+  lazy val gpioInterrupt = new RemoteClientGpioInterrupt
 
   def shutdown: Unit = {}
 }
