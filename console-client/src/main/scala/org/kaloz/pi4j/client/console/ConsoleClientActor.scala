@@ -8,7 +8,7 @@ import org.kaloz.pi4j.client.messages.ClientMessages.GpioUtilMessages._
 import org.kaloz.pi4j.client.messages.ClientMessages.PinDirection._
 import org.kaloz.pi4j.client.messages.ClientMessages.PinEdge._
 import org.kaloz.pi4j.client.messages.ClientMessages.PinMode._
-import org.kaloz.pi4j.client.messages.ClientMessages.PinStateChange._
+import org.kaloz.pi4j.client.messages.ClientMessages.PinStateChange.PinStateChange
 import org.kaloz.pi4j.client.messages.ClientMessages.PinValue._
 import org.kaloz.pi4j.client.messages.ClientMessages.PudMode._
 import org.kaloz.pi4j.client.messages.ClientMessages._
