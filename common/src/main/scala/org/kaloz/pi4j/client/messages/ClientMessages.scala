@@ -118,6 +118,11 @@ object ClientMessages {
       case Low => Gpio.LOW
       case High => Gpio.HIGH
     }
+
+    implicit def pinValueToBoolean(pinValue: PinValue): java.lang.Boolean = pinValue match {
+      case Low => false
+      case High => true
+    }
   }
 
   object PudMode {
@@ -198,6 +203,14 @@ object ClientMessages {
       case EdgeFalling => GpioUtil.EDGE_FALLING
       case EdgeRising => GpioUtil.EDGE_RISING
     }
+  }
+
+  object PinStateChange {
+
+    import PinValue._
+
+    case class PinStateChange(pin: Int, value: PinValue)
+
   }
 
 }

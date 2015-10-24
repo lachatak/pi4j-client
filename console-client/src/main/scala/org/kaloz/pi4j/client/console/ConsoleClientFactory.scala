@@ -5,13 +5,14 @@ import org.kaloz.pi4j.client.factory.ClientFactory
 
 class ConsoleClientFactory extends ClientFactory {
 
-  private lazy val system = ActorSystem("stub-actor-system")
+  private lazy val system = ActorSystem("console-actor-system")
 
-  private lazy val stubClientActor = system.actorOf(StubClientActor.props)
+  private val pinStateChangeHandler = ConsoleListenerActor.props
+  private lazy val consoleClientActor = system.actorOf(ConsoleClientActor.props(pinStateChangeHandler), "consoleClientActor")
 
-  lazy val gpio = new ConsoleGpio(stubClientActor)
-  lazy val gpioUtil = new ConsoleGpioUtil(stubClientActor)
-  lazy val gpioInterrupt = new ConsoleGpioInterrupt(stubClientActor)
+  lazy val gpio = new ConsoleGpio(consoleClientActor)
+  lazy val gpioUtil = new ConsoleGpioUtil(consoleClientActor)
+  lazy val gpioInterrupt = new ConsoleGpioInterrupt(consoleClientActor)
 
   def shutdown(): Unit = system.shutdown()
 
