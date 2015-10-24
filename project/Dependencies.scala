@@ -16,6 +16,7 @@ object Version {
   val rxScala       = "0.25.0"
   val aspectj       = "1.8.7"
   val jnativehook   = "2.0.2"
+  val clapper       = "1.0.5"
 }
 
 object Library {
@@ -34,7 +35,7 @@ object Library {
   val aspectjweaver   = "org.aspectj"                 % "aspectjweaver"                  % Version.aspectj
   val aspectjrt       = "org.aspectj"                 % "aspectjrt"                      % Version.aspectj
   val jnativehook     = "com.1stleg"                  % "jnativehook"                    % Version.jnativehook
-
+  val clapper         = "org.clapper"                 %% "classutil"                     % Version.clapper
 }
 
 object Dependencies {
@@ -43,6 +44,7 @@ object Dependencies {
 
   val core = deps(
     config,
+    clapper,
     scalazCore,
     aspectjrt,
     aspectjweaver,
@@ -107,7 +109,6 @@ object Dependencies {
     scalaTest     	% "test"
   )
 
-
-
   private def deps(modules: ModuleID*): Seq[Setting[_]] = Seq(libraryDependencies ++= modules)
 }
+

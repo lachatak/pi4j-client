@@ -9,7 +9,7 @@ object Publish {
     homepage := Some(url("https://github.com/lachatak/pi4j-client")),
     publishMavenStyle := true,
     publishArtifact in Test := false,
-    pomIncludeRepository := { _ => false},
+    pomIncludeRepository := { _ => false },
     credentials += Credentials(Path.userHome / ".sbt" / ".credentials"),
     pomExtra := (
       <scm>
