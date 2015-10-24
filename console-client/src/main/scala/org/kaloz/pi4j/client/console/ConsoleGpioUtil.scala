@@ -7,7 +7,6 @@ import org.kaloz.pi4j.client.GpioUtil
 import org.kaloz.pi4j.client.messages.ClientMessages.GpioUtilMessages._
 import org.kaloz.pi4j.client.messages.ClientMessages.PinDirection._
 import org.kaloz.pi4j.client.messages.ClientMessages.PinEdge._
-import org.kaloz.pi4j.client.messages.ClientMessages._
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -16,9 +15,9 @@ class ConsoleGpioUtil(stubClientActor: ActorRef) extends GpioUtil {
 
   implicit val timeout = Timeout(1 minutes)
 
-  override def export(pin: Int, direction: Int): Unit = Await.result((stubClientActor ? ExportCommand(pin, direction)).mapTo[Done.type], 1 minute)
+  override def export(pin: Int, direction: Int): Unit = stubClientActor ! ExportCommand(pin, direction)
 
-  override def unexport(pin: Int): Unit = Await.result((stubClientActor ? UnexportCommand(pin)).mapTo[Done.type], 1 minute)
+  override def unexport(pin: Int): Unit = stubClientActor ! UnexportCommand(pin)
 
   override def isExported(pin: Int): Boolean = Await.result((stubClientActor ? IsExportedRequest(pin)).mapTo[IsExportedResponse], 1 minute).exported
 

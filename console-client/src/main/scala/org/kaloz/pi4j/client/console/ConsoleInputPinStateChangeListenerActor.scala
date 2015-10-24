@@ -2,14 +2,14 @@ package org.kaloz.pi4j.client.console
 
 import java.util.logging.Level
 
-import akka.actor.{Actor, ActorLogging, Props, Terminated}
+import akka.actor._
 import org.jnativehook.GlobalScreen
 import org.jnativehook.keyboard.NativeKeyEvent._
 import org.jnativehook.keyboard.{NativeKeyEvent, NativeKeyListener}
-import org.kaloz.pi4j.client.messages.ClientMessages.PinStateChange.PinStateChange
+import org.kaloz.pi4j.client.messages.ClientMessages.PinStateChange.ChangeInputPinState
 import org.kaloz.pi4j.client.messages.ClientMessages.PinValue
 
-class ConsoleListenerActor(pin: Int, key: Char) extends Actor with ActorLogging with NativeKeyListener {
+class ConsoleInputPinStateChangeListenerActor(pin: Int, key: Char) extends Actor with ActorLogging with NativeKeyListener {
 
   log.info(s"Key listener is activated for pin $pin with '$key'")
   GlobalScreen.addNativeKeyListener(this)
@@ -21,19 +21,21 @@ class ConsoleListenerActor(pin: Int, key: Char) extends Actor with ActorLogging 
   def handle(keyPressed: Boolean = false): Receive = {
     case KeyPressed =>
       if (keyPressed == false) {
-        context.system.eventStream.publish(PinStateChange(pin, PinValue.High))
+        context.parent ! ChangeInputPinState(pin, PinValue.High)
         context.become(handle(true))
         log.debug(s"Key Pressed: $key")
       }
     case KeyReleased =>
       if (keyPressed == true) {
-        context.system.eventStream.publish(PinStateChange(pin, PinValue.Low))
+        context.parent ! ChangeInputPinState(pin, PinValue.Low)
         context.become(handle(false))
         log.debug(s"Key Released: $key")
       }
-    case Terminated =>
-      log.info(s"Terminate key listener for $key")
-      GlobalScreen.removeNativeKeyListener(this)
+  }
+
+  override def postStop(): Unit = {
+    log.info(s"Terminate key listener for $pin and $key")
+    GlobalScreen.removeNativeKeyListener(this)
   }
 
   def nativeKeyPressed(e: NativeKeyEvent): Unit = if (key == getKeyText(e.getKeyCode()).charAt(0).toUpper) self ! KeyPressed
@@ -48,11 +50,13 @@ class ConsoleListenerActor(pin: Int, key: Char) extends Actor with ActorLogging 
 
 }
 
-object ConsoleListenerActor {
+object ConsoleInputPinStateChangeListenerActor {
 
-  GlobalScreen.registerNativeHook()
-  java.util.logging.Logger.getLogger("org.jnativehook").setLevel(Level.OFF)
+  def factory: (ActorRefFactory, Int, Char) => ActorRef = (factory, pin, char) => {
+    GlobalScreen.registerNativeHook()
+    java.util.logging.Logger.getLogger("org.jnativehook").setLevel(Level.OFF)
 
-  def props: (Int, Char) => Props = (pin, char) => Props(classOf[ConsoleListenerActor], pin, char)
+    factory.actorOf(Props(classOf[ConsoleInputPinStateChangeListenerActor], pin, char), s"console-$pin-$char-actor")
+  }
 
 }

@@ -12,8 +12,6 @@ object ClientMessages {
 
   sealed trait GpioCommand extends GpioMessage
 
-  case object Done extends GpioMessage
-
   object GpioMessages {
 
     import PinMode._
@@ -209,7 +207,11 @@ object ClientMessages {
 
     import PinValue._
 
-    case class PinStateChange(pin: Int, value: PinValue)
+    case class ChangeInputPinState(pin: Int, value: PinValue) extends GpioMessage
+
+    case class InputPinStateChanged(pin: Int, value: PinValue) extends GpioMessage
+
+    case class OutputPinStateChanged(pin: Int, value: PinValue) extends GpioMessage
 
   }
 

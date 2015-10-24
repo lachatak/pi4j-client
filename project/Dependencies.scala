@@ -83,9 +83,6 @@ object Dependencies {
   )
 
   val mock = deps(
-    config,
-    pi4jCore,
-    logBack,
     mockito       	% "test",
     scalaTest     	% "test"
   )

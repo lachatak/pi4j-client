@@ -11,22 +11,22 @@ object AbstractClientFactory extends ClientFactory with StrictLogging {
 
   lazy val factory: ClientFactory = {
 
-    val factories = ClassFinder.concreteSubclasses(classOf[ClientFactory].getName, ClassFinder().getClasses.iterator)
+    val factoryClasses = ClassFinder.concreteSubclasses(classOf[ClientFactory].getName, ClassFinder().getClasses.iterator)
       .filterNot(info => info.name == AbstractClientFactory.getClass.getName || info.name == classOf[FallbackClientFactory].getName)
-      .map(info => Class.forName(info.name).newInstance().asInstanceOf[ClientFactory])
+      .map(info => Class.forName(info.name))
       .toList
 
-    factories.size match {
+    factoryClasses.size match {
       case 0 => throw new ClientFactoryException("No client library dependency were provided at runtime!")
       case 1 =>
-        factories.head.getClass.getSimpleName match {
+        factoryClasses.head.getSimpleName match {
           case ClientFactoryNamingConventionPattern(name) =>
             logger.info(s"Client mode '$name' is initialised!")
-            factories.head
+            factoryClasses.head.newInstance().asInstanceOf[ClientFactory]
         }
       case _ =>
-        val factoriesMap = factories.collect {
-          case clazz => clazz.getClass.getSimpleName match {
+        val factoriesMap: Map[String, Class[_]] = factoryClasses.collect {
+          case clazz => clazz.getSimpleName match {
             case ClientFactoryNamingConventionPattern(name) => name.toLowerCase -> clazz
           }
         }.toMap
@@ -41,8 +41,8 @@ object AbstractClientFactory extends ClientFactory with StrictLogging {
 
         factoriesMap.get(mode).getOrElse {
           logger.warn(s"Requested client mode '$mode' is not available! No client will be used!!")
-          new FallbackClientFactory
-        }
+          classOf[FallbackClientFactory]
+        }.newInstance().asInstanceOf[ClientFactory]
     }
   }
 

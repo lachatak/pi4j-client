@@ -31,7 +31,7 @@ object TriggerGpioExample extends App {
     }
   }))
 
-  while (true) {
-    Thread.sleep(500)
-  }
+  Thread.sleep(10000)
+
+  gpio.shutdown()
 }

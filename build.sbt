@@ -27,7 +27,7 @@ lazy val webClient = Project("web-client", file("web-client"))
   .settings(Publish.noPublishing: _*)
 
 lazy val mockClient = Project("mock-client", file("mock-client"))
-  .dependsOn(common, core)
+  .dependsOn(consoleClient)
   .settings(BaseSettings.defaultSettings: _*)
   .settings(Dependencies.mock: _*)
   .settings(Testing.settings: _*)

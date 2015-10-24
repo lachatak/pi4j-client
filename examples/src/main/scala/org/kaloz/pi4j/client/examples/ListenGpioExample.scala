@@ -18,7 +18,7 @@ object ListenGpioExample extends App {
 
   println(" ... complete the GPIO #02 circuit and see the listener feedback here in the console.")
 
-  while (true) {
-    Thread.sleep(500)
-  }
+  Thread.sleep(10000)
+
+  gpio.shutdown()
 }

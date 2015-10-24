@@ -8,12 +8,12 @@ import org.kaloz.pi4j.client.messages.ClientMessages.GpioUtilMessages._
 import org.kaloz.pi4j.client.messages.ClientMessages.PinDirection._
 import org.kaloz.pi4j.client.messages.ClientMessages.PinEdge._
 import org.kaloz.pi4j.client.messages.ClientMessages.PinMode._
-import org.kaloz.pi4j.client.messages.ClientMessages.PinStateChange.PinStateChange
+import org.kaloz.pi4j.client.messages.ClientMessages.PinStateChange._
 import org.kaloz.pi4j.client.messages.ClientMessages.PinValue._
 import org.kaloz.pi4j.client.messages.ClientMessages.PudMode._
 import org.kaloz.pi4j.client.messages.ClientMessages._
 
-class ConsoleClientActor(pinStateChangeHandler: (Int, Char) => Props) extends Actor with ActorLogging with Configuration {
+class ConsoleClientActor(inputPinStateChangeListenerFactory: (ActorRefFactory, Int, Char) => ActorRef) extends Actor with ActorLogging with Configuration {
 
   case class Pin(exported: Boolean = false,
                  direction: PinDirection = DirectionOut,
@@ -22,9 +22,6 @@ class ConsoleClientActor(pinStateChangeHandler: (Int, Char) => Props) extends Ac
                  pud: PudMode = PudOff,
                  value: PinValue = Low,
                  enableCallback: Option[ActorRef] = None)
-
-  context.system.actorOf(PinStateChangeListenerActor.props)
-  context.system.eventStream.subscribe(self, classOf[PinStateChange])
 
   override def receive = emptyBehavior
 
@@ -43,16 +40,13 @@ class ConsoleClientActor(pinStateChangeHandler: (Int, Char) => Props) extends Ac
     case WiringPiSetupRequest => sender ! WiringPiSetupResponse(0)
     case PinModeCommand(pin, mode) =>
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(mode = mode))))
-      sender ! Done
     case PullUpDnControlCommand(pin, pud) =>
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(pud = pud))))
-      sender ! Done
     case PwmWriteCommand(pin, value) =>
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(value = value))))
-      sender ! Done
     case DigitalWriteCommand(pin, value) =>
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(value = value))))
-      sender ! Done
+      context.system.eventStream.publish(OutputPinStateChanged(pin, value))
     case DigitalReadRequest(pin) =>
       sender ! DigitalReadResponse(pins.getOrElse(pin, Pin()).value)
 
@@ -61,10 +55,8 @@ class ConsoleClientActor(pinStateChangeHandler: (Int, Char) => Props) extends Ac
     case IsExportedRequest(pin) => sender ! IsExportedResponse(pins.getOrElse(pin, Pin()).exported)
     case ExportCommand(pin, direction) =>
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(exported = true, direction = direction))))
-      sender ! Done
     case UnexportCommand(pin) =>
       context.become(handlePins(pins - pin))
-      sender ! Done
     case SetEdgeDetectionRequest(pin, edge) =>
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(edge = edge))))
       //verify
@@ -74,8 +66,8 @@ class ConsoleClientActor(pinStateChangeHandler: (Int, Char) => Props) extends Ac
 
     case EnablePinStateChangeCallbackRequest(pin) =>
       val before = pins.getOrElse(pin, Pin()).enableCallback
-      val pinStateChangeActor = context.system.actorOf(pinStateChangeHandler(pin, keyMap(pin)), s"$pin-${keyMap(pin)}-actor")
-      context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(enableCallback = Some(pinStateChangeActor)))))
+      val inputPinStateChangeListenerActor = inputPinStateChangeListenerFactory(context, pin, keyMap(pin))
+      context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(enableCallback = Some(inputPinStateChangeListenerActor)))))
       sender ! EnablePinStateChangeCallbackResponse(if (before != None) 0 else 1)
     case DisablePinStateChangeCallbackRequest(pin) =>
       val before = pins.getOrElse(pin, Pin()).enableCallback
@@ -83,9 +75,9 @@ class ConsoleClientActor(pinStateChangeHandler: (Int, Char) => Props) extends Ac
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(enableCallback = None))))
       sender ! DisablePinStateChangeCallbackResponse(if (before == None) 0 else 1)
 
-    case PinStateChange(pin, value) => self ! DigitalWriteCommand(pin, value)
-
-    case Done =>
+    case ChangeInputPinState(pin, value) =>
+      context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(value = value))))
+      context.system.eventStream.publish(InputPinStateChanged(pin, value))
 
     case message: GpioMessage => throw new NotImplementedError(s"$message is missing!!")
   }
@@ -94,5 +86,5 @@ class ConsoleClientActor(pinStateChangeHandler: (Int, Char) => Props) extends Ac
 
 object ConsoleClientActor {
 
-  def props(pinStateChangeHandler: (Int, Char) => Props) = Props(classOf[ConsoleClientActor], pinStateChangeHandler)
+  def props(inputPinStateChangeListenerFactory: (ActorRefFactory, Int, Char) => ActorRef) = Props(classOf[ConsoleClientActor], inputPinStateChangeListenerFactory)
 }
