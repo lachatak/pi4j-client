@@ -2,16 +2,21 @@ package org.kaloz.pi4j.client.web
 
 import akka.actor.ActorSystem
 import akka.io.IO
+import akka.pattern.ask
+import akka.util.Timeout
 import com.typesafe.scalalogging.StrictLogging
 import org.kaloz.pi4j.client.{GpioInterruptActorGateway, GpioUtilActorGateway, GpioActorGateway}
 import org.kaloz.pi4j.client.factory.ClientFactory
 import spray.can.Http
 
-class WebClientFactory extends ClientFactory with StrictLogging {
+import scala.concurrent.duration._
 
+class WebClientFactory extends ClientFactory with StrictLogging {
+  private implicit val timeout = Timeout(1 minute)
   private implicit val system = ActorSystem("web-actor-system")
-  private val serviceActor = system.actorOf(WebClientHttpServiceActor.props)
-  IO(Http) ! Http.Bind(serviceActor, "localhost", 9000)
+
+  private val serviceActor = system.actorOf(WebClientHttpServiceActor.props(gpio))
+  private val httpBind = IO(Http) ? Http.Bind(serviceActor, "localhost", 9000)
 
   logger.info("Initialised...")
 

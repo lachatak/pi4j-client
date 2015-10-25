@@ -1,20 +1,29 @@
 package org.kaloz.pi4j.client.web
 
 import akka.actor.Props
+import org.kaloz.pi4j.client.Gpio
 import spray.routing.HttpServiceActor
 
-class WebClientHttpServiceActor extends HttpServiceActor {
+class WebClientHttpServiceActor(gpio: Gpio) extends HttpServiceActor {
   private implicit val system = context.system
 
   def receive = runRoute {
-    path("ping") {
+    path("digitalWrite" / IntNumber) { pin =>
+      put {
+        entity(as[String]) { pinValue =>
+          gpio.digitalWrite(pin, pinValue.toInt)
+          complete(s"write: $pin -> $pinValue\n")
+        }
+      }
+    } ~
+    path("digitalRead" / IntNumber) { pin =>
       get {
-        complete("pong")
+        complete(s"read: $pin -> ${gpio.digitalRead(pin)}\n")
       }
     }
   }
 }
 
 object WebClientHttpServiceActor {
-  def props = Props[WebClientHttpServiceActor]
+  def props(gpio: Gpio) = Props(classOf[WebClientHttpServiceActor], gpio)
 }
