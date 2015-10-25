@@ -10,11 +10,10 @@ class ConsoleClientFactory extends ClientFactory with StrictLogging {
   logger.info("Initialised...")
 
   private lazy val system = ActorSystem("console-actor-system")
+  private lazy val consoleInputPinStateChangeListener = ConsoleInputPinStateChangeListenerActor.factory
+  private lazy val consoleClientActor = system.actorOf(ConsoleClientActor.props(consoleInputPinStateChangeListener), "consoleClientActor")
 
   system.actorOf(PinStateChangeListenerActor.props, "pinStateChangeListenerActor")
-
-  private val consoleInputPinStateChangeListener = ConsoleInputPinStateChangeListenerActor.factory
-  private lazy val consoleClientActor = system.actorOf(ConsoleClientActor.props(consoleInputPinStateChangeListener), "consoleClientActor")
 
   lazy val gpio = new ConsoleGpio(consoleClientActor)
   lazy val gpioUtil = new ConsoleGpioUtil(consoleClientActor)

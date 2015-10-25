@@ -16,7 +16,7 @@ public class GpioUtilAspect {
 
     public GpioUtilAspect() {
         this.gpioUtil = AbstractClientFactory.gpioUtil();
-        logger.info("Initialised...");
+        logger.debug("Initialised...");
     }
 
     @Around(value = "call (public int com.pi4j.wiringpi.GpioUtil.isPinSupported(int)) && args(pin)")

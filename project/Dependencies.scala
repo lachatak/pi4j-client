@@ -3,7 +3,7 @@ import sbt.Keys._
 
 object Version {
 
-  val akka          = "2.3.12"
+  val akka          = "2.4.0"
   val jodaTime      = "2.8.2"
   val scalazCore    = "7.1.3"
   val scalaTest     = "2.2.0"
@@ -21,6 +21,7 @@ object Version {
 
 object Library {
   val akkaActor       = "com.typesafe.akka"           %% "akka-actor"                    % Version.akka
+  val akkaCluster     = "com.typesafe.akka"           %% "akka-cluster"                  % Version.akka
   val akkaSlf4j       = "com.typesafe.akka"           %% "akka-slf4j"                    % Version.akka
   val akkaTestkit     = "com.typesafe.akka"           %% "akka-testkit"                  % Version.akka
   val jodaTime        = "joda-time"                   %  "joda-time"                     % Version.jodaTime
@@ -90,6 +91,7 @@ object Dependencies {
   val remoteClient = deps(
     config,
     akkaActor,
+    akkaCluster,
     pi4jCore,
     logBack,
     config,
@@ -99,6 +101,7 @@ object Dependencies {
   
   val remoteServer = deps(
     config,
+    akkaCluster,
     scalaLogging,
     pi4jCore,
     logBack,

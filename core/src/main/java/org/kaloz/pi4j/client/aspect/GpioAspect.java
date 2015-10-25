@@ -16,7 +16,7 @@ public class GpioAspect {
 
     public GpioAspect() {
         this.gpio = AbstractClientFactory.gpio();
-        logger.info("Initialised...");
+        logger.debug("Initialised...");
     }
 
     @Around(value = "call (public int com.pi4j.wiringpi.Gpio.wiringPiSetup())")

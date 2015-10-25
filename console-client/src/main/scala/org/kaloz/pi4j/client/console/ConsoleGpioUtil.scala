@@ -11,19 +11,19 @@ import org.kaloz.pi4j.client.messages.ClientMessages.PinEdge._
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-class ConsoleGpioUtil(stubClientActor: ActorRef) extends GpioUtil {
+class ConsoleGpioUtil(consoleClientActor: ActorRef) extends GpioUtil {
 
   implicit val timeout = Timeout(1 minutes)
 
-  override def export(pin: Int, direction: Int): Unit = stubClientActor ! ExportCommand(pin, direction)
+  override def export(pin: Int, direction: Int): Unit = consoleClientActor ! ExportCommand(pin, direction)
 
-  override def unexport(pin: Int): Unit = stubClientActor ! UnexportCommand(pin)
+  override def unexport(pin: Int): Unit = consoleClientActor ! UnexportCommand(pin)
 
-  override def isExported(pin: Int): Boolean = Await.result((stubClientActor ? IsExportedRequest(pin)).mapTo[IsExportedResponse], 1 minute).exported
+  override def isExported(pin: Int): Boolean = Await.result((consoleClientActor ? IsExportedRequest(pin)).mapTo[IsExportedResponse], 1 minute).exported
 
-  override def setEdgeDetection(pin: Int, edge: Int): Boolean = Await.result((stubClientActor ? SetEdgeDetectionRequest(pin, edge)).mapTo[SetEdgeDetectionResponse], 1 minute).status
+  override def setEdgeDetection(pin: Int, edge: Int): Boolean = Await.result((consoleClientActor ? SetEdgeDetectionRequest(pin, edge)).mapTo[SetEdgeDetectionResponse], 1 minute).status
 
-  override def getDirection(pin: Int): Int = Await.result((stubClientActor ? GetDirectionRequest(pin)).mapTo[GetDirectionReponse], 1 minute).direction
+  override def getDirection(pin: Int): Int = Await.result((consoleClientActor ? GetDirectionRequest(pin)).mapTo[GetDirectionReponse], 1 minute).direction
 
-  override def isPinSupported(pin: Int): Int = Await.result((stubClientActor ? IsPinSupportedRequest(pin)).mapTo[IsPinSupportedResponse], 1 minute).supported
+  override def isPinSupported(pin: Int): Int = Await.result((consoleClientActor ? IsPinSupportedRequest(pin)).mapTo[IsPinSupportedResponse], 1 minute).supported
 }

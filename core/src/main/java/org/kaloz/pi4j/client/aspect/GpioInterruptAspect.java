@@ -16,7 +16,7 @@ public class GpioInterruptAspect {
 
     public GpioInterruptAspect() {
         this.gpioInterrupt = AbstractClientFactory.gpioInterrupt();
-        logger.info("Initialised...");
+        logger.debug("Initialised...");
     }
 
     @Around(value = "call (public int com.pi4j.wiringpi.GpioInterrupt.enablePinStateChangeCallback(int)) && args(pin)")

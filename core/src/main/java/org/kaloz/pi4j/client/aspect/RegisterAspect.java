@@ -16,24 +16,24 @@ public class RegisterAspect {
     private Set<String> points = new HashSet<>();
 
     public RegisterAspect() {
-        logger.info("Initialised...");
+        logger.debug("Initialised...");
     }
 
     @Before(value = "call (public * com.pi4j.wiringpi.Gpio.*(..))")
     public void logGpio(JoinPoint point) {
-        logger.info(String.format("pointcut: %-20s join point: %s", "Gpio Call", point.toShortString()));
+        logger.debug(String.format("pointcut: %-20s join point: %s", "Gpio Call", point.toShortString()));
         points.add(point.toShortString());
     }
 
     @Before(value = "call (public * com.pi4j.wiringpi.GpioUtil.*(..))")
     public void logGpioUtil(JoinPoint point) {
-        logger.info(String.format("pointcut: %-20s join point: %s", "GpioUtil Call", point.toShortString()));
+        logger.debug(String.format("pointcut: %-20s join point: %s", "GpioUtil Call", point.toShortString()));
         points.add(point.toShortString());
     }
 
     @Before(value = "call (public * com.pi4j.wiringpi.GpioInterrupt.*(..))")
     public void logGpioInterrupt(JoinPoint point) {
-        logger.info(String.format("pointcut: %-20s join point: %s", " GpioInterrupt Call", point.toShortString()));
+        logger.debug(String.format("pointcut: %-20s join point: %s", " GpioInterrupt Call", point.toShortString()));
         points.add(point.toShortString());
     }
 
