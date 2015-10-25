@@ -87,6 +87,7 @@ object Dependencies {
     config,
     pi4jCore,
     logBack,
+    akkaActor,
     mockito       	% "test",
     scalaTest     	% "test"
   )
