@@ -32,8 +32,8 @@ object BaseSettings {
       Publish.settings ++
       Release.settings
 
-  //Required by Aspects
-  lazy val coreSettings = defaultSettings ++ Seq(
+  //Required by Aspects - debug settings
+  lazy val debugSettings = defaultSettings ++ Seq(
     javacOptions += "-g"
   )
 

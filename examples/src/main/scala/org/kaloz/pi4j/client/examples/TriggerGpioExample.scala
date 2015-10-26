@@ -10,12 +10,12 @@ object TriggerGpioExample extends App {
   System.out.println("<--Pi4J--> GPIO Trigger Example ... started.")
 
   val gpio: GpioController = GpioFactory.getInstance
-  val myButton: GpioPinDigitalInput = gpio.provisionDigitalInputPin(RaspiPin.GPIO_02, PinPullResistance.PULL_DOWN)
+  val myButton: GpioPinDigitalInput = gpio.provisionDigitalInputPin(RaspiPin.GPIO_29, PinPullResistance.PULL_UP)
 
   System.out.println(" ... complete the GPIO #02 circuit and see the triggers take effect.")
 
   val myLed =
-    List(gpio.provisionDigitalOutputPin(RaspiPin.GPIO_04, "LED #1", PinState.LOW),
+    List(gpio.provisionDigitalOutputPin(RaspiPin.GPIO_24, "LED #1", PinState.LOW),
       gpio.provisionDigitalOutputPin(RaspiPin.GPIO_05, "LED #2", PinState.LOW),
       gpio.provisionDigitalOutputPin(RaspiPin.GPIO_06, "LED #3", PinState.LOW))
 

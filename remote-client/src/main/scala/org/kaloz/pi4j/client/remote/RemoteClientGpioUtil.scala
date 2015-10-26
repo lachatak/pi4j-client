@@ -4,7 +4,7 @@ import akka.actor.ActorRef
 import akka.pattern.ask
 import akka.util.Timeout
 import org.kaloz.pi4j.client.GpioUtil
-import org.kaloz.pi4j.client.messages.ClientMessages.GpioUtilMessages._
+import org.kaloz.pi4j.common.messages.ClientMessages.GpioUtilMessages._
 
 import scala.concurrent.Await
 import scala.concurrent.duration._

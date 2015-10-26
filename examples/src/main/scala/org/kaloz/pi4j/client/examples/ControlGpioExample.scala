@@ -6,7 +6,7 @@ object ControlGpioExample extends App {
 
   val gpio = GpioFactory.getInstance()
 
-  val pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "MyLED", PinState.HIGH)
+  val pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_24, "MyLED", PinState.HIGH)
 
   pin.setShutdownOptions(true, PinState.LOW)
 

@@ -1,5 +1,5 @@
-import sbt._
 import sbt.Keys._
+import sbt._
 
 object Version {
 
@@ -20,23 +20,24 @@ object Version {
 }
 
 object Library {
-  val akkaActor       = "com.typesafe.akka"           %% "akka-actor"                    % Version.akka
-  val akkaCluster     = "com.typesafe.akka"           %% "akka-cluster"                  % Version.akka
-  val akkaSlf4j       = "com.typesafe.akka"           %% "akka-slf4j"                    % Version.akka
-  val akkaTestkit     = "com.typesafe.akka"           %% "akka-testkit"                  % Version.akka
-  val jodaTime        = "joda-time"                   %  "joda-time"                     % Version.jodaTime
-  val config          = "com.typesafe" 	              %  "config"                        % Version.config
-  val scalazCore      = "org.scalaz"           	      %% "scalaz-core"                   % Version.scalazCore
-  val mockito         = "org.mockito"                 %  "mockito-core"                  % Version.mockito
-  val scalaTest       = "org.scalatest"               %% "scalatest"                     % Version.scalaTest
-  val pi4jCore        = "com.pi4j"                    %  "pi4j-core"                     % Version.pi4j
-  val scalaLogging    = "com.typesafe.scala-logging"  %% "scala-logging"                 % Version.scalaLogging
-  val logBack         = "ch.qos.logback"              %  "logback-classic"               % Version.logBack
-  val rxScala         = "io.reactivex"                %% "rxscala"                       % Version.rxScala
-  val aspectjweaver   = "org.aspectj"                 % "aspectjweaver"                  % Version.aspectj
-  val aspectjrt       = "org.aspectj"                 % "aspectjrt"                      % Version.aspectj
-  val jnativehook     = "com.1stleg"                  % "jnativehook"                    % Version.jnativehook
-  val clapper         = "org.clapper"                 %% "classutil"                     % Version.clapper
+  val akkaActor         = "com.typesafe.akka"           %% "akka-actor"                    % Version.akka
+  val akkaCluster       = "com.typesafe.akka"           %% "akka-cluster"                  % Version.akka
+  val akkaClusterTools  = "com.typesafe.akka"           %% "akka-cluster-tools"            % Version.akka
+  val akkaSlf4j         = "com.typesafe.akka"           %% "akka-slf4j"                    % Version.akka
+  val akkaTestkit       = "com.typesafe.akka"           %% "akka-testkit"                  % Version.akka
+  val jodaTime          = "joda-time"                   %  "joda-time"                     % Version.jodaTime
+  val config            = "com.typesafe" 	              %  "config"                        % Version.config
+  val scalazCore        = "org.scalaz"           	      %% "scalaz-core"                   % Version.scalazCore
+  val mockito           = "org.mockito"                 %  "mockito-core"                  % Version.mockito
+  val scalaTest         = "org.scalatest"               %% "scalatest"                     % Version.scalaTest
+  val pi4jCore          = "com.pi4j"                    %  "pi4j-core"                     % Version.pi4j
+  val scalaLogging      = "com.typesafe.scala-logging"  %% "scala-logging"                 % Version.scalaLogging
+  val logBack           = "ch.qos.logback"              %  "logback-classic"               % Version.logBack
+  val rxScala           = "io.reactivex"                %% "rxscala"                       % Version.rxScala
+  val aspectjweaver     = "org.aspectj"                 % "aspectjweaver"                  % Version.aspectj
+  val aspectjrt         = "org.aspectj"                 % "aspectjrt"                      % Version.aspectj
+  val jnativehook       = "com.1stleg"                  % "jnativehook"                    % Version.jnativehook
+  val clapper           = "org.clapper"                 %% "classutil"                     % Version.clapper
 }
 
 object Dependencies {
@@ -92,6 +93,7 @@ object Dependencies {
     config,
     akkaActor,
     akkaCluster,
+    akkaClusterTools,
     pi4jCore,
     logBack,
     config,
@@ -101,7 +103,10 @@ object Dependencies {
   
   val remoteServer = deps(
     config,
+    aspectjweaver,
+    aspectjrt,
     akkaCluster,
+    akkaClusterTools,
     scalaLogging,
     pi4jCore,
     logBack,

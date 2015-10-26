@@ -1,19 +1,36 @@
 package org.kaloz.pi4j.client.remote
 
-import akka.actor.ActorSystem
+import akka.actor.{ActorPath, ActorSystem}
+import akka.cluster.Cluster
 import com.typesafe.scalalogging.StrictLogging
 import org.kaloz.pi4j.client.factory.ClientFactory
+import org.kaloz.pi4j.common.messages.ClientMessages.ControlMessages.Shutdown
+
+import scala.collection.JavaConversions._
+import scala.concurrent.Await
+import scala.concurrent.duration._
 
 class RemoteClientFactory extends ClientFactory with Configuration with StrictLogging {
 
   logger.info("Initialised...")
 
-  private lazy val system = ActorSystem("Pi4jRemoting", config)
-  private lazy val remoteClientActor = system.actorOf(RemoteClientActor.props)
+  private lazy val system = ActorSystem("pi4j-remoting", config)
+
+  private lazy val seedNode = config.getStringList("akka.cluster.seed-nodes").head
+
+  private lazy val remoteServerActor = system.actorSelection(ActorPath.fromString(s"$seedNode/user/remoteServerActor"))
+  private lazy val remoteClientActor = system.actorOf(RemoteClientActor.props(remoteServerActor), "remoteClientActor")
+
+  system.actorOf(InputPinStateChangedListenerActor.props, "pinStateChangedListenerActor")
 
   lazy val gpio = new RemoteClientGpio(remoteClientActor)
   lazy val gpioUtil = new RemoteClientGpioUtil(remoteClientActor)
   lazy val gpioInterrupt = new RemoteClientGpioInterrupt(remoteClientActor)
 
-  def shutdown: Unit = system.shutdown()
+  def shutdown: Unit = {
+    remoteServerActor ! Shutdown
+    val cluster = Cluster(system)
+    cluster.leave(cluster.selfAddress)
+    Await.ready(system.terminate(), 10 seconds)
+  }
 }

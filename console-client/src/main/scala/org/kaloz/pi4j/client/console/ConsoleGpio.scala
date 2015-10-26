@@ -4,10 +4,10 @@ import akka.actor.ActorRef
 import akka.pattern.ask
 import akka.util.Timeout
 import org.kaloz.pi4j.client.Gpio
-import org.kaloz.pi4j.client.messages.ClientMessages.GpioMessages._
-import org.kaloz.pi4j.client.messages.ClientMessages.PinMode._
-import org.kaloz.pi4j.client.messages.ClientMessages.PinValue._
-import org.kaloz.pi4j.client.messages.ClientMessages.PudMode._
+import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessages._
+import org.kaloz.pi4j.common.messages.ClientMessages.PinMode._
+import org.kaloz.pi4j.common.messages.ClientMessages.PinValue._
+import org.kaloz.pi4j.common.messages.ClientMessages.PudMode._
 
 import scala.concurrent.Await
 import scala.concurrent.duration._

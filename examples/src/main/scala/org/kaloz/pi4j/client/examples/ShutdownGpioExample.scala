@@ -7,7 +7,7 @@ object ShutdownGpioExample extends App {
   println("<--Pi4J--> GPIO Shutdown Example ... started.")
 
   val gpio: GpioController = GpioFactory.getInstance
-  val pin: GpioPinDigitalOutput = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, PinState.HIGH)
+  val pin: GpioPinDigitalOutput = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_24, PinState.HIGH)
   pin.setShutdownOptions(true, PinState.LOW, PinPullResistance.OFF)
 
   println("--> GPIO state should be: ON")

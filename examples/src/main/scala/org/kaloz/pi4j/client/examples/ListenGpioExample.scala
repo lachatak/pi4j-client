@@ -8,7 +8,7 @@ object ListenGpioExample extends App {
   println("<--Pi4J--> GPIO Listen Example ... started.")
 
   val gpio: GpioController = GpioFactory.getInstance
-  val myButton: GpioPinDigitalInput = gpio.provisionDigitalInputPin(RaspiPin.GPIO_02, PinPullResistance.PULL_DOWN)
+  val myButton: GpioPinDigitalInput = gpio.provisionDigitalInputPin(RaspiPin.GPIO_29, PinPullResistance.PULL_UP)
 
   myButton.addListener(new GpioPinListenerDigital() {
     def handleGpioPinDigitalStateChangeEvent(event: GpioPinDigitalStateChangeEvent) {

@@ -1,0 +1,12 @@
+<aspectj>
+
+    <aspects>
+        <aspect name="org.kaloz.pi4j.server.remote.aspect.GpioInterruptAspect"/>
+    </aspects>
+
+    <weaver options="-XnoInline -Xlint:ignore">
+        <include within="com.pi4j.wiringpi.GpioInterrupt"/>
+        <include within="org.kaloz.pi4j.server.remote.aspect.GpioInterruptAspect"/>
+    </weaver>
+
+</aspectj>

@@ -13,7 +13,7 @@ class ConsoleClientFactory extends ClientFactory with StrictLogging {
   private lazy val consoleInputPinStateChangeListener = ConsoleInputPinStateChangeListenerActor.factory
   private lazy val consoleClientActor = system.actorOf(ConsoleClientActor.props(consoleInputPinStateChangeListener), "consoleClientActor")
 
-  system.actorOf(PinStateChangeListenerActor.props, "pinStateChangeListenerActor")
+  system.actorOf(InputPinStateChangedListenerActor.props, "pinStateChangeListenerActor")
 
   lazy val gpio = new ConsoleGpio(consoleClientActor)
   lazy val gpioUtil = new ConsoleGpioUtil(consoleClientActor)
@@ -21,7 +21,7 @@ class ConsoleClientFactory extends ClientFactory with StrictLogging {
 
   def shutdown(): Unit = {
     GlobalScreen.unregisterNativeHook()
-    system.shutdown()
+    system.terminate()
   }
 
 }

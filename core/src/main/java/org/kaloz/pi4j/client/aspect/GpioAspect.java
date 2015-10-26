@@ -8,11 +8,14 @@ import org.kaloz.pi4j.client.factory.AbstractClientFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 @Aspect
 public class GpioAspect {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
     private final Gpio gpio;
+    private final AtomicBoolean shutDown = new AtomicBoolean(false);
 
     public GpioAspect() {
         this.gpio = AbstractClientFactory.gpio();
@@ -57,8 +60,10 @@ public class GpioAspect {
 
     @Around(value = "execution (public void com.pi4j.io.gpio.GpioController.shutdown())")
     public void shutdown(ProceedingJoinPoint point) throws Throwable {
-        logger.debug("GpioController.shutdown is called");
-        point.proceed();
-        AbstractClientFactory.shutdown();
+        if (shutDown.weakCompareAndSet(false, true)) {
+            logger.debug("GpioController.shutdown is called");
+            point.proceed();
+            AbstractClientFactory.shutdown();
+        }
     }
 }

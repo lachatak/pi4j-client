@@ -2,16 +2,17 @@ package org.kaloz.pi4j.client.console
 
 import akka.actor.Actor.emptyBehavior
 import akka.actor._
-import org.kaloz.pi4j.client.messages.ClientMessages.GpioInterruptMessages._
-import org.kaloz.pi4j.client.messages.ClientMessages.GpioMessages._
-import org.kaloz.pi4j.client.messages.ClientMessages.GpioUtilMessages._
-import org.kaloz.pi4j.client.messages.ClientMessages.PinDirection._
-import org.kaloz.pi4j.client.messages.ClientMessages.PinEdge._
-import org.kaloz.pi4j.client.messages.ClientMessages.PinMode._
-import org.kaloz.pi4j.client.messages.ClientMessages.PinStateChange._
-import org.kaloz.pi4j.client.messages.ClientMessages.PinValue._
-import org.kaloz.pi4j.client.messages.ClientMessages.PudMode._
-import org.kaloz.pi4j.client.messages.ClientMessages._
+import akka.event.LoggingReceive
+import org.kaloz.pi4j.common.messages.ClientMessages.GpioInterruptMessages._
+import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessages._
+import org.kaloz.pi4j.common.messages.ClientMessages.GpioUtilMessages._
+import org.kaloz.pi4j.common.messages.ClientMessages.PinDirection._
+import org.kaloz.pi4j.common.messages.ClientMessages.PinEdge._
+import org.kaloz.pi4j.common.messages.ClientMessages.PinMode._
+import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange._
+import org.kaloz.pi4j.common.messages.ClientMessages.PinValue._
+import org.kaloz.pi4j.common.messages.ClientMessages.PudMode._
+import org.kaloz.pi4j.common.messages.ClientMessages._
 
 class ConsoleClientActor(inputPinStateChangeListenerFactory: (ActorRefFactory, Int, Char) => ActorRef) extends Actor with ActorLogging with Configuration {
 
@@ -27,16 +28,7 @@ class ConsoleClientActor(inputPinStateChangeListenerFactory: (ActorRefFactory, I
 
   context.become(handlePins())
 
-  def logging(pins: Map[Int, Pin] = Map.empty[Int, Pin]): PartialFunction[Any, Any] = {
-    case message: GpioMessage =>
-      log.debug(s"Message received $message!")
-      message
-    case message => message
-  }
-
-  def handlePins(pins: Map[Int, Pin] = Map.empty[Int, Pin]): Receive = logging(pins) andThen handle(pins)
-
-  def handle(pins: Map[Int, Pin] = Map.empty[Int, Pin]): Receive = {
+  def handlePins(pins: Map[Int, Pin] = Map.empty[Int, Pin]): Receive = LoggingReceive {
     case WiringPiSetupRequest => sender ! WiringPiSetupResponse(0)
     case PinModeCommand(pin, mode) =>
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(mode = mode))))
@@ -59,7 +51,6 @@ class ConsoleClientActor(inputPinStateChangeListenerFactory: (ActorRefFactory, I
       context.become(handlePins(pins - pin))
     case SetEdgeDetectionRequest(pin, edge) =>
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(edge = edge))))
-      //verify
       sender ! SetEdgeDetectionResponse(false)
     case GetDirectionRequest(pin) => sender ! GetDirectionReponse(pins.getOrElse(pin, Pin()).direction)
 

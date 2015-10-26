@@ -1,15 +1,28 @@
 package org.kaloz.pi4j.client.remote
 
-import akka.actor.Actor.emptyBehavior
 import akka.actor._
+import akka.event.LoggingReceive
+import akka.pattern.{ask, pipe}
+import akka.util.Timeout
+import org.kaloz.pi4j.common.messages.ClientMessages.{GpioCommand, GpioMessage, GpioRequest, GpioResponse}
 
-class RemoteClientActor extends Actor with ActorLogging with Configuration {
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration._
 
-  override def receive = emptyBehavior
+class RemoteClientActor(remoteServerActor: ActorSelection) extends Actor with ActorLogging {
+
+  implicit val timeout = Timeout(5 seconds)
+
+  override def receive = LoggingReceive {
+    case request: GpioRequest => (remoteServerActor ? request).mapTo[GpioResponse].pipeTo(sender)
+    case command: GpioCommand => remoteServerActor ! command
+
+    case message: GpioMessage => throw new NotImplementedError(s"$message is not handled!!")
+  }
 
 }
 
 object RemoteClientActor {
 
-  def props = Props[RemoteClientActor]
+  def props(remoteServerActor: ActorSelection) = Props(classOf[RemoteClientActor], remoteServerActor)
 }

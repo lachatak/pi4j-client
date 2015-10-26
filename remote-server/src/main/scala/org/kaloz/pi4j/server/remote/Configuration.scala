@@ -1,4 +1,4 @@
-package org.kaloz.pi4j.remote.server
+package org.kaloz.pi4j.server.remote
 
 import com.typesafe.config.ConfigFactory
 

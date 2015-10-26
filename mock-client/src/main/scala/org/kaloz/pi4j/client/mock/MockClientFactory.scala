@@ -11,7 +11,7 @@ class MockClientFactory extends ClientFactory with StrictLogging {
 
   private lazy val system = ActorSystem("mock-actor-system")
 
-  system.actorOf(PinStateChangeListenerActor.props, "pinStateChangeListenerActor")
+  system.actorOf(InputPinStateChangedListenerActor.props, "pinStateChangeListenerActor")
 
   private val mockInputPinStateChangeListener = MockInputPinStateChangeListenerActor.factory
   private lazy val mockClientActor = system.actorOf(ConsoleClientActor.props(mockInputPinStateChangeListener), "mockClientActor")
@@ -20,5 +20,5 @@ class MockClientFactory extends ClientFactory with StrictLogging {
   lazy val gpioUtil = new ConsoleGpioUtil(mockClientActor)
   lazy val gpioInterrupt = new ConsoleGpioInterrupt(mockClientActor)
 
-  def shutdown: Unit = system.shutdown()
+  def shutdown: Unit = system.terminate()
 }

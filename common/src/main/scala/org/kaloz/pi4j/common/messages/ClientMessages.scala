@@ -1,4 +1,4 @@
-package org.kaloz.pi4j.client.messages
+package org.kaloz.pi4j.common.messages
 
 import com.pi4j.wiringpi.{Gpio, GpioUtil}
 
@@ -121,6 +121,11 @@ object ClientMessages {
       case Low => false
       case High => true
     }
+
+    implicit def booleanToPinValue(pinValue: java.lang.Boolean): PinValue = pinValue match {
+      case java.lang.Boolean.FALSE => Low
+      case java.lang.Boolean.TRUE => High
+    }
   }
 
   object PudMode {
@@ -212,6 +217,12 @@ object ClientMessages {
     case class InputPinStateChanged(pin: Int, value: PinValue) extends GpioMessage
 
     case class OutputPinStateChanged(pin: Int, value: PinValue) extends GpioMessage
+
+  }
+
+  object ControlMessages {
+
+    case object Shutdown
 
   }
 
