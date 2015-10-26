@@ -14,6 +14,6 @@ object Assembly {
         art.copy(`classifier` = Some("assembly"))
       }
     ) ++
-      addArtifact(Artifact("remote-server", "assembly"), sbtassembly.AssemblyKeys.assembly)
+      addArtifact(Artifact("pi4j-remote-server", "assembly"), sbtassembly.AssemblyKeys.assembly)
 
 }
