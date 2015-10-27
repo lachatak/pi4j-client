@@ -51,13 +51,15 @@ class ConsoleInputPinStateChangeListenerActor(pin: Int, key: Char) extends Actor
 
 }
 
-object ConsoleInputPinStateChangeListenerActor {
+object ConsoleInputPinStateChangeListenerActor extends Configuration {
 
-  def factory: (ActorRefFactory, Int, Char) => ActorRef = (factory, pin, char) => {
+  def factory: (ActorRefFactory, Int) => ActorRef = (actorRefFactory, pin) => {
+
     GlobalScreen.registerNativeHook()
     java.util.logging.Logger.getLogger("org.jnativehook").setLevel(Level.OFF)
+    val char = keyMap(pin)
 
-    factory.actorOf(Props(classOf[ConsoleInputPinStateChangeListenerActor], pin, char), s"console-$pin-$char-actor")
+    actorRefFactory.actorOf(Props(classOf[ConsoleInputPinStateChangeListenerActor], pin, char), s"console-$pin-$char-actor")
   }
 
 }

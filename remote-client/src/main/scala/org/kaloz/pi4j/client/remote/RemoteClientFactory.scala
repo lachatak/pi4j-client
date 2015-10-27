@@ -14,18 +14,18 @@ class RemoteClientFactory extends ClientFactory with Configuration with StrictLo
 
   logger.info("Initialised...")
 
-  private lazy val system = ActorSystem("pi4j-remoting", config)
+  private val system = ActorSystem("pi4j-remoting", config)
 
-  private lazy val seedNode = config.getStringList("akka.cluster.seed-nodes").head
+  private val seedNode = config.getStringList("akka.cluster.seed-nodes").head
 
-  private lazy val remoteServerActor = system.actorSelection(ActorPath.fromString(s"$seedNode/user/remoteServerActor"))
-  private lazy val remoteClientActor = system.actorOf(RemoteClientActor.props(remoteServerActor), "remoteClientActor")
+  private val remoteServerActor = system.actorSelection(ActorPath.fromString(s"$seedNode/user/remoteServerActor"))
+  private val remoteClientActor = system.actorOf(RemoteClientActor.props(remoteServerActor), "remoteClientActor")
 
-  system.actorOf(InputPinStateChangedListenerActor.props, "pinStateChangedListenerActor")
+  system.actorOf(RemoteInputPinStateChangedListenerActor.props, "pinStateChangedListenerActor")
 
-  lazy val gpio = new RemoteClientGpio(remoteClientActor)
-  lazy val gpioUtil = new RemoteClientGpioUtil(remoteClientActor)
-  lazy val gpioInterrupt = new RemoteClientGpioInterrupt(remoteClientActor)
+  val gpio = new RemoteClientGpio(remoteClientActor)
+  val gpioUtil = new RemoteClientGpioUtil(remoteClientActor)
+  val gpioInterrupt = new RemoteClientGpioInterrupt(remoteClientActor)
 
   def shutdown: Unit = {
     remoteServerActor ! Shutdown

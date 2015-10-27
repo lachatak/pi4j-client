@@ -46,6 +46,7 @@ object Dependencies {
 
   val core = deps(
     config,
+    akkaActor,
     clapper,
     scalazCore,
     aspectjrt,
@@ -57,7 +58,7 @@ object Dependencies {
     scalaTest     	  % "test"
   )
 
-  val common = deps(
+  val api = deps(
     scalazCore,
     pi4jCore,
     scalaLogging,
@@ -91,7 +92,6 @@ object Dependencies {
 
   val remoteClient = deps(
     config,
-    akkaActor,
     akkaCluster,
     akkaClusterTools,
     pi4jCore,

@@ -1,4 +1,4 @@
-package org.kaloz.pi4j.client.console
+package org.kaloz.pi4j.client.actor
 
 import akka.actor.Actor.emptyBehavior
 import akka.actor._
@@ -14,7 +14,7 @@ import org.kaloz.pi4j.common.messages.ClientMessages.PinValue._
 import org.kaloz.pi4j.common.messages.ClientMessages.PudMode._
 import org.kaloz.pi4j.common.messages.ClientMessages._
 
-class ConsoleClientActor(inputPinStateChangeListenerFactory: (ActorRefFactory, Int, Char) => ActorRef) extends Actor with ActorLogging with Configuration {
+class InMemoryClientActor(pinStateChangeCallbackFactory: (ActorRefFactory, Int) => ActorRef) extends Actor with ActorLogging {
 
   case class Pin(exported: Boolean = false,
                  direction: PinDirection = DirectionOut,
@@ -57,7 +57,7 @@ class ConsoleClientActor(inputPinStateChangeListenerFactory: (ActorRefFactory, I
 
     case EnablePinStateChangeCallbackRequest(pin) =>
       val before = pins.getOrElse(pin, Pin()).enableCallback
-      val inputPinStateChangeListenerActor = inputPinStateChangeListenerFactory(context, pin, keyMap(pin))
+      val inputPinStateChangeListenerActor = pinStateChangeCallbackFactory(context, pin)
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(enableCallback = Some(inputPinStateChangeListenerActor)))))
       sender ! EnablePinStateChangeCallbackResponse(if (before != None) 0 else 1)
     case DisablePinStateChangeCallbackRequest(pin) =>
@@ -75,7 +75,8 @@ class ConsoleClientActor(inputPinStateChangeListenerFactory: (ActorRefFactory, I
 
 }
 
-object ConsoleClientActor {
+object InMemoryClientActor {
 
-  def props(inputPinStateChangeListenerFactory: (ActorRefFactory, Int, Char) => ActorRef) = Props(classOf[ConsoleClientActor], inputPinStateChangeListenerFactory)
+  def props(pinStateChangeCallbackFactory: (ActorRefFactory, Int) => ActorRef) = Props(classOf[InMemoryClientActor], pinStateChangeCallbackFactory)
+
 }
