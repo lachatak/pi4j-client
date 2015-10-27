@@ -8,6 +8,9 @@ machine:
     version: oraclejdk8
 
 test:
+  pre:
+    - chmod 774 circleci/*
+    - circleci/make_credentials.sh
   override:
     - sbt coverage test
   post:
@@ -17,6 +20,4 @@ deployment:
   staging:
     branch: master
     commands:
-      - chmod 774 circleci/*
-      - circleci/make_credentials.sh
       - sbt publish
