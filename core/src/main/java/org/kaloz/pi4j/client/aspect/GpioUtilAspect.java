@@ -15,8 +15,13 @@ public class GpioUtilAspect {
     private final GpioUtil gpioUtil;
 
     public GpioUtilAspect() {
-        this.gpioUtil = AbstractClientFactory.gpioUtil();
+        this.gpioUtil = AbstractClientFactory.instance().gpioUtil();
         logger.debug("Initialised...");
+    }
+
+    @Around(value = "staticinitialization(com.pi4j.wiringpi.GpioUtil)")
+    public void staticinitialization(ProceedingJoinPoint point) {
+        logger.info("Skipping GpioUtil static init block...");
     }
 
     @Around(value = "call (public int com.pi4j.wiringpi.GpioUtil.isPinSupported(int)) && args(pin)")
@@ -49,9 +54,9 @@ public class GpioUtilAspect {
         return gpioUtil.setEdgeDetection(pin, edge);
     }
 
-    @Around(value = "call (public int com.pi4j.wiringpi.GpioUtil.getDirection(int)) && args(pin, edge)")
-    public int getDirection(ProceedingJoinPoint point, int pin, int edge) {
-        logger.debug("GpioUtil.getDirection is called with {} - {}", pin, edge);
+    @Around(value = "call (public int com.pi4j.wiringpi.GpioUtil.getDirection(int)) && args(pin)")
+    public int getDirection(ProceedingJoinPoint point, int pin) {
+        logger.debug("GpioUtil.getDirection is called with {} - {}", pin);
         return gpioUtil.getDirection(pin);
     }
 }

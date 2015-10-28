@@ -5,6 +5,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.kaloz.pi4j.client.Gpio;
 import org.kaloz.pi4j.client.factory.AbstractClientFactory;
+import org.kaloz.pi4j.client.factory.ClientFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,12 +15,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class GpioAspect {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+    private final ClientFactory clientFactory;
     private final Gpio gpio;
     private final AtomicBoolean shutDown = new AtomicBoolean(false);
 
     public GpioAspect() {
-        this.gpio = AbstractClientFactory.gpio();
+        this.clientFactory = AbstractClientFactory.instance();
+        this.gpio = clientFactory.gpio();
         logger.debug("Initialised...");
+    }
+
+    @Around(value = "staticinitialization(com.pi4j.wiringpi.Gpio)")
+    public void staticinitialization(ProceedingJoinPoint point) {
+        logger.info("Skipping Gpio static init block...");
     }
 
     @Around(value = "call (public int com.pi4j.wiringpi.Gpio.wiringPiSetup())")
@@ -63,7 +71,7 @@ public class GpioAspect {
         if (shutDown.weakCompareAndSet(false, true)) {
             logger.debug("GpioController.shutdown is called");
             point.proceed();
-            AbstractClientFactory.shutdown();
+            clientFactory.shutdown();
         }
     }
 }

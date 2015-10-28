@@ -20,3 +20,7 @@ class MockClientFactory extends ClientFactory with StrictLogging {
 
   def shutdown: Unit = system.terminate()
 }
+
+object MockClientFactory {
+  val instance = new MockClientFactory()
+}

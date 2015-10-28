@@ -34,3 +34,7 @@ class RemoteClientFactory extends ClientFactory with Configuration with StrictLo
     Await.ready(system.terminate(), 10 seconds)
   }
 }
+
+object RemoteClientFactory {
+  val instance = new RemoteClientFactory()
+}

@@ -15,8 +15,18 @@ public class GpioInterruptAspect {
     private final GpioInterrupt gpioInterrupt;
 
     public GpioInterruptAspect() {
-        this.gpioInterrupt = AbstractClientFactory.gpioInterrupt();
+        this.gpioInterrupt = AbstractClientFactory.instance().gpioInterrupt();
         logger.debug("Initialised...");
+    }
+
+    @Around(value = "staticinitialization(com.pi4j.wiringpi.GpioInterrupt)")
+    public void staticinitialization(ProceedingJoinPoint point) {
+        logger.info("Skipping GpioInterrupt static init block...");
+        try{
+            point.proceed();
+        } catch (Throwable t){
+
+        }
     }
 
     @Around(value = "call (public int com.pi4j.wiringpi.GpioInterrupt.enablePinStateChangeCallback(int)) && args(pin)")
