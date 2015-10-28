@@ -9,8 +9,6 @@ import org.kaloz.pi4j.client.{GpioInterruptActorGateway, GpioUtilActorGateway, G
 import org.kaloz.pi4j.client.factory.ClientFactory
 import spray.can.Http
 
-import scala.concurrent.duration._
-
 class WebClientFactory extends ClientFactory with StrictLogging {
   private implicit val timeout = Timeout(1 minute)
   private implicit val system = ActorSystem("web-actor-system")
@@ -26,7 +24,7 @@ class WebClientFactory extends ClientFactory with StrictLogging {
   lazy val gpioInterrupt = new GpioInterruptActorGateway(null)
 
   def shutdown: Unit = {
-    IO(Http) ! Http.Unbind
+//    IO(Http) ! Http.Unbind
   }
 }
 

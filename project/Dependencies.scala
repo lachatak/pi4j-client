@@ -16,6 +16,8 @@ object Version {
   val rxScala       = "0.25.0"
   val aspectj       = "1.8.7"
   val jnativehook   = "2.0.2"
+  val akkaHttp      = "1.0"
+  val json4s        = "3.3.0"
   val reflections   = "0.9.10"
   val scoverage     = "1.1.1"
 }
@@ -40,6 +42,8 @@ object Library {
   val aspectjrt         = "org.aspectj"                 %  "aspectjrt"                     % Version.aspectj
   val jnativehook       = "com.1stleg"                  %  "jnativehook"                   % Version.jnativehook
   val reflections       = "org.reflections"             %  "reflections"                   % Version.reflections
+  val akkaHttp        = "com.typesafe.akka"           %% "akka-http-experimental"        % Version.akkaHttp
+  val json4s          = "org.json4s"                  %% "json4s-native"                 % Version.json4s
   //FIXME multi node test + coverage failure without it on circleci
   val scoverage         = "org.scoverage"               %% "scalac-scoverage-runtime"      % Version.scoverage
 }
@@ -88,6 +92,8 @@ object Dependencies {
     pi4jCore,
     logBack,
     akkaActor,
+    akkaHttp,
+    json4s,
     mockito       	% "test",
     scalaTest     	% "test"
   )
