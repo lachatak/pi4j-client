@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds">
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>{{ pi4j-remote-server.log.directory }}/pi4j-remote-server.log</file>
+        <encoder>
+            <pattern>%date{ISO8601} %-5level %logger{36} %X{sourceThread} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="{{ pi4j-remote-server.log.level }}">
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

@@ -1,0 +1,5 @@
+---
+pi4j-remote-server:
+  log:
+    directory: "/var/kaloz/logs/pi4j-remote-server"
+    level: "DEBUG"

@@ -45,9 +45,12 @@ lazy val remoteServer = Project("remote-server", file("remote-server"))
   .settings(Dependencies.remoteServer: _*)
   .settings(Testing.settings: _*)
   .settings(Assembly.remoteServerAssemblySettings: _*)
+  .settings(Rpm.rpmSettings: _*)
+  .enablePlugins(JavaServerAppPackaging, RpmPlugin, RpmDeployPlugin)
 
 lazy val examples = Project("examples", file("examples"))
   .dependsOn(core, consoleClient, webClient, mockClient, remoteClient)
   .settings(BaseSettings.exampleSettings: _*)
   .settings(Publish.noPublishing: _*)
+
 

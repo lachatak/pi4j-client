@@ -1,0 +1,19 @@
+---
+- name: install yum package management
+  apt: name=yum state=present
+
+- name: Add yum repo file
+  template: src=sonatype.repo dest=etc/yum/repos.d/sonatype.repo owner=pi4j-remote-server group=pi4j-remote-server
+
+- name: Install pi4j-remote-server
+  yum: pkg=pi4j-remote-server state=latest update_cache=yes
+
+- name: Configure pi4j-remote-server
+  template: src=pi4j-remote-server.conf.j2 dest=/var/kaloz/pi4j-remote-server/conf/pi4j-remote-server.conf owner=pi4j-remote-server group=pi4j-remote-server
+  notify: restart pi4j-remote-server
+
+- name: Configure pi4j-remote-server logger
+  template: src=logback.xml.j2 dest=/var/kaloz/pi4j-remote-server/conf/logback.xml owner=pi4j-remote-server group=pi4j-remote-server
+
+- name: Add aspectj lib
+  template: src=aspectjweaver-1.8.7.jar dest=/var/kaloz/pi4j-remote-server/jar/aspectjweaver.jar owner=pi4j-remote-server group=pi4j-remote-server

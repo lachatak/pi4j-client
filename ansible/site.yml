@@ -1,0 +1,5 @@
+- hosts: home
+  sudo: yes
+  user: pi
+  roles:
+    - raspberry

@@ -1,0 +1,5 @@
+[sonatype]
+name=Sonatype Repository
+baseurl=https://oss.sonatype.org/service/local/repositories/snapshots
+enabled=1
+gpgcheck=0

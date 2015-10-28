@@ -1,0 +1,3 @@
+---
+- name: restart pi4j-remote-server
+  service: name=pi4j-remote-server state=restarted
