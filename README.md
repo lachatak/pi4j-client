@@ -1,4 +1,4 @@
-# Pi4j Client [![Circle CI](https://circleci.com/gh/lachatak/pi4j-client/tree/master.svg?style=svg)](https://circleci.com/gh/lachatak/pi4j-client/tree/master) [![Coverage Status](https://coveralls.io/repos/lachatak/pi4j-client/badge.svg?branch=master)](https://coveralls.io/r/lachatak/pi4j-client?branch=master)
+# Pi4j Client [![Circle CI](https://circleci.com/gh/lachatak/pi4j-client/tree/master.svg?style=svg)](https://circleci.com/gh/lachatak/pi4j-client/tree/master) [![Coverage Status](https://coveralls.io/repos/lachatak/pi4j-client/badge.svg?branch=master&service=github)](https://coveralls.io/github/lachatak/pi4j-client?branch=master)
 - Have you ever tried to test your Raspberry Pi pi4j based java application without having a Raspberry?
 - Have you ever tried to run your Raspberry Pi pi4j based java application on your own machine?
 - Have you ever tried to continuously deploy new version of your Raspberry Pi pi4j based java application to the Raspberry via Wifi?
