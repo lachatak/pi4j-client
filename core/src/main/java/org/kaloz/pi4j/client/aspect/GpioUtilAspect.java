@@ -19,10 +19,10 @@ public class GpioUtilAspect {
         logger.debug("Initialised...");
     }
 
-    @Around(value = "staticinitialization(com.pi4j.wiringpi.GpioUtil)")
-    public void staticinitialization(ProceedingJoinPoint point) {
-        logger.info("Skipping GpioUtil static init block...");
-    }
+//    @Around(value = "staticinitialization(com.pi4j.wiringpi.GpioUtil)")
+//    public void staticinitialization(ProceedingJoinPoint point) {
+//        logger.info("Skipping GpioUtil static init block...");
+//    }
 
     @Around(value = "call (public int com.pi4j.wiringpi.GpioUtil.isPinSupported(int)) && args(pin)")
     public int isPinSupported(ProceedingJoinPoint point, int pin) {

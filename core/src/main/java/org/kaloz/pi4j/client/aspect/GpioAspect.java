@@ -25,10 +25,10 @@ public class GpioAspect {
         logger.debug("Initialised...");
     }
 
-    @Around(value = "staticinitialization(com.pi4j.wiringpi.Gpio)")
-    public void staticinitialization(ProceedingJoinPoint point) {
-        logger.info("Skipping Gpio static init block...");
-    }
+//    @Around(value = "staticinitialization(com.pi4j.wiringpi.Gpio)")
+//    public void staticinitialization(ProceedingJoinPoint point) {
+//        logger.info("Skipping Gpio static init block...");
+//    }
 
     @Around(value = "call (public int com.pi4j.wiringpi.Gpio.wiringPiSetup())")
     public int wiringPiSetup(ProceedingJoinPoint point) {

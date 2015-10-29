@@ -2,6 +2,7 @@
 
     <aspects>
         <!--<aspect name="org.kaloz.pi4j.client.aspect.RegisterAspect"/>-->
+        <aspect name="org.kaloz.pi4j.client.aspect.NativeLibraryLoadAspect"/>
         <aspect name="org.kaloz.pi4j.client.aspect.GpioAspect"/>
         <aspect name="org.kaloz.pi4j.client.aspect.GpioUtilAspect"/>
         <aspect name="org.kaloz.pi4j.client.aspect.GpioInterruptAspect"/>

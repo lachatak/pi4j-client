@@ -1,8 +1,10 @@
 package org.kaloz.pi4j.client.aspect;
 
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.kaloz.pi4j.client.GpioInterrupt;
 import org.kaloz.pi4j.client.factory.AbstractClientFactory;
 import org.slf4j.Logger;
@@ -19,15 +21,15 @@ public class GpioInterruptAspect {
         logger.debug("Initialised...");
     }
 
-    @Around(value = "staticinitialization(com.pi4j.wiringpi.GpioInterrupt)")
-    public void staticinitialization(ProceedingJoinPoint point) {
-        logger.info("Skipping GpioInterrupt static init block...");
-        try{
-            point.proceed();
-        } catch (Throwable t){
-
-        }
-    }
+//    @Around(value = "staticinitialization(com.pi4j.wiringpi.GpioInterrupt)")
+//    public void staticinitialization(ProceedingJoinPoint point) {
+//        logger.info("Skipping GpioInterrupt static init block...");
+//    }
+//
+//    @Before(value = "get(* com.pi4j.wiringpi.GpioInterrupt.listeners)")
+//    public void test(JoinPoint point) {
+//        logger.info("--------------------- Vector is called!!");
+//    }
 
     @Around(value = "call (public int com.pi4j.wiringpi.GpioInterrupt.enablePinStateChangeCallback(int)) && args(pin)")
     public int enablePinStateChangeCallback(ProceedingJoinPoint point, int pin) {
