@@ -5,23 +5,17 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.kaloz.pi4j.client.Gpio;
 import org.kaloz.pi4j.client.factory.AbstractClientFactory;
-import org.kaloz.pi4j.client.factory.ClientFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Aspect
 public class GpioAspect {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
-    private final ClientFactory clientFactory;
     private final Gpio gpio;
-    private final AtomicBoolean shutDown = new AtomicBoolean(false);
 
     public GpioAspect() {
-        this.clientFactory = AbstractClientFactory.instance();
-        this.gpio = clientFactory.gpio();
+        this.gpio = AbstractClientFactory.instance().gpio();
         logger.debug("Initialised...");
     }
 
@@ -59,14 +53,5 @@ public class GpioAspect {
     public void pwmWrite(ProceedingJoinPoint point, int pin, int value) {
         logger.debug("Gpio.pwmWrite is called with {}, {}", pin, value);
         gpio.pwmWrite(pin, value);
-    }
-
-    @Around(value = "execution (public void com.pi4j.io.gpio.GpioController.shutdown())")
-    public void shutdown(ProceedingJoinPoint point) throws Throwable {
-        if (shutDown.weakCompareAndSet(false, true)) {
-            logger.debug("GpioController.shutdown is called");
-            point.proceed();
-            clientFactory.shutdown();
-        }
     }
 }
