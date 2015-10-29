@@ -13,3 +13,7 @@ class WebClientFactory extends ClientFactory with StrictLogging {
 
   def shutdown: Unit = {}
 }
+
+object WebClientFactory {
+  val instance = new WebClientFactory()
+}

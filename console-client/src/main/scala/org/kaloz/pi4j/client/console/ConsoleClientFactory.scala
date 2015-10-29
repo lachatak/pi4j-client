@@ -25,3 +25,7 @@ class ConsoleClientFactory extends ClientFactory with StrictLogging {
   }
 
 }
+
+object ConsoleClientFactory {
+  val instance = new ConsoleClientFactory()
+}

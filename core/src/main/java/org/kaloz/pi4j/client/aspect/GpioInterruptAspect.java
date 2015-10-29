@@ -15,7 +15,7 @@ public class GpioInterruptAspect {
     private final GpioInterrupt gpioInterrupt;
 
     public GpioInterruptAspect() {
-        this.gpioInterrupt = AbstractClientFactory.gpioInterrupt();
+        this.gpioInterrupt = AbstractClientFactory.instance().gpioInterrupt();
         logger.debug("Initialised...");
     }
 

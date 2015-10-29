@@ -5,14 +5,14 @@ import org.clapper.classutil.ClassFinder
 import org.kaloz.pi4j.client.fallback.FallbackClientFactory
 import org.kaloz.pi4j.client.{Gpio, GpioInterrupt, GpioUtil}
 
-object AbstractClientFactory extends ClientFactory with StrictLogging {
+class AbstractClientFactory extends ClientFactory with StrictLogging {
 
   private val ClientFactoryNamingConventionPattern = "(.*)ClientFactory".r
 
   lazy val factory: ClientFactory = {
 
     val factoryClasses = ClassFinder.concreteSubclasses(classOf[ClientFactory].getName, ClassFinder().getClasses.iterator)
-      .filterNot(info => info.name == AbstractClientFactory.getClass.getName || info.name == classOf[FallbackClientFactory].getName)
+      .filterNot(info => info.name == this.getClass.getName || info.name == classOf[FallbackClientFactory].getName)
       .map(info => Class.forName(info.name))
       .toList
 
@@ -22,7 +22,7 @@ object AbstractClientFactory extends ClientFactory with StrictLogging {
         factoryClasses.head.getSimpleName match {
           case ClientFactoryNamingConventionPattern(name) =>
             logger.info(s"Client mode '$name' is initialised!")
-            factoryClasses.head.newInstance().asInstanceOf[ClientFactory]
+            factoryClasses.head.getMethod("instance").invoke(null).asInstanceOf[ClientFactory]
         }
       case _ =>
         val factoriesMap: Map[String, Class[_]] = factoryClasses.collect {
@@ -42,7 +42,7 @@ object AbstractClientFactory extends ClientFactory with StrictLogging {
         factoriesMap.get(mode).getOrElse {
           logger.warn(s"Requested client mode '$mode' is not available! No client will be used!!")
           classOf[FallbackClientFactory]
-        }.newInstance().asInstanceOf[ClientFactory]
+        }.getMethod("instance").invoke(null).asInstanceOf[ClientFactory]
     }
   }
 
@@ -51,6 +51,10 @@ object AbstractClientFactory extends ClientFactory with StrictLogging {
   lazy val gpioInterrupt: GpioInterrupt = factory.gpioInterrupt
 
   def shutdown(): Unit = factory.shutdown
+}
+
+object AbstractClientFactory{
+  val instance = new AbstractClientFactory()
 }
 
 class ClientFactoryException(message: String) extends RuntimeException(message)

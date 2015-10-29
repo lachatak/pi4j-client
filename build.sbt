@@ -11,7 +11,7 @@ lazy val core = Project("core", file("core"))
   .dependsOn(api)
   .settings(BaseSettings.debugSettings: _*)
   .settings(Dependencies.core: _*)
-  .settings(Testing.settings: _*)
+  .settings(Testing.coreSettings: _*)
 
 lazy val consoleClient = Project("console-client", file("console-client"))
   .dependsOn(core)
