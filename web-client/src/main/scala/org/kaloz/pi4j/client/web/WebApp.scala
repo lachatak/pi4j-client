@@ -35,6 +35,8 @@ object WebApp extends App {
       get {
         handleWebsocketMessages(myFlow)
       }
+    } ~ pathPrefix("www") {
+      getFromResourceDirectory("www")
     }
 
   val binding = Http().bindAndHandle(route, interface, port)
