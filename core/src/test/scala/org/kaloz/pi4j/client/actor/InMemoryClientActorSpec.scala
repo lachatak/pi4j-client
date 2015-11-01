@@ -148,10 +148,10 @@ with ImplicitSender {
     watcher.watch(pinStateChangeCallbackActor.ref)
     val pinStateChangeCallbackFactory: (ActorRefFactory, Int) => ActorRef = (factory, pin) => pinStateChangeCallbackActor.ref
     val inMemoryClientActor = TestActorRef(new InMemoryClientActor(pinStateChangeCallbackFactory))
-    val listenerActor = TestActorRef(new ListenerActor)
+    val listenerActor = TestActorRef(new LocalListenerActor)
   }
 
-  class ListenerActor extends Actor {
+  class LocalListenerActor extends Actor {
     context.system.eventStream.subscribe(self, classOf[InputPinStateChanged])
 
     var pin: Int = _

@@ -15,7 +15,9 @@ trait InputPinStateChangedListenerActor extends Actor with ActorLogging {
   override def preStart(): Unit
 
   override def receive: Receive = LoggingReceive {
-    case InputPinStateChanged(pin, value) => pinStateChangeCallback.invoke(null, pin: java.lang.Integer, value: java.lang.Boolean)
+    case InputPinStateChanged(pin, value) =>
+      pinStateChangeCallback.invoke(null, pin: java.lang.Integer, value: java.lang.Boolean)
+      log.debug(s"Listeners have been updated about pin state change --> $pin - $value")
   }
 
 }
