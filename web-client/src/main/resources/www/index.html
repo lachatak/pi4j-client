@@ -1,31 +1,15 @@
 <!doctype html>
-<html ng-app>
+<html ng-app="webClient">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/angular.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
 
-    <style>
-        .pin {
-          width: 25px;
-          height: 25px;
-          align: center;
-        }
-        .inputPin {
-          background-color: rgb(217, 237, 247);
-        }
-        .outputPin {
-          background-color: rgb(252, 248, 227;
-        }
-        .unusedPin {
-          background-color: rgb(245, 245, 245);
-        }
-    </style>
+    <script src="js/pinController.js"></script>
+
 </head>
-<body>
+<body ng-controller="PinController">
 <div class="container">
     <h1>Web client for pi4j-client</h1>
 
@@ -33,81 +17,10 @@
 </div>
 <div class="container">
     <div class="row" style="margin-bottom: 4px">
-        <button type="button" class="btn btn-warning">
-            <span class="glyphicon glyphicon-plus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-warning active">
-            <span class="glyphicon glyphicon-minus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info active">
-            <span class="glyphicon glyphicon-plus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info active">
-            <span class="glyphicon glyphicon-plus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info active">
-            <span class="glyphicon glyphicon-plus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info active">
-            <span class="glyphicon glyphicon-plus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info">
-            <span class="glyphicon glyphicon-minus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info">
-            <span class="glyphicon glyphicon-minus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info active">
-            <span class="glyphicon glyphicon-plus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info">
-            <span class="glyphicon glyphicon-minus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info">
-            <span class="glyphicon glyphicon-minus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-default" disabled="true">
-            <span class="glyphicon glyphicon-ban-circle"></span>
-        </button>
+        <wc-pin pin="pin" ng-repeat="pin in pins | limitTo : 13"></wc-pin>
     </div>
-
-    <div class="row show-grid">
-        <button type="button" class="btn btn-warning">
-            <span class="glyphicon glyphicon-plus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-warning active">
-            <span class="glyphicon glyphicon-minus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info active">
-            <span class="glyphicon glyphicon-plus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info active">
-            <span class="glyphicon glyphicon-plus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info active">
-            <span class="glyphicon glyphicon-plus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info active">
-            <span class="glyphicon glyphicon-plus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info">
-            <span class="glyphicon glyphicon-minus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info">
-            <span class="glyphicon glyphicon-minus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info active">
-            <span class="glyphicon glyphicon-plus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info">
-            <span class="glyphicon glyphicon-minus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-info">
-            <span class="glyphicon glyphicon-minus-sign"></span>
-        </button>
-        <button type="button" class="btn btn-default" disabled="true">
-            <span class="glyphicon glyphicon-ban-circle"></span>
-        </button>
+    <div class="row">
+        <wc-pin pin="pin" ng-repeat="pin in pins | limitTo : 13 : 13"></wc-pin>
     </div>
 </div>
 </body>

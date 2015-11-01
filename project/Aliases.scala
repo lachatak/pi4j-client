@@ -7,5 +7,5 @@ object Aliases {
       addCommandAlias("listenGpioExample", ";project examples ;clean ;runMain org.kaloz.pi4j.client.examples.ListenGpioExample") ++
       addCommandAlias("shutdownGpioExample", ";project examples ;clean ;runMain org.kaloz.pi4j.client.examples.ShutdownGpioExample") ++
       addCommandAlias("triggerGpioExample", ";project examples ;clean ;runMain org.kaloz.pi4j.client.examples.TriggerGpioExample") ++
-      addCommandAlias("webApp", ";project web-client ;clean ;runMain org.kaloz.pi4j.client.web.WebApp")
+      addCommandAlias("webApp", ";project web-client ;runMain org.kaloz.pi4j.client.web.WebApp")
 }

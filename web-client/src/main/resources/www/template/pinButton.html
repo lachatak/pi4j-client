@@ -1,0 +1,23 @@
+<ng-switch on='pin.value'>
+
+  <button type='button' ng-switch-when='in-high' class='btn btn-info'>
+    <span class='glyphicon glyphicon-plus-sign'></span>
+  </button>
+
+  <button type='button' ng-switch-when='in-low' class='btn btn-info'>
+    <span class='glyphicon glyphicon-minus-sign'></span>
+  </button>
+
+  <button type='button' ng-switch-when='out-high' class='btn btn-warning'>
+    <span class='glyphicon glyphicon-plus-sign'></span>
+  </button>
+
+  <button type='button' ng-switch-when='out-low' class='btn btn-warning'>
+    <span class='glyphicon glyphicon-minus-sign'></span>
+  </button>
+
+  <button type='button' ng-switch-default class='btn btn-default' disabled="true">
+    <span class='glyphicon glyphicon-minus-sign' disabled></span>
+  </button>
+
+</ng-switch>

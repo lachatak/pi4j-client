@@ -1,3 +1,0 @@
-# Routes
-
-GET     /ws                           org.kaloz.pi4j.client.web.Application.ws()

@@ -7,6 +7,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.stream._
 import akka.stream.scaladsl._
 import org.json4s.DefaultFormats
+import org.kaloz.pi4j.client.web.SinkActor.RegisterSink
 import scala.concurrent.duration._
 
 
@@ -25,7 +26,7 @@ object WebApp extends App {
     val sinkActor = actorSystem.actorOf(Props[SinkActor])
 
     val in = Flow[Message].to(Sink.actorRef(sinkActor, "COMPLETE-MESSAGE"))
-    val out = Source.actorRef(10, OverflowStrategy.fail).mapMaterializedValue(sinkActor ! _)
+    val out = Source.actorRef(10, OverflowStrategy.fail).mapMaterializedValue(sinkActor ! RegisterSink(_))
 
     Flow.wrap(in, out)(Keep.both)
   }
@@ -50,13 +51,21 @@ object WebApp extends App {
 }
 
 class SinkActor extends Actor {
+  import SinkActor._
   import scala.concurrent.ExecutionContext.Implicits.global
 
   def receive = {
-    case a: ActorRef => {
-      println(s"actor-ref received: $a")
-      context.system.scheduler.schedule(0 milliseconds, 1 second, a, TextMessage(s"currentTime: ${System.currentTimeMillis}"))
+    case RegisterSink(actorRef) => {
+      context.system.scheduler.schedule(0 second, 5 seconds, actorRef, TextMessage("""{"type": "pinStateChange", "pinId": 1, "pinValue": "out-high"}"""))
+//      context.become(receiveWithSink(actorRef))
     }
-    case x => println(s"${this}-sink: $x")
   }
+
+  def receiveWithSink(actorRef: ActorRef): Receive = {
+    case "bar" => sender() ! "I am already happy :-)"
+  }
+}
+
+object SinkActor {
+  case class RegisterSink(actorRef: ActorRef)
 }
