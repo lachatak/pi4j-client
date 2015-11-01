@@ -3,6 +3,7 @@ package org.kaloz.pi4j.client.actor
 import akka.actor.Actor.emptyBehavior
 import akka.actor._
 import akka.event.LoggingReceive
+import org.kaloz.pi4j.client.actor.InMemoryClientActor.ServiceMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioInterruptMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioUtilMessages._
@@ -15,14 +16,6 @@ import org.kaloz.pi4j.common.messages.ClientMessages.PudMode._
 import org.kaloz.pi4j.common.messages.ClientMessages._
 
 class InMemoryClientActor(pinStateChangeCallbackFactory: (ActorRefFactory, Int) => ActorRef) extends Actor with ActorLogging {
-
-  case class Pin(exported: Boolean = false,
-                 direction: PinDirection = DirectionOut,
-                 edge: PinEdge = EdgeNone,
-                 mode: PinMode = Input,
-                 pud: PudMode = PudOff,
-                 value: PinValue = Low,
-                 enableCallback: Option[ActorRef] = None)
 
   override def receive = emptyBehavior
 
@@ -70,6 +63,8 @@ class InMemoryClientActor(pinStateChangeCallbackFactory: (ActorRefFactory, Int) 
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(value = value))))
       context.system.eventStream.publish(InputPinStateChanged(pin, value))
 
+    case PinStatesRequest => sender ! PinStatesResponse(pins)
+
     case message: GpioMessage => throw new NotImplementedError(s"$message is missing!!")
   }
 
@@ -78,5 +73,21 @@ class InMemoryClientActor(pinStateChangeCallbackFactory: (ActorRefFactory, Int) 
 object InMemoryClientActor {
 
   def props(pinStateChangeCallbackFactory: (ActorRefFactory, Int) => ActorRef) = Props(classOf[InMemoryClientActor], pinStateChangeCallbackFactory)
+
+  object ServiceMessages {
+
+    case object PinStatesRequest
+
+    case class PinStatesResponse(pins: Map[Int, Pin])
+
+    case class Pin(exported: Boolean = false,
+                   direction: PinDirection = DirectionOut,
+                   edge: PinEdge = EdgeNone,
+                   mode: PinMode = Input,
+                   pud: PudMode = PudOff,
+                   value: Int = Low,
+                   enableCallback: Option[ActorRef] = None)
+
+  }
 
 }

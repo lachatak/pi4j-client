@@ -32,7 +32,7 @@ object ClientMessages {
 
     case class PullUpDnControlCommand(pin: Int, pud: PudMode) extends GpioCommand
 
-    case class PwmWriteCommand(pin: Int, value: PinValue) extends GpioCommand
+    case class PwmWriteCommand(pin: Int, value: Int) extends GpioCommand
 
   }
 

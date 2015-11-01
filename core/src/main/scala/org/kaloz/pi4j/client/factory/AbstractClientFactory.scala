@@ -1,19 +1,23 @@
 package org.kaloz.pi4j.client.factory
 
 import com.typesafe.scalalogging.StrictLogging
-import org.clapper.classutil.ClassFinder
 import org.kaloz.pi4j.client.fallback.FallbackClientFactory
 import org.kaloz.pi4j.client.{Gpio, GpioInterrupt, GpioUtil}
+import org.reflections.Reflections
+import scala.collection.JavaConversions._
 
-class AbstractClientFactory extends ClientFactory with StrictLogging {
+private[factory] class AbstractClientFactory extends ClientFactory with StrictLogging {
 
   private val ClientFactoryNamingConventionPattern = "(.*)ClientFactory".r
 
   lazy val factory: ClientFactory = {
 
-    val factoryClasses = ClassFinder.concreteSubclasses(classOf[ClientFactory].getName, ClassFinder().getClasses.iterator)
-      .filterNot(info => info.name == this.getClass.getName || info.name == classOf[FallbackClientFactory].getName)
-      .map(info => Class.forName(info.name))
+    val packageToScan = System.getProperty(AbstractClientFactory.pi4jClientScanPackage, "org.kaloz.pi4j.client")
+    logger.debug(s"packageToScan for clients --> $packageToScan")
+
+    val factoryClasses = new Reflections(packageToScan).getSubTypesOf(classOf[ClientFactory])
+      .filterNot(info => info.getName == this.getClass.getName || info.getName == classOf[FallbackClientFactory].getName)
+      .map(info => Class.forName(info.getName))
       .toList
 
     factoryClasses.size match {
@@ -31,7 +35,7 @@ class AbstractClientFactory extends ClientFactory with StrictLogging {
           }
         }.toMap
 
-        val requestedMode = Option(System.getProperty("pi4j.client.mode"))
+        val requestedMode = Option(System.getProperty(AbstractClientFactory.pi4jClientMode))
         val mode: String = requestedMode.fold {
           logger.warn(s"Multiple client is available on the classpath and pi4j.client.mode is not provided. Trying to initialise with default 'console' mode!")
           "console"
@@ -53,7 +57,11 @@ class AbstractClientFactory extends ClientFactory with StrictLogging {
   def shutdown(): Unit = factory.shutdown
 }
 
-object AbstractClientFactory{
+object AbstractClientFactory {
+
+  val pi4jClientScanPackage = "pi4j.client.scan.package"
+  val pi4jClientMode = "pi4j.client.mode"
+
   val instance = new AbstractClientFactory()
 }
 

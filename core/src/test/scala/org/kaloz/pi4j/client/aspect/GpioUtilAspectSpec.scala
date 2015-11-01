@@ -1,6 +1,7 @@
 package org.kaloz.pi4j.client.aspect
 
 import org.kaloz.pi4j.client
+import org.kaloz.pi4j.client.factory.AbstractClientFactory
 import org.mockito.Mockito._
 import org.scalatest.{FunSpec, Matchers}
 
@@ -8,6 +9,8 @@ class GpioUtilAspectSpec extends FunSpec with Matchers {
 
   describe("GpioUtilAspect") {
     it("should weave GpioUtil calls and delegate call to the client instead") {
+
+      System.setProperty(AbstractClientFactory.pi4jClientScanPackage, this.getClass.getPackage.getName)
 
       GpioUtilWrapper.export(1, 2)
       verify(MockClientFactory.instance.gpioUtil).export(1, 2)

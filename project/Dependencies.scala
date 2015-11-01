@@ -16,7 +16,7 @@ object Version {
   val rxScala       = "0.25.0"
   val aspectj       = "1.8.7"
   val jnativehook   = "2.0.2"
-  val clapper       = "1.0.5"
+  val reflections   = "0.9.10"
 }
 
 object Library {
@@ -34,10 +34,10 @@ object Library {
   val scalaLogging      = "com.typesafe.scala-logging"  %% "scala-logging"                 % Version.scalaLogging
   val logBack           = "ch.qos.logback"              %  "logback-classic"               % Version.logBack
   val rxScala           = "io.reactivex"                %% "rxscala"                       % Version.rxScala
-  val aspectjweaver     = "org.aspectj"                 % "aspectjweaver"                  % Version.aspectj
-  val aspectjrt         = "org.aspectj"                 % "aspectjrt"                      % Version.aspectj
-  val jnativehook       = "com.1stleg"                  % "jnativehook"                    % Version.jnativehook
-  val clapper           = "org.clapper"                 %% "classutil"                     % Version.clapper
+  val aspectjweaver     = "org.aspectj"                 %  "aspectjweaver"                 % Version.aspectj
+  val aspectjrt         = "org.aspectj"                 %  "aspectjrt"                     % Version.aspectj
+  val jnativehook       = "com.1stleg"                  %  "jnativehook"                   % Version.jnativehook
+  val reflections       = "org.reflections"             %  "reflections"                   % Version.reflections
 }
 
 object Dependencies {
@@ -47,13 +47,14 @@ object Dependencies {
   val core = deps(
     config,
     akkaActor,
-    clapper,
+    reflections,
     scalazCore,
     aspectjrt,
     aspectjweaver,
     pi4jCore,
     scalaLogging,
     logBack,
+    akkaTestkit       % "test",
     mockito       	  % "test",
     scalaTest     	  % "test"
   )
@@ -100,7 +101,7 @@ object Dependencies {
     mockito       	% "test",
     scalaTest     	% "test"
   )
-  
+
   val remoteServer = deps(
     config,
     aspectjweaver,

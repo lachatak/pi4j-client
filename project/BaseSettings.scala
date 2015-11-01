@@ -39,7 +39,7 @@ object BaseSettings {
 
   //Required by Aspects
   lazy val exampleSettings = defaultSettings ++ Seq(
-    javaOptions in run ++= Seq("-javaagent:" + System.getProperty("user.home") + "/.ivy2/cache/org.aspectj/aspectjweaver/jars/aspectjweaver-" + Version.aspectj + ".jar", "-Dpi4j.client.mode=remote"),
+    javaOptions in run ++= Seq("-javaagent:" + System.getProperty("user.home") + "/.ivy2/cache/org.aspectj/aspectjweaver/jars/aspectjweaver-" + Version.aspectj + ".jar", "-Dpi4j.client.mode=console"),
     fork in run := true
   )
 }

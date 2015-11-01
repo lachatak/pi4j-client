@@ -11,3 +11,7 @@ class FallbackClientFactory extends ClientFactory {
   def shutdown(): Unit = {}
 
 }
+
+object FallbackClientFactory {
+  val instance = new FallbackClientFactory()
+}
