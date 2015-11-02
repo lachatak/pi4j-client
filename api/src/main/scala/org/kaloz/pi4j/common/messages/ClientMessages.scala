@@ -15,7 +15,7 @@ object ClientMessages {
   object GpioMessages {
 
     import PinMode._
-    import PinValue._
+    import PinDigitalValue._
     import PudMode._
 
     case object WiringPiSetupRequest extends GpioRequest
@@ -24,11 +24,11 @@ object ClientMessages {
 
     case class PinModeCommand(pin: Int, mode: PinMode) extends GpioCommand
 
-    case class DigitalWriteCommand(pin: Int, value: PinValue) extends GpioCommand
+    case class DigitalWriteCommand(pin: Int, value: PinDigitalValue) extends GpioCommand
 
     case class DigitalReadRequest(pin: Int) extends GpioRequest
 
-    case class DigitalReadResponse(value: PinValue) extends GpioResponse
+    case class DigitalReadResponse(value: PinDigitalValue) extends GpioResponse
 
     case class PullUpDnControlCommand(pin: Int, pud: PudMode) extends GpioCommand
 
@@ -99,30 +99,31 @@ object ClientMessages {
     }
   }
 
-  object PinValue {
+  object PinDigitalValue {
 
-    sealed trait PinValue
+    sealed trait PinDigitalValue
 
-    case object Low extends PinValue
+    case object Low extends PinDigitalValue
 
-    case object High extends PinValue
+    case object High extends PinDigitalValue
 
-    implicit def intToPinValue(pinValue: Int): PinValue = pinValue match {
+    implicit def intToPinValue(pinValue: Int): PinDigitalValue = pinValue match {
       case Gpio.LOW => Low
       case Gpio.HIGH => High
+      case x: Int => throw new NotImplementedError(s"$x p inValue is not implemented!!")
     }
 
-    implicit def pinValueToInt(pinValue: PinValue): Int = pinValue match {
+    implicit def pinValueToInt(pinValue: PinDigitalValue): Int = pinValue match {
       case Low => Gpio.LOW
       case High => Gpio.HIGH
     }
 
-    implicit def pinValueToBoolean(pinValue: PinValue): java.lang.Boolean = pinValue match {
+    implicit def pinValueToBoolean(pinValue: PinDigitalValue): java.lang.Boolean = pinValue match {
       case Low => false
       case High => true
     }
 
-    implicit def booleanToPinValue(pinValue: java.lang.Boolean): PinValue = pinValue match {
+    implicit def booleanToPinValue(pinValue: java.lang.Boolean): PinDigitalValue = pinValue match {
       case java.lang.Boolean.FALSE => Low
       case java.lang.Boolean.TRUE => High
     }
@@ -210,13 +211,13 @@ object ClientMessages {
 
   object PinStateChange {
 
-    import PinValue._
+    import PinDigitalValue._
 
-    case class ChangeInputPinState(pin: Int, value: PinValue) extends GpioMessage
+    case class ChangeInputPinState(pin: Int, value: PinDigitalValue) extends GpioMessage
 
-    case class InputPinStateChanged(pin: Int, value: PinValue) extends GpioMessage
+    case class InputPinStateChanged(pin: Int, value: PinDigitalValue) extends GpioMessage
 
-    case class OutputPinStateChanged(pin: Int, value: PinValue) extends GpioMessage
+    case class OutputPinStateChanged(pin: Int, value: PinDigitalValue) extends GpioMessage
 
   }
 

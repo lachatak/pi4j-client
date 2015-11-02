@@ -6,7 +6,7 @@ import akka.util.Timeout
 import org.kaloz.pi4j.client.Gpio
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.PinMode._
-import org.kaloz.pi4j.common.messages.ClientMessages.PinValue._
+import org.kaloz.pi4j.common.messages.ClientMessages.PinDigitalValue._
 import org.kaloz.pi4j.common.messages.ClientMessages.PudMode._
 
 import scala.concurrent.Await

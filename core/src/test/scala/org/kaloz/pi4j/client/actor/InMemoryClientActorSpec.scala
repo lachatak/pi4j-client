@@ -40,15 +40,15 @@ with ImplicitSender {
     }
 
     "be able to handle DigitalWriteCommand" in new scope {
-      inMemoryClientActor ! DigitalWriteCommand(5, PinValue.High)
+      inMemoryClientActor ! DigitalWriteCommand(5, PinDigitalValue.High)
       inMemoryClientActor ! PinStatesRequest
-      expectMsg(PinStatesResponse(Map(5 -> Pin(value = PinValue.High))))
+      expectMsg(PinStatesResponse(Map(5 -> Pin(value = PinDigitalValue.High))))
     }
 
     "be able to handle DigitalReadRequest" in new scope {
-      inMemoryClientActor ! DigitalWriteCommand(6, PinValue.High)
+      inMemoryClientActor ! DigitalWriteCommand(6, PinDigitalValue.High)
       inMemoryClientActor ! DigitalReadRequest(6)
-      expectMsg(DigitalReadResponse(PinValue.High))
+      expectMsg(DigitalReadResponse(PinDigitalValue.High))
     }
 
     "be able to handle IsPinSupportedRequest" in new scope {
@@ -116,7 +116,7 @@ with ImplicitSender {
     }
 
     "be able to handle ChangeInputPinState" in new scope {
-      inMemoryClientActor ! ChangeInputPinState(15, PinValue.High)
+      inMemoryClientActor ! ChangeInputPinState(15, PinDigitalValue.High)
       inMemoryClientActor ! PinStatesRequest
       expectMsg(PinStatesResponse(Map(15 -> Pin(value = 1))))
       listenerActor.underlyingActor.pin should be(15)
@@ -127,7 +127,7 @@ with ImplicitSender {
       inMemoryClientActor ! WiringPiSetupRequest
       inMemoryClientActor ! PinModeCommand(1, PinMode.Input)
       inMemoryClientActor ! PullUpDnControlCommand(1, PudMode.PudUp)
-      inMemoryClientActor ! DigitalWriteCommand(1, PinValue.High)
+      inMemoryClientActor ! DigitalWriteCommand(1, PinDigitalValue.High)
       inMemoryClientActor ! ExportCommand(1, PinDirection.DirectionHigh)
       inMemoryClientActor ! SetEdgeDetectionRequest(1, PinEdge.EdgeRising)
       inMemoryClientActor ! EnablePinStateChangeCallbackRequest(1)
@@ -137,7 +137,7 @@ with ImplicitSender {
         case m:PinStatesResponse => true
         case _ => false
       }
-      result should be(PinStatesResponse(Map(1 -> Pin(true, PinDirection.DirectionHigh, PinEdge.EdgeRising, PinMode.Input, PudMode.PudUp, PinValue.High, Some(pinStateChangeCallbackActor.ref)))))
+      result should be(PinStatesResponse(Map(1 -> Pin(true, PinDirection.DirectionHigh, PinEdge.EdgeRising, PinMode.Input, PudMode.PudUp, PinDigitalValue.High, Some(pinStateChangeCallbackActor.ref)))))
     }
   }
 

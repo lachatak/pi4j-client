@@ -11,7 +11,7 @@ import org.kaloz.pi4j.common.messages.ClientMessages.PinDirection._
 import org.kaloz.pi4j.common.messages.ClientMessages.PinEdge._
 import org.kaloz.pi4j.common.messages.ClientMessages.PinMode._
 import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange._
-import org.kaloz.pi4j.common.messages.ClientMessages.PinValue._
+import org.kaloz.pi4j.common.messages.ClientMessages.PinDigitalValue._
 import org.kaloz.pi4j.common.messages.ClientMessages.PudMode._
 import org.kaloz.pi4j.common.messages.ClientMessages._
 
