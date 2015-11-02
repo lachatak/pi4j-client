@@ -74,6 +74,7 @@ object Dependencies {
     jnativehook,
     pi4jCore,
     logBack,
+    akkaTestkit     % "test",
     mockito       	% "test",
     scalaTest     	% "test"
   )
