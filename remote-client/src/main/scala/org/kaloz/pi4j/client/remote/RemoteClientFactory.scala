@@ -3,6 +3,7 @@ package org.kaloz.pi4j.client.remote
 import akka.actor.{ActorPath, ActorSystem}
 import akka.cluster.Cluster
 import com.typesafe.scalalogging.StrictLogging
+import org.kaloz.pi4j.client.{GpioInterruptActorGateway, GpioUtilActorGateway, GpioActorGateway}
 import org.kaloz.pi4j.client.factory.ClientFactory
 import org.kaloz.pi4j.common.messages.ClientMessages.ControlMessages.Shutdown
 
@@ -23,9 +24,9 @@ class RemoteClientFactory extends ClientFactory with Configuration with StrictLo
 
   system.actorOf(RemoteInputPinStateChangedListenerActor.props, "pinStateChangedListenerActor")
 
-  val gpio = new RemoteClientGpio(remoteClientActor)
-  val gpioUtil = new RemoteClientGpioUtil(remoteClientActor)
-  val gpioInterrupt = new RemoteClientGpioInterrupt(remoteClientActor)
+  val gpio = new GpioActorGateway(remoteClientActor)
+  val gpioUtil = new GpioUtilActorGateway(remoteClientActor)
+  val gpioInterrupt = new GpioInterruptActorGateway(remoteClientActor)
 
   def shutdown: Unit = {
     remoteServerActor ! Shutdown
