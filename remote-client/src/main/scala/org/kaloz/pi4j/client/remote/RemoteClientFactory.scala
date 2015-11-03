@@ -3,13 +3,11 @@ package org.kaloz.pi4j.client.remote
 import akka.actor.{ActorPath, ActorSystem}
 import akka.cluster.Cluster
 import com.typesafe.scalalogging.StrictLogging
-import org.kaloz.pi4j.client.{GpioInterruptActorGateway, GpioUtilActorGateway, GpioActorGateway}
 import org.kaloz.pi4j.client.factory.ClientFactory
+import org.kaloz.pi4j.client.{GpioActorGateway, GpioInterruptActorGateway, GpioUtilActorGateway}
 import org.kaloz.pi4j.common.messages.ClientMessages.ControlMessages.Shutdown
 
 import scala.collection.JavaConversions._
-import scala.concurrent.Await
-import scala.concurrent.duration._
 
 class RemoteClientFactory extends ClientFactory with Configuration with StrictLogging {
 
@@ -32,7 +30,7 @@ class RemoteClientFactory extends ClientFactory with Configuration with StrictLo
     remoteServerActor ! Shutdown
     val cluster = Cluster(system)
     cluster.leave(cluster.selfAddress)
-    Await.ready(system.terminate(), 10 seconds)
+    system.terminate()
   }
 }
 

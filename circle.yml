@@ -12,9 +12,7 @@ test:
     - chmod 774 circleci/*
     - circleci/make_credentials.sh
   override:
-    - sbt coverage test
-  post:
-    - sbt coveralls
+    - sbt coverage test coveralls
 
 deployment:
   staging:
