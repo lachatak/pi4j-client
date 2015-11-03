@@ -1,6 +1,6 @@
 package org.kaloz.pi4j.client.console
 
-import java.util.logging.Level
+import java.util.logging.{Logger, Level}
 
 import akka.actor._
 import akka.event.LoggingReceive
@@ -12,12 +12,18 @@ import org.kaloz.pi4j.common.messages.ClientMessages.PinDigitalValue
 
 class ConsoleInputPinStateChangeListenerActor(pin: Int, key: Char) extends Actor with ActorLogging with NativeKeyListener {
 
-  log.info(s"Key listener is activated for pin $pin with '$key'")
-  GlobalScreen.addNativeKeyListener(this)
-
   override def receive: Receive = Actor.emptyBehavior
 
-  context.become(handleKeyEvents())
+  override def preStart(): Unit = {
+    log.info(s"Key listener is activated for pin $pin with '$key'")
+    GlobalScreen.addNativeKeyListener(this)
+    context.become(handleKeyEvents())
+  }
+
+  override def postStop(): Unit = {
+    log.info(s"Terminate key listener for $pin and $key")
+    GlobalScreen.removeNativeKeyListener(this)
+  }
 
   def handleKeyEvents(keyPressed: Boolean = false): Receive = LoggingReceive {
     case KeyPressed =>
@@ -34,11 +40,6 @@ class ConsoleInputPinStateChangeListenerActor(pin: Int, key: Char) extends Actor
       }
   }
 
-  override def postStop(): Unit = {
-    log.info(s"Terminate key listener for $pin and $key")
-    GlobalScreen.removeNativeKeyListener(this)
-  }
-
   def nativeKeyPressed(e: NativeKeyEvent): Unit = if (key == getKeyText(e.getKeyCode()).charAt(0).toUpper) self ! KeyPressed
 
   def nativeKeyReleased(e: NativeKeyEvent): Unit = if (key == getKeyText(e.getKeyCode()).charAt(0).toUpper) self ! KeyReleased
@@ -53,13 +54,18 @@ class ConsoleInputPinStateChangeListenerActor(pin: Int, key: Char) extends Actor
 
 object ConsoleInputPinStateChangeListenerActor extends Configuration {
 
+  // Get the logger for "org.jnativehook" and set the level to off.
+  val log = Logger.getLogger(classOf[GlobalScreen].getPackage().getName())
+  log.setLevel(Level.OFF)
+  // Don't forget to disable the parent handlers.
+  log.setUseParentHandlers(false)
+  GlobalScreen.registerNativeHook()
+
   def factory: (ActorRefFactory, Int) => ActorRef = (actorRefFactory, pin) => {
-
-    GlobalScreen.registerNativeHook()
-    java.util.logging.Logger.getLogger("org.jnativehook").setLevel(Level.OFF)
     val char = keyMap(pin)
-
     actorRefFactory.actorOf(Props(classOf[ConsoleInputPinStateChangeListenerActor], pin, char), s"console-$pin-$char-actor")
   }
+
+  def shutdown() = GlobalScreen.unregisterNativeHook()
 
 }

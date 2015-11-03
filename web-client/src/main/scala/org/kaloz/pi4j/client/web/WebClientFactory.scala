@@ -6,7 +6,7 @@ import org.kaloz.pi4j.client.factory.ClientFactory
 
 class WebClientFactory extends ClientFactory with StrictLogging {
 
-  logger.info("Initialised...")
+  logger.info("Initializing...")
 
   //TODO add proper client actor
   lazy val gpio = new GpioActorGateway(null)

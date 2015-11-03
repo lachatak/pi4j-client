@@ -13,7 +13,7 @@ import scala.concurrent.duration._
 
 class RemoteClientFactory extends ClientFactory with Configuration with StrictLogging {
 
-  logger.info("Initialised...")
+  logger.info("Initializing...")
 
   private val system = ActorSystem("pi4j-remoting", config)
 

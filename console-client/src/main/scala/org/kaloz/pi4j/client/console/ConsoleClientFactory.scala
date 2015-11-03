@@ -2,14 +2,13 @@ package org.kaloz.pi4j.client.console
 
 import akka.actor.ActorSystem
 import com.typesafe.scalalogging.StrictLogging
-import org.jnativehook.GlobalScreen
-import org.kaloz.pi4j.client.{GpioInterruptActorGateway, GpioUtilActorGateway, GpioActorGateway}
-import org.kaloz.pi4j.client.actor.{LocalInputPinStateChangedListenerActor, InMemoryClientActor}
+import org.kaloz.pi4j.client.actor.{InMemoryClientActor, LocalInputPinStateChangedListenerActor}
 import org.kaloz.pi4j.client.factory.ClientFactory
+import org.kaloz.pi4j.client.{GpioActorGateway, GpioInterruptActorGateway, GpioUtilActorGateway}
 
 class ConsoleClientFactory extends ClientFactory with StrictLogging {
 
-  logger.info("Initialised...")
+  logger.info("Initializing...")
 
   private val system = ActorSystem("console-actor-system")
   private val consoleClientActor = system.actorOf(InMemoryClientActor.props(ConsoleInputPinStateChangeListenerActor.factory), "consoleClientActor")
@@ -21,7 +20,7 @@ class ConsoleClientFactory extends ClientFactory with StrictLogging {
   val gpioInterrupt = new GpioInterruptActorGateway(consoleClientActor)
 
   def shutdown(): Unit = {
-    GlobalScreen.unregisterNativeHook()
+    ConsoleInputPinStateChangeListenerActor.shutdown()
     system.terminate()
   }
 
