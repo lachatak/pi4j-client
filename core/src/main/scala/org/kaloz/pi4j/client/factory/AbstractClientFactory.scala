@@ -21,8 +21,6 @@ private[factory] class AbstractClientFactory extends ClientFactory with StrictLo
       .map(info => Class.forName(info.getName))
       .toList
 
-    println(factoryClasses)
-
     factoryClasses.size match {
       case 0 => throw new ClientFactoryException("No client library dependency were provided at runtime!")
       case 1 =>

@@ -2,18 +2,18 @@ package org.kaloz.pi4j.client.web
 
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.ws.{TextMessage, Message}
+import akka.http.scaladsl.model.ws.{Message, TextMessage}
 import akka.http.scaladsl.server.Directives._
 import akka.pattern.ask
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
 import akka.stream.{ActorMaterializer, OverflowStrategy}
 import akka.util.Timeout
 import com.typesafe.scalalogging.StrictLogging
-import org.kaloz.pi4j.client.actor.InMemoryClientActor
+import org.kaloz.pi4j.client.actor.InMemoryClientActor.ServiceMessages.PinStatesRequest
+import org.kaloz.pi4j.client.actor.{InMemoryClientActor, LocalInputPinStateChangedListenerActor}
 import org.kaloz.pi4j.client.factory.ClientFactory
 import org.kaloz.pi4j.client.web.WebSocketActor.Initialize
 import org.kaloz.pi4j.client.{GpioActorGateway, GpioInterruptActorGateway, GpioUtilActorGateway}
-import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessages.WiringPiSetupRequest
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -24,6 +24,7 @@ class WebClientFactory extends ClientFactory with StrictLogging with Configurati
   private implicit val flowMaterializer = ActorMaterializer()
   private implicit val timeout = Timeout(1 minute)
 
+  system.actorOf(LocalInputPinStateChangedListenerActor.props, "pinStateChangeListenerActor")
   private val webSocketActor = system.actorOf(Props[WebSocketActor], "webSocketActor")
   private val webClientActor = system.actorOf(InMemoryClientActor.props((x, y) => webSocketActor), "webClientActor")
 
@@ -66,11 +67,11 @@ class WebSocketActor extends Actor {
 
   def receive = {
     case Initialize(sink, webClient) => {
-      (webClient ? WiringPiSetupRequest).foreach(println)
+      (webClient ? PinStatesRequest).foreach(println)
       context.system.scheduler.schedule(0 second, 5 seconds, sink, TextMessage( """{"type": "pinStateChange", "pinId": 1, "pinValue": "out-high"}"""))
 //      context.become(receiveWithSink(sink))
     }
-    case x => println(x)
+    case x => println(s"received $x")
   }
 
   def receiveWithSink(actorRef: ActorRef): Receive = {
