@@ -1,19 +1,18 @@
 package org.kaloz.pi4j.client.web
 
-import akka.actor.{Actor, ActorRef, ActorSystem, Props}
+import akka.actor._
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.ws.{Message, TextMessage}
+import akka.http.scaladsl.model.ws.Message
 import akka.http.scaladsl.server.Directives._
-import akka.pattern.ask
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
 import akka.stream.{ActorMaterializer, OverflowStrategy}
 import akka.util.Timeout
 import com.typesafe.scalalogging.StrictLogging
-import org.kaloz.pi4j.client.actor.InMemoryClientActor.ServiceMessages.PinStatesRequest
 import org.kaloz.pi4j.client.actor.{InMemoryClientActor, LocalInputPinStateChangedListenerActor}
 import org.kaloz.pi4j.client.factory.ClientFactory
 import org.kaloz.pi4j.client.web.WebSocketActor.Initialize
 import org.kaloz.pi4j.client.{GpioActorGateway, GpioInterruptActorGateway, GpioUtilActorGateway}
+import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange.{OutputPinStateChanged, InputPinStateChanged}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -24,9 +23,12 @@ class WebClientFactory extends ClientFactory with StrictLogging with Configurati
   private implicit val flowMaterializer = ActorMaterializer()
   private implicit val timeout = Timeout(1 minute)
 
-  system.actorOf(LocalInputPinStateChangedListenerActor.props, "pinStateChangeListenerActor")
   private val webSocketActor = system.actorOf(Props[WebSocketActor], "webSocketActor")
-  private val webClientActor = system.actorOf(InMemoryClientActor.props((x, y) => webSocketActor), "webClientActor")
+  private val webClientActor = system.actorOf(InMemoryClientActor.props(WebSocketActor.f(webSocketActor)), "webClientActor")
+  system.actorOf(LocalInputPinStateChangedListenerActor.props, "pinStateChangeListenerActor")
+
+  system.eventStream.subscribe(webSocketActor, classOf[InputPinStateChanged])
+  system.eventStream.subscribe(webSocketActor, classOf[OutputPinStateChanged])
 
   private def webSocketActorFlow(webSocketActor: ActorRef): Flow[Message, Message, _] = {
     val in = Flow[Message].to(Sink.actorRef(webSocketActor, "onCompleteMessage"))
@@ -61,17 +63,17 @@ object WebClientFactory {
   val instance = new WebClientFactory()
 }
 
-class WebSocketActor extends Actor {
+class WebSocketActor extends Actor with StrictLogging {
 
   implicit val timeout = Timeout(5 seconds)
 
   def receive = {
-    case Initialize(sink, webClient) => {
-      (webClient ? PinStatesRequest).foreach(println)
-      context.system.scheduler.schedule(0 second, 5 seconds, sink, TextMessage( """{"type": "pinStateChange", "pinId": 1, "pinValue": "out-high"}"""))
+    case x => logger.error(s"received $x")
+//    case Initialize(sink, webClient) => {
+//      (webClient ? PinStatesRequest).foreach(println)
+//      context.system.scheduler.schedule(0 second, 5 seconds, sink, TextMessage( """{"type": "pinStateChange", "pinId": 1, "pinValue": "out-high"}"""))
 //      context.become(receiveWithSink(sink))
-    }
-    case x => println(s"received $x")
+//    }
   }
 
   def receiveWithSink(actorRef: ActorRef): Receive = {
@@ -80,6 +82,11 @@ class WebSocketActor extends Actor {
 }
 
 object WebSocketActor {
+
+  def f(webSocketActor: ActorRef)(x: ActorRefFactory, y: Int): ActorRef = {
+    println("something happened")
+    webSocketActor
+  }
 
   case class Initialize(sink: ActorRef, webClient: ActorRef)
 
