@@ -24,6 +24,7 @@ object Library {
   val akkaCluster       = "com.typesafe.akka"           %% "akka-cluster"                  % Version.akka
   val akkaClusterTools  = "com.typesafe.akka"           %% "akka-cluster-tools"            % Version.akka
   val akkaSlf4j         = "com.typesafe.akka"           %% "akka-slf4j"                    % Version.akka
+  val akkaMultiNodeTest = "com.typesafe.akka"           %% "akka-multi-node-testkit"       % Version.akka
   val akkaTestkit       = "com.typesafe.akka"           %% "akka-testkit"                  % Version.akka
   val jodaTime          = "joda-time"                   %  "joda-time"                     % Version.jodaTime
   val config            = "com.typesafe" 	              %  "config"                        % Version.config
@@ -99,9 +100,10 @@ object Dependencies {
     pi4jCore,
     logBack,
     config,
-    akkaTestkit     % "test",
-    mockito       	% "test",
-    scalaTest     	% "test"
+    akkaTestkit         % "test",
+    akkaMultiNodeTest   % "test",
+    mockito           	% "test",
+    scalaTest         	% "test"
   )
 
   val remoteServer = deps(
