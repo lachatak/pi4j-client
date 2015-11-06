@@ -17,7 +17,7 @@ object Version {
   val aspectj       = "1.8.7"
   val jnativehook   = "2.0.2"
   val reflections   = "0.9.10"
-  val scoverage     = "1.1.0"
+  val scoverage     = "1.1.1"
 }
 
 object Library {
@@ -99,6 +99,7 @@ object Dependencies {
   val remoteClient = deps(
     config,
     akkaCluster,
+    akkaSlf4j,
     akkaClusterTools,
     pi4jCore,
     logBack,
