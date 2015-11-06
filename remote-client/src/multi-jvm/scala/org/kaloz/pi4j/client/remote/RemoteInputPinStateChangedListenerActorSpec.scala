@@ -25,7 +25,7 @@ object RemoteInputPinStateChangedListenerActorSpec {
 
     def receive = {
       case Ping =>
-        context.system.scheduler.scheduleOnce(2 seconds) {
+        context.system.scheduler.scheduleOnce(5 seconds) {
           mediator ! DistributedPubSubMediator.Publish(classOf[InputPinStateChanged].getClass.getSimpleName, InputPinStateChanged(1, PinDigitalValue.High))
         }
     }
