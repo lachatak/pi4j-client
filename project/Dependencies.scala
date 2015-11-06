@@ -107,8 +107,8 @@ object Dependencies {
     akkaTestkit         % "test",
     akkaMultiNodeTest   % "test",
     mockito           	% "test",
-    scalaTest         	% "test",
-    scoverage           % "test"
+    scalaTest         	% "test"
+//    scoverage           % "test"
   )
 
   val remoteServer = deps(
