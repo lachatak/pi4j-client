@@ -14,7 +14,7 @@ object RemoteClientServerConfig extends MultiNodeConfig {
   commonConfig(ConfigFactory.parseString(
     """
       |akka {
-      |  loggers = ["akka.testkit.TestEventListener"]
+      |  loggers = ["akka.event.slf4j.Slf4jLogger", "akka.testkit.TestEventListener"]
       |  loglevel = "DEBUG"
       |  akka.remote.log-remote-lifecycle-events = off
       |  actor.provider = "akka.cluster.ClusterActorRefProvider"
@@ -24,6 +24,7 @@ object RemoteClientServerConfig extends MultiNodeConfig {
       |       pub-sub.max-delta-elements = 500
       |       metrics.enabled=off
       |  }
+      |  test.filter-leeway = 6s
       |}
     """.stripMargin))
 
