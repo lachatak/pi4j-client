@@ -24,7 +24,6 @@ object RemoteClientServerConfig extends MultiNodeConfig {
       |       pub-sub.max-delta-elements = 500
       |       metrics.enabled=off
       |  }
-      |  test.filter-leeway = 5s
       |}
     """.stripMargin))
 
