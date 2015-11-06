@@ -99,6 +99,7 @@ object Dependencies {
   val remoteClient = deps(
     config,
     akkaCluster,
+    akkaSlf4j,
     akkaClusterTools,
     pi4jCore,
     logBack,
