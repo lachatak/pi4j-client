@@ -2,13 +2,17 @@ package org.kaloz.pi4j.client.remote
 
 import akka.actor._
 import akka.cluster.Cluster
+import akka.cluster.pubsub.DistributedPubSubMediator.Count
 import akka.cluster.pubsub.{DistributedPubSub, DistributedPubSubMediator}
+import akka.pattern.ask
 import akka.remote.testconductor.RoleName
 import akka.remote.testkit.MultiNodeSpec
 import akka.testkit.{EventFilter, ImplicitSender}
+import akka.util.Timeout
 import org.kaloz.pi4j.common.messages.ClientMessages.PinDigitalValue
 import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange.InputPinStateChanged
 
+import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
@@ -20,12 +24,28 @@ object RemoteInputPinStateChangedListenerActorSpec {
 
   case object Ping
 
+  case object Test
+
   class RemoteServer extends Actor with ActorLogging {
+
+    implicit val timeout = Timeout(5 second)
+
     val mediator = DistributedPubSub(context.system).mediator
 
-    def receive = {
+    override def receive: Receive = Actor.emptyBehavior
+
+    context.become(trigger())
+
+    def trigger(cancellable: Option[Cancellable] = None): Receive = {
       case Ping =>
-        context.system.scheduler.scheduleOnce(2 seconds) {
+        context.become(trigger(Some(context.system.scheduler.schedule(100 millis, 100 millis) {
+          self ! Test
+        })))
+
+      case Test =>
+        val count = Await.result((mediator ? Count).mapTo[Int], 5 second)
+        if (count == 1) {
+          cancellable.foreach(_.cancel())
           mediator ! DistributedPubSubMediator.Publish(classOf[InputPinStateChanged].getClass.getSimpleName, InputPinStateChanged(1, PinDigitalValue.High))
         }
     }

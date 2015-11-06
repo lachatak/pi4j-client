@@ -18,7 +18,7 @@ with ImplicitSender {
       parent.expectMsg(ChangeInputPinState(1, PinDigitalValue.High))
     }
 
-    "not inform parent if the key was pressed constantly" in new scope {
+    "not inform parent if the key has been already pressed" in new scope {
       consoleInputPinStateChangeListenerActor.underlyingActor.nativeKeyPressed(new NativeKeyEvent(2401, System.currentTimeMillis(), 0, 97, NativeKeyEvent.VC_A, 0))
       parent.expectMsg(ChangeInputPinState(1, PinDigitalValue.High))
       consoleInputPinStateChangeListenerActor.underlyingActor.nativeKeyPressed(new NativeKeyEvent(2401, System.currentTimeMillis(), 0, 97, NativeKeyEvent.VC_A, 0))
@@ -30,6 +30,15 @@ with ImplicitSender {
       parent.expectMsg(ChangeInputPinState(1, PinDigitalValue.High))
       consoleInputPinStateChangeListenerActor.underlyingActor.nativeKeyReleased(new NativeKeyEvent(2402, System.currentTimeMillis(), 0, 97, NativeKeyEvent.VC_A, 0))
       parent.expectMsg(ChangeInputPinState(1, PinDigitalValue.Low))
+    }
+
+    "not inform parent if the key has been already released" in new scope {
+      consoleInputPinStateChangeListenerActor.underlyingActor.nativeKeyPressed(new NativeKeyEvent(2401, System.currentTimeMillis(), 0, 97, NativeKeyEvent.VC_A, 0))
+      parent.expectMsg(ChangeInputPinState(1, PinDigitalValue.High))
+      consoleInputPinStateChangeListenerActor.underlyingActor.nativeKeyReleased(new NativeKeyEvent(2402, System.currentTimeMillis(), 0, 97, NativeKeyEvent.VC_A, 0))
+      parent.expectMsg(ChangeInputPinState(1, PinDigitalValue.Low))
+      consoleInputPinStateChangeListenerActor.underlyingActor.nativeKeyReleased(new NativeKeyEvent(2402, System.currentTimeMillis(), 0, 97, NativeKeyEvent.VC_A, 0))
+      parent.expectNoMsg()
     }
   }
 

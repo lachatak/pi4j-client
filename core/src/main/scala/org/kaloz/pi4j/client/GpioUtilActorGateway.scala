@@ -22,7 +22,7 @@ class GpioUtilActorGateway(clientActor: ActorRef) extends GpioUtil {
 
   override def setEdgeDetection(pin: Int, edge: Int): Boolean = Await.result((clientActor ? SetEdgeDetectionRequest(pin, edge)).mapTo[SetEdgeDetectionResponse], 5 seconds).status
 
-  override def getDirection(pin: Int): Int = Await.result((clientActor ? GetDirectionRequest(pin)).mapTo[GetDirectionReponse], 5 seconds).direction
+  override def getDirection(pin: Int): Int = Await.result((clientActor ? GetDirectionRequest(pin)).mapTo[GetDirectionResponse], 5 seconds).direction
 
   override def isPinSupported(pin: Int): Int = Await.result((clientActor ? IsPinSupportedRequest(pin)).mapTo[IsPinSupportedResponse], 5 seconds).supported
 }

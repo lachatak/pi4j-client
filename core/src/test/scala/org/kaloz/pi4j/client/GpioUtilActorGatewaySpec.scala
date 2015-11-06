@@ -44,7 +44,7 @@ with Matchers {
     "should delegate getDirection call to the underlying actor and return the response" in new scope {
       Future {
         clientActor.expectMsg(GetDirectionRequest(1))
-        clientActor.reply(GetDirectionReponse(PinDirection.DirectionLow))
+        clientActor.reply(GetDirectionResponse(PinDirection.DirectionLow))
       }
       gpioUtilActorGateway.getDirection(1) should be(JGpioUtil.DIRECTION_LOW)
     }

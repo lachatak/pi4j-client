@@ -83,8 +83,8 @@ with ImplicitSender {
 
     "be able to handle GetDirectionRequest" in new scope {
       inMemoryClientActor ! ExportCommand(12, PinDirection.DirectionLow)
-      inMemoryClientActor ! PinStatesRequest
-      expectMsg(PinStatesResponse(Map(12 -> Pin(exported = true, direction = PinDirection.DirectionLow))))
+      inMemoryClientActor ! GetDirectionRequest(12)
+      expectMsg(GetDirectionResponse(PinDirection.DirectionLow))
     }
 
     "be able to handle EnablePinStateChangeCallbackRequest" in new scope {
@@ -133,8 +133,8 @@ with ImplicitSender {
       inMemoryClientActor ! EnablePinStateChangeCallbackRequest(1)
 
       inMemoryClientActor ! PinStatesRequest
-      val result = fishForMessage(){
-        case m:PinStatesResponse => true
+      val result = fishForMessage() {
+        case m: PinStatesResponse => true
         case _ => false
       }
       result should be(PinStatesResponse(Map(1 -> Pin(true, PinDirection.DirectionHigh, PinEdge.EdgeRising, PinMode.Input, PudMode.PudUp, PinDigitalValue.High, Some(pinStateChangeCallbackActor.ref)))))

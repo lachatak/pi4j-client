@@ -16,8 +16,6 @@ class RemoteClientActor(remoteServerActor: ActorSelection) extends Actor with Ac
   override def receive = LoggingReceive {
     case request: GpioRequest => (remoteServerActor ? request).mapTo[GpioResponse].pipeTo(sender)
     case command: GpioCommand => remoteServerActor ! command
-
-    case message: GpioMessage => throw new NotImplementedError(s"$message is not handled!!")
   }
 
 }

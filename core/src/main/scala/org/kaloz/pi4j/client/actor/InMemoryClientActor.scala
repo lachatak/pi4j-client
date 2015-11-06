@@ -45,7 +45,7 @@ class InMemoryClientActor(pinStateChangeCallbackFactory: (ActorRefFactory, Int) 
     case SetEdgeDetectionRequest(pin, edge) =>
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(edge = edge))))
       sender ! SetEdgeDetectionResponse(false)
-    case GetDirectionRequest(pin) => sender ! GetDirectionReponse(pins.getOrElse(pin, Pin()).direction)
+    case GetDirectionRequest(pin) => sender ! GetDirectionResponse(pins.getOrElse(pin, Pin()).direction)
 
 
     case EnablePinStateChangeCallbackRequest(pin) =>
@@ -64,8 +64,6 @@ class InMemoryClientActor(pinStateChangeCallbackFactory: (ActorRefFactory, Int) 
       context.system.eventStream.publish(InputPinStateChanged(pin, value))
 
     case PinStatesRequest => sender ! PinStatesResponse(pins)
-
-    case message: GpioMessage => throw new NotImplementedError(s"$message is missing!!")
   }
 
 }

@@ -36,7 +36,7 @@ class RemoteServerActor extends Actor with ActorLogging {
       context.become(handle(pins - pin))
       GpioUtil.unexport(pin)
     case SetEdgeDetectionRequest(pin, edge) => sender ! SetEdgeDetectionResponse(GpioUtil.setEdgeDetection(pin, edge))
-    case GetDirectionRequest(pin) => sender ! GetDirectionReponse(GpioUtil.getDirection(pin))
+    case GetDirectionRequest(pin) => sender ! GetDirectionResponse(GpioUtil.getDirection(pin))
 
     case EnablePinStateChangeCallbackRequest(pin) => sender ! EnablePinStateChangeCallbackResponse(GpioInterrupt.enablePinStateChangeCallback(pin))
     case DisablePinStateChangeCallbackRequest(pin) => sender ! DisablePinStateChangeCallbackResponse(GpioInterrupt.disablePinStateChangeCallback(pin))

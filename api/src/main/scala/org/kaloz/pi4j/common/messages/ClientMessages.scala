@@ -59,7 +59,7 @@ object ClientMessages {
 
     case class GetDirectionRequest(pin: Int) extends GpioRequest
 
-    case class GetDirectionReponse(direction: PinDirection) extends GpioResponse
+    case class GetDirectionResponse(direction: PinDirection) extends GpioResponse
 
   }
 
