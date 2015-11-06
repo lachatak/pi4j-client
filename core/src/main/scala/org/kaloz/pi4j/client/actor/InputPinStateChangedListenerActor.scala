@@ -8,6 +8,7 @@ import org.kaloz.pi4j.common.messages.ClientMessages.PinDigitalValue.pinValueToB
 
 trait InputPinStateChangedListenerActor extends Actor with ActorLogging {
 
+  //TODO extract it to a separate trait
   val parameterTypes = List(classOf[Int], classOf[Boolean])
   val pinStateChangeCallback = classOf[GpioInterrupt].getDeclaredMethod("pinStateChangeCallback", parameterTypes: _*)
   pinStateChangeCallback.setAccessible(true)

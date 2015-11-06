@@ -2,11 +2,12 @@ package org.kaloz.pi4j.client.remote
 
 import akka.actor._
 import akka.cluster.Cluster
-import akka.cluster.pubsub.DistributedPubSubMediator.{Count, SubscribeAck}
 import akka.cluster.pubsub.{DistributedPubSub, DistributedPubSubMediator}
 import akka.remote.testconductor.RoleName
 import akka.remote.testkit.MultiNodeSpec
-import akka.testkit.{ImplicitSender, TestProbe}
+import akka.testkit.{EventFilter, ImplicitSender}
+import org.kaloz.pi4j.common.messages.ClientMessages.PinDigitalValue
+import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange.InputPinStateChanged
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -19,34 +20,14 @@ object RemoteInputPinStateChangedListenerActorSpec {
 
   case object Ping
 
-  case object Pong
-
-  class ServerActor extends Actor with ActorLogging {
+  class RemoteServer extends Actor with ActorLogging {
     val mediator = DistributedPubSub(context.system).mediator
 
     def receive = {
-      case Ping => mediator ! DistributedPubSubMediator.Publish("ping", Pong)
-    }
-  }
-
-  class ClientActor(testProbe: ActorRef, serverActor: ActorSelection) extends Actor with ActorLogging {
-
-    val mediator = DistributedPubSub(context.system).mediator
-    mediator ! DistributedPubSubMediator.Subscribe("ping", None, self)
-
-    override def receive = Actor.emptyBehavior
-
-    context.become(handle())
-
-    def handle(cancellable: Option[Cancellable] = None): Receive = {
-      case Pong =>
-        cancellable.foreach(_.cancel())
-        context.become(handle())
-        testProbe forward Pong
-      case SubscribeAck(_) =>
-        context.become(handle(Some(context.system.scheduler.schedule(300 millis, 300 millis) {
-          serverActor ! Ping
-        })))
+      case Ping =>
+        context.system.scheduler.scheduleOnce(2 seconds) {
+          mediator ! DistributedPubSubMediator.Publish(classOf[InputPinStateChanged].getClass.getSimpleName, InputPinStateChanged(1, PinDigitalValue.High))
+        }
     }
   }
 
@@ -55,28 +36,16 @@ object RemoteInputPinStateChangedListenerActorSpec {
 class RemoteInputPinStateChangedListenerActorSpec extends MultiNodeSpec(RemoteClientServerConfig)
 with STMultiNodeSpec with ImplicitSender {
 
-  import RemoteInputPinStateChangedListenerActorSpec._
   import RemoteClientServerConfig._
+  import RemoteInputPinStateChangedListenerActorSpec._
 
   def initialParticipants = roles.size
 
   def join(from: RoleName, to: RoleName): Unit = {
     runOn(from) {
       Cluster(system) join node(to).address
-      createMediator()
     }
     enterBarrier(from.name + "-joined")
-  }
-
-  def createMediator(): ActorRef = DistributedPubSub(system).mediator
-
-  def mediator: ActorRef = DistributedPubSub(system).mediator
-
-  def awaitCount(expected: Int): Unit = {
-    awaitAssert {
-      mediator ! Count
-      expectMsgType[Int] should ===(expected)
-    }
   }
 
   "A RemoteInputPinStateChangedListenerActor" must {
@@ -87,23 +56,23 @@ with STMultiNodeSpec with ImplicitSender {
       enterBarrier("after-joined")
     }
 
-    "send to and receive from a remote node" in {
-
-      val testProbe = TestProbe()
+    "process published message from the server" in {
 
       runOn(server) {
-        system.actorOf(Props[ServerActor], "serverActor")
+        system.actorOf(Props[RemoteServer], "remoteServer")
 
         enterBarrier("deployed")
       }
 
       runOn(client) {
-        val serverActor = system.actorSelection(node(server) / "user" / "serverActor")
-        system.actorOf(Props(classOf[ClientActor], testProbe.ref, serverActor), "clientActor")
+        val serverActor = system.actorSelection(node(server) / "user" / "remoteServer")
+        system.actorOf(Props(classOf[RemoteInputPinStateChangedListenerActor]), "remoteInputPinStateChangedListenerActor")
 
         enterBarrier("deployed")
 
-        testProbe.expectMsg(Pong)
+        EventFilter.debug(message = s"Listeners have been updated about pin state change --> 1 - High", occurrences = 1) intercept {
+          serverActor ! Ping
+        }
       }
 
       enterBarrier("finished")
