@@ -17,6 +17,7 @@ object Version {
   val aspectj       = "1.8.7"
   val jnativehook   = "2.0.2"
   val reflections   = "0.9.10"
+  val scoverage     = "1.1.0"
 }
 
 object Library {
@@ -39,6 +40,8 @@ object Library {
   val aspectjrt         = "org.aspectj"                 %  "aspectjrt"                     % Version.aspectj
   val jnativehook       = "com.1stleg"                  %  "jnativehook"                   % Version.jnativehook
   val reflections       = "org.reflections"             %  "reflections"                   % Version.reflections
+  //FIXME multi node test + coverage failure without it on circleci
+  val scoverage         = "org.scoverage"               %% "scalac-scoverage-runtime"      % Version.scoverage
 }
 
 object Dependencies {
@@ -103,7 +106,8 @@ object Dependencies {
     akkaTestkit         % "test",
     akkaMultiNodeTest   % "test",
     mockito           	% "test",
-    scalaTest         	% "test"
+    scalaTest         	% "test",
+    scoverage           % "test"
   )
 
   val remoteServer = deps(
