@@ -9,8 +9,8 @@ import akka.remote.testconductor.RoleName
 import akka.remote.testkit.MultiNodeSpec
 import akka.testkit.{EventFilter, ImplicitSender}
 import akka.util.Timeout
-import org.kaloz.pi4j.common.messages.ClientMessages.PinDigitalValue
 import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange.InputPinStateChanged
+import org.kaloz.pi4j.common.messages.ClientMessages.PinValue.PinDigitalValue
 
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global

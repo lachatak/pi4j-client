@@ -4,7 +4,7 @@ import akka.actor._
 import akka.event.LoggingReceive
 import akka.pattern.{ask, pipe}
 import akka.util.Timeout
-import org.kaloz.pi4j.common.messages.ClientMessages.{GpioCommand, GpioMessage, GpioRequest, GpioResponse}
+import org.kaloz.pi4j.common.messages.ClientMessages.{GpioCommand, GpioRequest, GpioResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._

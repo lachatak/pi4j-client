@@ -3,8 +3,8 @@ package org.kaloz.pi4j.client.console
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}
 import org.jnativehook.keyboard.NativeKeyEvent
-import org.kaloz.pi4j.common.messages.ClientMessages.PinDigitalValue
 import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange.ChangeInputPinState
+import org.kaloz.pi4j.common.messages.ClientMessages.PinValue.PinDigitalValue
 import org.scalatest.{Matchers, WordSpecLike}
 
 class ConsoleInputPinStateChangeListenerActorSpec extends TestKit(ActorSystem("console-test-system"))

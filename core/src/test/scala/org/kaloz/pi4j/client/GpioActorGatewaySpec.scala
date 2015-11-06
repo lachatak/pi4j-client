@@ -4,6 +4,7 @@ import akka.actor.ActorSystem
 import akka.testkit.{TestKit, TestProbe}
 import com.pi4j.wiringpi.{Gpio => JGpio}
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessages._
+import org.kaloz.pi4j.common.messages.ClientMessages.PinValue._
 import org.kaloz.pi4j.common.messages.ClientMessages._
 import org.scalatest.{Matchers, WordSpecLike}
 
@@ -49,7 +50,7 @@ with Matchers {
 
     "should delegate pwmWrite call to the underlying actor" in new scope {
       gpioActorGateway.pwmWrite(1, 50)
-      clientActor.expectMsg(PwmWriteCommand(1, 50))
+      clientActor.expectMsg(PwmWriteCommand(1, PinPwmValue(50)))
     }
   }
 

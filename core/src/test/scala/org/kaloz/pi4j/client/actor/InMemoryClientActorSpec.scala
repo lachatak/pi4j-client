@@ -7,6 +7,7 @@ import org.kaloz.pi4j.common.messages.ClientMessages.GpioInterruptMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioUtilMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange._
+import org.kaloz.pi4j.common.messages.ClientMessages.PinValue._
 import org.kaloz.pi4j.common.messages.ClientMessages._
 import org.scalatest.{Matchers, WordSpecLike}
 
@@ -34,9 +35,9 @@ with ImplicitSender {
     }
 
     "be able to handle PwmWriteCommand" in new scope {
-      inMemoryClientActor ! PwmWriteCommand(4, 50)
+      inMemoryClientActor ! PwmWriteCommand(4, PinPwmValue(50))
       inMemoryClientActor ! PinStatesRequest
-      expectMsg(PinStatesResponse(Map(4 -> Pin(value = 50))))
+      expectMsg(PinStatesResponse(Map(4 -> Pin(value = PinPwmValue(50)))))
     }
 
     "be able to handle DigitalWriteCommand" in new scope {
@@ -118,7 +119,7 @@ with ImplicitSender {
     "be able to handle ChangeInputPinState" in new scope {
       inMemoryClientActor ! ChangeInputPinState(15, PinDigitalValue.High)
       inMemoryClientActor ! PinStatesRequest
-      expectMsg(PinStatesResponse(Map(15 -> Pin(value = 1))))
+      expectMsg(PinStatesResponse(Map(15 -> Pin(value = PinDigitalValue.High))))
       listenerActor.underlyingActor.pin should be(15)
       listenerActor.underlyingActor.value should be(1)
     }

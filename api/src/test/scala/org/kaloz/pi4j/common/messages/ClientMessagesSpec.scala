@@ -1,12 +1,13 @@
 package org.kaloz.pi4j.common.messages
 
-import com.pi4j.wiringpi.{GpioUtil, Gpio}
+import com.pi4j.wiringpi.{Gpio, GpioUtil}
 import org.kaloz.pi4j.common.messages.ClientMessages.PinDirection.PinDirection
 import org.kaloz.pi4j.common.messages.ClientMessages.PinEdge.PinEdge
 import org.kaloz.pi4j.common.messages.ClientMessages.PinMode.PinMode
-import org.kaloz.pi4j.common.messages.ClientMessages.PinDigitalValue.PinDigitalValue
-import org.kaloz.pi4j.common.messages.ClientMessages._
+import org.kaloz.pi4j.common.messages.ClientMessages.PinValue.PinDigitalValue._
+import org.kaloz.pi4j.common.messages.ClientMessages.PinValue._
 import org.kaloz.pi4j.common.messages.ClientMessages.PudMode.PudMode
+import org.kaloz.pi4j.common.messages.ClientMessages._
 import org.scalatest.{FunSpec, Matchers}
 
 class ClientMessagesSpec extends FunSpec with Matchers {
@@ -39,7 +40,7 @@ class ClientMessagesSpec extends FunSpec with Matchers {
     }
   }
 
-  describe("PinDigitalValue") {
+  describe("PinValue") {
     it("should have implicit converter from Int to PinDigitalValue") {
       val lowPinValue: PinDigitalValue = Gpio.LOW
       lowPinValue should be(PinDigitalValue.Low)
@@ -52,12 +53,27 @@ class ClientMessagesSpec extends FunSpec with Matchers {
       }
     }
 
-    it("should have implicit converter from PinDigitalValue to Int") {
+    it("should have implicit converter from PinValue to PinDigitalValue") {
+      val lowPinValue: PinDigitalValue = PinDigitalValue.Low
+      lowPinValue should be(PinDigitalValue.Low)
+
+      val highPinValue: PinDigitalValue = PinDigitalValue.High
+      highPinValue should be(PinDigitalValue.High)
+
+      intercept[NotImplementedError]{
+        val notImplemented:PinDigitalValue = PinValue.PinPwmValue(50)
+      }
+    }
+
+    it("should have implicit converter from PinValue to Int") {
       val lowPinValue: Int = PinDigitalValue.Low
       lowPinValue should be(Gpio.LOW)
 
       val highPinValue: Int = PinDigitalValue.High
       highPinValue should be(Gpio.HIGH)
+
+      val pinValue: Int = PinValue.PinPwmValue(50)
+      pinValue should be(50)
     }
 
     it("should have implicit converter from PinDigitalValue to java.lang.Boolean") {

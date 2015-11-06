@@ -2,9 +2,9 @@ package org.kaloz.pi4j.client.mock
 
 import akka.actor.ActorSystem
 import com.typesafe.scalalogging.StrictLogging
-import org.kaloz.pi4j.client.{GpioInterruptActorGateway, GpioUtilActorGateway, GpioActorGateway}
 import org.kaloz.pi4j.client.actor.{InMemoryClientActor, LocalInputPinStateChangedListenerActor}
 import org.kaloz.pi4j.client.factory.ClientFactory
+import org.kaloz.pi4j.client.{GpioActorGateway, GpioInterruptActorGateway, GpioUtilActorGateway}
 
 class MockClientFactory extends ClientFactory with StrictLogging {
 

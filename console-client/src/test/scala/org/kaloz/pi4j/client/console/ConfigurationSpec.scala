@@ -1,6 +1,6 @@
 package org.kaloz.pi4j.client.console
 
-import org.scalatest.{Matchers, FunSpec}
+import org.scalatest.{FunSpec, Matchers}
 
 class ConfigurationSpec extends FunSpec with Matchers {
 

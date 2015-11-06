@@ -7,8 +7,8 @@ import akka.event.LoggingReceive
 import org.jnativehook.GlobalScreen
 import org.jnativehook.keyboard.NativeKeyEvent._
 import org.jnativehook.keyboard.{NativeKeyEvent, NativeKeyListener}
-import org.kaloz.pi4j.common.messages.ClientMessages.PinDigitalValue
 import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange.ChangeInputPinState
+import org.kaloz.pi4j.common.messages.ClientMessages.PinValue.PinDigitalValue
 
 class ConsoleInputPinStateChangeListenerActor(pin: Int, key: Char) extends Actor with ActorLogging with NativeKeyListener {
 

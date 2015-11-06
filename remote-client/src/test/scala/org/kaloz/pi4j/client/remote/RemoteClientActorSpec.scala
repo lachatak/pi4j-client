@@ -2,15 +2,16 @@ package org.kaloz.pi4j.client.remote
 
 
 import akka.actor.ActorSystem
+import akka.pattern.ask
 import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}
 import akka.util.Timeout
-import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessages.{PinModeCommand, WiringPiSetupResponse, WiringPiSetupRequest}
+import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessages.{PinModeCommand, WiringPiSetupRequest, WiringPiSetupResponse}
 import org.kaloz.pi4j.common.messages.ClientMessages.PinMode
 import org.scalatest.{Matchers, WordSpecLike}
+
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{Await, Future}
-import akka.pattern.ask
 import scala.concurrent.duration._
+import scala.concurrent.{Await, Future}
 
 class RemoteClientActorSpec extends TestKit(ActorSystem("remote-test-system"))
 with WordSpecLike

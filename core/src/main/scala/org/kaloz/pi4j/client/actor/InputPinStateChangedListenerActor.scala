@@ -4,7 +4,7 @@ import akka.actor.{Actor, ActorLogging}
 import akka.event.LoggingReceive
 import com.pi4j.wiringpi.GpioInterrupt
 import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange.InputPinStateChanged
-import org.kaloz.pi4j.common.messages.ClientMessages.PinDigitalValue.pinValueToBoolean
+import org.kaloz.pi4j.common.messages.ClientMessages.PinValue.pinValueToBoolean
 
 trait InputPinStateChangedListenerActor extends Actor with ActorLogging {
 

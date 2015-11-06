@@ -10,6 +10,7 @@ import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessage
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioUtilMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange._
+import org.kaloz.pi4j.common.messages.ClientMessages.PinValue._
 
 class RemoteServerActor extends Actor with ActorLogging {
 

@@ -1,6 +1,7 @@
 package org.kaloz.pi4j.common.messages
 
 import com.pi4j.wiringpi.{Gpio, GpioUtil}
+import org.kaloz.pi4j.common.messages.ClientMessages.PinValue.PinDigitalValue._
 
 object ClientMessages {
 
@@ -15,7 +16,7 @@ object ClientMessages {
   object GpioMessages {
 
     import PinMode._
-    import PinDigitalValue._
+    import PinValue._
     import PudMode._
 
     case object WiringPiSetupRequest extends GpioRequest
@@ -32,7 +33,7 @@ object ClientMessages {
 
     case class PullUpDnControlCommand(pin: Int, pud: PudMode) extends GpioCommand
 
-    case class PwmWriteCommand(pin: Int, value: Int) extends GpioCommand
+    case class PwmWriteCommand(pin: Int, pwmValue: PinPwmValue) extends GpioCommand
 
   }
 
@@ -99,23 +100,37 @@ object ClientMessages {
     }
   }
 
-  object PinDigitalValue {
+  object PinValue {
 
-    sealed trait PinDigitalValue
+    sealed trait PinValue
 
-    case object Low extends PinDigitalValue
+    object PinDigitalValue {
 
-    case object High extends PinDigitalValue
+      sealed trait PinDigitalValue extends PinValue
 
-    implicit def intToPinValue(pinValue: Int): PinDigitalValue = pinValue match {
-      case Gpio.LOW => Low
-      case Gpio.HIGH => High
-      case x: Int => throw new NotImplementedError(s"$x p inValue is not implemented!!")
+      case object Low extends PinDigitalValue
+
+      case object High extends PinDigitalValue
+
     }
 
-    implicit def pinValueToInt(pinValue: PinDigitalValue): Int = pinValue match {
+    case class PinPwmValue(value: Int) extends PinValue
+
+    implicit def intToPinDigitalValue(pinValue: Int): PinDigitalValue = pinValue match {
+      case Gpio.LOW => Low
+      case Gpio.HIGH => High
+      case x: Int => throw new NotImplementedError(s"$x pinDigitalValue is not implemented!!")
+    }
+
+    implicit def pinValueToInt(pinValue: PinValue): Int = pinValue match {
       case Low => Gpio.LOW
       case High => Gpio.HIGH
+      case PinPwmValue(x) => x
+    }
+
+    implicit def pinValueToPinDigitalValue(pinValue: PinValue): PinDigitalValue = pinValue match {
+      case p: PinPwmValue => throw new NotImplementedError(s"$p PwmValue cannot be handled as PinDigitalValue!!")
+      case d: PinDigitalValue => d
     }
 
     implicit def pinValueToBoolean(pinValue: PinDigitalValue): java.lang.Boolean = pinValue match {
@@ -210,8 +225,6 @@ object ClientMessages {
   }
 
   object PinStateChange {
-
-    import PinDigitalValue._
 
     case class ChangeInputPinState(pin: Int, value: PinDigitalValue) extends GpioMessage
 

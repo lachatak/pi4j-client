@@ -11,9 +11,9 @@ import org.kaloz.pi4j.common.messages.ClientMessages.PinDirection._
 import org.kaloz.pi4j.common.messages.ClientMessages.PinEdge._
 import org.kaloz.pi4j.common.messages.ClientMessages.PinMode._
 import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange._
-import org.kaloz.pi4j.common.messages.ClientMessages.PinDigitalValue._
+import org.kaloz.pi4j.common.messages.ClientMessages.PinValue.PinDigitalValue._
+import org.kaloz.pi4j.common.messages.ClientMessages.PinValue._
 import org.kaloz.pi4j.common.messages.ClientMessages.PudMode._
-import org.kaloz.pi4j.common.messages.ClientMessages._
 
 class InMemoryClientActor(pinStateChangeCallbackFactory: (ActorRefFactory, Int) => ActorRef) extends Actor with ActorLogging {
 
@@ -28,7 +28,7 @@ class InMemoryClientActor(pinStateChangeCallbackFactory: (ActorRefFactory, Int) 
     case PullUpDnControlCommand(pin, pud) =>
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(pud = pud))))
     case PwmWriteCommand(pin, value) =>
-      context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(value = value))))
+      context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(value = PinPwmValue(value)))))
     case DigitalWriteCommand(pin, value) =>
       context.become(handlePins(pins + (pin -> pins.getOrElse(pin, Pin()).copy(value = value))))
       context.system.eventStream.publish(OutputPinStateChanged(pin, value))
@@ -83,7 +83,7 @@ object InMemoryClientActor {
                    edge: PinEdge = EdgeNone,
                    mode: PinMode = Input,
                    pud: PudMode = PudOff,
-                   value: Int = Low,
+                   value: PinValue = Low,
                    enableCallback: Option[ActorRef] = None)
 
   }

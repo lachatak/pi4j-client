@@ -4,6 +4,7 @@ import com.typesafe.scalalogging.StrictLogging
 import org.kaloz.pi4j.client.fallback.FallbackClientFactory
 import org.kaloz.pi4j.client.{Gpio, GpioInterrupt, GpioUtil}
 import org.reflections.Reflections
+
 import scala.collection.JavaConversions._
 
 private[factory] class AbstractClientFactory extends ClientFactory with StrictLogging {
