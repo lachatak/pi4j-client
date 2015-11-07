@@ -6,7 +6,7 @@ import scala.util.Properties.{propOrEmpty, propOrNone}
 
 object Release {
 
-  lazy val settings = releaseSettings ++ Seq(
+  lazy val defaultSettings = releaseSettings ++ Seq(
     publishArtifactsAction := publishSigned.value,
     releaseVersion := { _ => propOrEmpty("releaseVersion") },
     nextVersion := { _ => propOrEmpty("developmentVersion") },

@@ -4,7 +4,7 @@ import sbtassembly.AssemblyKeys._
 
 object Assembly {
 
-  lazy val remoteServerAssemblySettings =
+  lazy val remoteServerSettings =
     Seq(
       name := "pi4j-remote-server",
       mainClass in assembly := Some("org.kaloz.pi4j.server.remote.Main"),

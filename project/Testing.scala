@@ -5,7 +5,7 @@ import sbt._
 
 object Testing {
 
-  lazy val settings = Seq(
+  lazy val defaultSettings = Seq(
     fork in Test := false,
     parallelExecution in Test := false
   )
@@ -17,7 +17,7 @@ object Testing {
     parallelExecution in Test := false
   )
 
-  lazy val multiJmvSettings = settings ++ SbtMultiJvm.multiJvmSettings ++ Seq(
+  lazy val multiJmvSettings = defaultSettings ++ SbtMultiJvm.multiJvmSettings ++ Seq(
     // make sure that MultiJvm test are compiled by the default test compilation
     compile in MultiJvm <<= (compile in MultiJvm) triggeredBy (compile in Test),
     // make sure that MultiJvm tests are executed by the default test target,
