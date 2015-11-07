@@ -1,6 +1,5 @@
 import sbt.Keys._
 import sbt._
-import scoverage.ScoverageSbtPlugin.ScoverageKeys._
 
 object BaseSettings {
 

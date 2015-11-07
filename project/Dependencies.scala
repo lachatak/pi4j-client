@@ -124,6 +124,10 @@ object Dependencies {
     scalaTest     	% "test"
   )
 
+  val examples = deps(
+    scalaTest     	% "test"
+  )
+
   private def deps(modules: ModuleID*): Seq[Setting[_]] = Seq(libraryDependencies ++= modules)
 }
 

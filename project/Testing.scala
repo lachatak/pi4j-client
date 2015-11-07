@@ -1,6 +1,7 @@
 import com.typesafe.sbt.SbtMultiJvm
 import com.typesafe.sbt.SbtMultiJvm.MultiJvmKeys.MultiJvm
 import sbt.Keys._
+import sbt.Tests.{Group, SubProcess}
 import sbt._
 
 object Testing {
@@ -11,10 +12,10 @@ object Testing {
   )
 
   //Required by Aspects testing
-  lazy val coreSettings = Seq(
-    javaOptions in Test ++= Seq("-javaagent:" + System.getProperty("user.home") + "/.ivy2/cache/org.aspectj/aspectjweaver/jars/aspectjweaver-" + Version.aspectj + ".jar"),
+  lazy val aspectSettings = Seq(
     fork in Test := true,
-    parallelExecution in Test := false
+    testForkedParallel := true,
+    testGrouping in Test := TestPhases.oneForkedJvmPerTest((definedTests in Test).value)
   )
 
   lazy val multiJmvSettings = defaultSettings ++ SbtMultiJvm.multiJvmSettings ++ Seq(
@@ -35,4 +36,12 @@ object Testing {
     }
   )
 
+}
+
+private object TestPhases {
+
+  def oneForkedJvmPerTest(tests: Seq[TestDefinition]) =
+    tests map {
+      test => new Group(test.name, Seq(test), SubProcess(ForkOptions(runJVMOptions = Seq("-javaagent:" + System.getProperty("user.home") + "/.ivy2/cache/org.aspectj/aspectjweaver/jars/aspectjweaver-" + Version.aspectj + ".jar"))))
+    }
 }
