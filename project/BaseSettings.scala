@@ -28,10 +28,10 @@ object BaseSettings {
       ),
       shellPrompt := { s => "[" + scala.Console.BLUE + Project.extract(s).currentProject.id + scala.Console.RESET + "] $ " }
     ) ++
-      ResolverSettings.settings ++
+      Resolvers.defaultSettings ++
       Aliases.aliases ++
-      Publish.settings ++
-      Release.settings
+      Publish.defaultSettings ++
+      Release.defaultSettings
 
   //Required by Aspects - debug settings
   lazy val debugSettings = defaultSettings ++ Seq(
@@ -40,8 +40,7 @@ object BaseSettings {
 
   //Required by Aspects
   lazy val exampleSettings = defaultSettings ++ Seq(
-    javaOptions in run ++= Seq("-javaagent:" + System.getProperty("user.home") + "/.ivy2/cache/org.aspectj/aspectjweaver/jars/aspectjweaver-" + Version.aspectj + ".jar", "-Dpi4j.client.mode=console"),
-    fork in run := true,
-    coverageExcludedPackages := "org.kaloz.pi4j.client.examples.*"
+    javaOptions in run ++= Seq("-javaagent:" + System.getProperty("user.home") + "/.ivy2/cache/org.aspectj/aspectjweaver/jars/aspectjweaver-" + Version.aspectj + ".jar"),
+    fork in run := true
   )
 }

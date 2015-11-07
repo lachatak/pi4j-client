@@ -4,7 +4,7 @@ import xerial.sbt.Sonatype.SonatypeKeys._
 
 object Publish {
 
-  lazy val settings = Seq(
+  lazy val defaultSettings = Seq(
     profileName := "lachatak",
     homepage := Some(url("https://github.com/lachatak/pi4j-client")),
     publishMavenStyle := true,

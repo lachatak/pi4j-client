@@ -1,9 +1,9 @@
 import sbt.Keys._
 import sbt._
 
-object ResolverSettings {
+object Resolvers {
 
-  lazy val settings = Seq(resolvers ++=
+  lazy val defaultSettings = Seq(resolvers ++=
     Seq(
       Resolver.defaultLocal,
       Resolver.mavenLocal,
