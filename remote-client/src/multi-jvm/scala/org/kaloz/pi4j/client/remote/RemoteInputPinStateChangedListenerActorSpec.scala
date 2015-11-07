@@ -9,7 +9,7 @@ import akka.remote.testconductor.RoleName
 import akka.remote.testkit.MultiNodeSpec
 import akka.testkit.{EventFilter, ImplicitSender}
 import akka.util.Timeout
-import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange.InputPinStateChanged
+import org.kaloz.pi4j.common.messages.ClientMessages.DigitalPinValueChange.DigitalInputPinValueChangedEvent
 import org.kaloz.pi4j.common.messages.ClientMessages.PinValue.PinDigitalValue
 
 import scala.concurrent.Await
@@ -46,7 +46,7 @@ object RemoteInputPinStateChangedListenerActorSpec {
         val count = Await.result((mediator ? Count).mapTo[Int], 5 second)
         if (count == 1) {
           cancellable.foreach(_.cancel())
-          mediator ! DistributedPubSubMediator.Publish(classOf[InputPinStateChanged].getClass.getSimpleName, InputPinStateChanged(1, PinDigitalValue.High))
+          mediator ! DistributedPubSubMediator.Publish(classOf[DigitalInputPinValueChangedEvent].getClass.getSimpleName, DigitalInputPinValueChangedEvent(1, PinDigitalValue.High))
         }
     }
   }

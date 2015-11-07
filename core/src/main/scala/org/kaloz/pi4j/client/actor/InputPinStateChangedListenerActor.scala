@@ -3,7 +3,7 @@ package org.kaloz.pi4j.client.actor
 import akka.actor.{Actor, ActorLogging}
 import akka.event.LoggingReceive
 import com.pi4j.wiringpi.GpioInterrupt
-import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange.InputPinStateChanged
+import org.kaloz.pi4j.common.messages.ClientMessages.DigitalPinValueChange.DigitalInputPinValueChangedEvent
 import org.kaloz.pi4j.common.messages.ClientMessages.PinValue.pinValueToBoolean
 
 trait InputPinStateChangedListenerActor extends Actor with ActorLogging {
@@ -16,7 +16,7 @@ trait InputPinStateChangedListenerActor extends Actor with ActorLogging {
   override def preStart(): Unit
 
   override def receive: Receive = LoggingReceive {
-    case InputPinStateChanged(pin, value) =>
+    case DigitalInputPinValueChangedEvent(pin, value) =>
       pinStateChangeCallback.invoke(null, pin: java.lang.Integer, value: java.lang.Boolean)
       log.debug(s"Listeners have been updated about pin state change --> $pin - $value")
   }

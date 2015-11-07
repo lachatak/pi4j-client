@@ -1,7 +1,7 @@
 package org.kaloz.pi4j.server.remote
 
 import akka.actor.ActorSystem
-import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange.InputPinStateChanged
+import org.kaloz.pi4j.common.messages.ClientMessages.DigitalPinValueChange.DigitalInputPinValueChangedEvent
 
 object Main extends App with Configuration {
 
@@ -9,5 +9,5 @@ object Main extends App with Configuration {
 
   val remoteServerActor = system.actorOf(RemoteServerActor.props, "remoteServerActor")
 
-  def pinStateChangeCallback(pin: Int, state: java.lang.Boolean): Unit = remoteServerActor ! InputPinStateChanged(pin, state)
+  def pinStateChangeCallback(pin: Int, state: java.lang.Boolean): Unit = remoteServerActor ! DigitalInputPinValueChangedEvent(pin, state)
 }

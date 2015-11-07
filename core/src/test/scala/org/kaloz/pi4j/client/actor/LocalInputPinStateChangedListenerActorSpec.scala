@@ -3,7 +3,7 @@ package org.kaloz.pi4j.client.actor
 import akka.actor.ActorSystem
 import akka.testkit.{EventFilter, ImplicitSender, TestActorRef, TestKit}
 import com.typesafe.config.ConfigFactory
-import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange.InputPinStateChanged
+import org.kaloz.pi4j.common.messages.ClientMessages.DigitalPinValueChange.DigitalInputPinValueChangedEvent
 import org.scalatest.{Matchers, WordSpecLike}
 
 class LocalInputPinStateChangedListenerActorSpec extends TestKit(ActorSystem("core-test-system", ConfigFactory.parseString(TestKitUsageSpec.config)))
@@ -17,7 +17,7 @@ with ImplicitSender {
       TestActorRef(new LocalInputPinStateChangedListenerActor)
 
       EventFilter.debug(message = s"Listeners have been updated about pin state change --> 1 - High", occurrences = 1) intercept {
-        system.eventStream.publish(InputPinStateChanged(1, java.lang.Boolean.TRUE))
+        system.eventStream.publish(DigitalInputPinValueChangedEvent(1, java.lang.Boolean.TRUE))
       }
     }
   }

@@ -7,7 +7,7 @@ import akka.event.LoggingReceive
 import org.jnativehook.GlobalScreen
 import org.jnativehook.keyboard.NativeKeyEvent._
 import org.jnativehook.keyboard.{NativeKeyEvent, NativeKeyListener}
-import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange.ChangeInputPinState
+import org.kaloz.pi4j.common.messages.ClientMessages.DigitalPinValueChange.ChangeDigitalInputPinValue
 import org.kaloz.pi4j.common.messages.ClientMessages.PinValue.PinDigitalValue
 
 class ConsoleInputPinStateChangeListenerActor(pin: Int, key: Char) extends Actor with ActorLogging with NativeKeyListener {
@@ -28,13 +28,13 @@ class ConsoleInputPinStateChangeListenerActor(pin: Int, key: Char) extends Actor
   def handleKeyEvents(keyPressed: Boolean = false): Receive = LoggingReceive {
     case KeyPressed =>
       if (!keyPressed) {
-        context.parent ! ChangeInputPinState(pin, PinDigitalValue.High)
+        context.parent ! ChangeDigitalInputPinValue(pin, PinDigitalValue.High)
         context.become(handleKeyEvents(true))
         log.debug(s"Key Pressed: $key")
       }
     case KeyReleased =>
       if (keyPressed) {
-        context.parent ! ChangeInputPinState(pin, PinDigitalValue.Low)
+        context.parent ! ChangeDigitalInputPinValue(pin, PinDigitalValue.Low)
         context.become(handleKeyEvents(false))
         log.debug(s"Key Released: $key")
       }

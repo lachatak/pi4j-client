@@ -7,11 +7,17 @@ object ClientMessages {
 
   sealed trait GpioMessage
 
+  sealed trait GpioEvent extends GpioMessage
+
   sealed trait GpioRequest extends GpioMessage
 
   sealed trait GpioResponse extends GpioMessage
 
   sealed trait GpioCommand extends GpioMessage
+
+  implicit def gpioEventToOption(event: GpioEvent): Option[GpioEvent] = Some(event)
+
+  implicit def gpioResponseToOption(response: GpioResponse): Option[GpioResponse] = Some(response)
 
   object GpioMessages {
 
@@ -23,7 +29,11 @@ object ClientMessages {
 
     case class WiringPiSetupResponse(status: Int) extends GpioResponse
 
+    case object WiringPiSetupEvent extends GpioEvent
+
     case class PinModeCommand(pin: Int, mode: PinMode) extends GpioCommand
+
+    case class PinModeChangedEvent(pin: Int, mode: PinMode) extends GpioEvent
 
     case class DigitalWriteCommand(pin: Int, value: PinDigitalValue) extends GpioCommand
 
@@ -33,7 +43,11 @@ object ClientMessages {
 
     case class PullUpDnControlCommand(pin: Int, pud: PudMode) extends GpioCommand
 
+    case class PullUpDnControlChangedEvent(pin: Int, pud: PudMode) extends GpioEvent
+
     case class PwmWriteCommand(pin: Int, pwmValue: PinPwmValue) extends GpioCommand
+
+    case class PwmValueChangedEvent(pin: Int, pwmValue: PinPwmValue) extends GpioEvent
 
   }
 
@@ -52,11 +66,17 @@ object ClientMessages {
 
     case class ExportCommand(pin: Int, direction: PinDirection) extends GpioCommand
 
+    case class PinExportEvent(pin: Int, direction: PinDirection) extends GpioEvent
+
     case class UnexportCommand(pin: Int) extends GpioCommand
+
+    case class PinUnexportEvent(pin: Int) extends GpioEvent
 
     case class SetEdgeDetectionRequest(pin: Int, edge: PinEdge) extends GpioRequest
 
     case class SetEdgeDetectionResponse(status: Boolean) extends GpioResponse
+
+    case class EdgeDetectionChangedEvent(pin: Int, edge: PinEdge) extends GpioEvent
 
     case class GetDirectionRequest(pin: Int) extends GpioRequest
 
@@ -70,9 +90,13 @@ object ClientMessages {
 
     case class EnablePinStateChangeCallbackResponse(status: Int) extends GpioResponse
 
+    case class PinStateChangeCallbackEnabledEvent(pin: Int) extends GpioEvent
+
     case class DisablePinStateChangeCallbackRequest(pin: Int) extends GpioRequest
 
     case class DisablePinStateChangeCallbackResponse(status: Int) extends GpioResponse
+
+    case class PinStateChangeCallbackDisabledEvent(pin: Int) extends GpioEvent
 
   }
 
@@ -224,13 +248,13 @@ object ClientMessages {
     }
   }
 
-  object PinStateChange {
+  object DigitalPinValueChange {
 
-    case class ChangeInputPinState(pin: Int, value: PinDigitalValue) extends GpioMessage
+    case class ChangeDigitalInputPinValue(pin: Int, value: PinDigitalValue) extends GpioMessage
 
-    case class InputPinStateChanged(pin: Int, value: PinDigitalValue) extends GpioMessage
+    case class DigitalInputPinValueChangedEvent(pin: Int, value: PinDigitalValue) extends GpioEvent
 
-    case class OutputPinStateChanged(pin: Int, value: PinDigitalValue) extends GpioMessage
+    case class DigitalOutputPinValueChangedEvent(pin: Int, value: PinDigitalValue) extends GpioEvent
 
   }
 

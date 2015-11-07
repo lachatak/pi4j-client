@@ -9,7 +9,7 @@ import org.kaloz.pi4j.common.messages.ClientMessages.GpioInterruptMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessage
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioUtilMessages._
-import org.kaloz.pi4j.common.messages.ClientMessages.PinStateChange._
+import org.kaloz.pi4j.common.messages.ClientMessages.DigitalPinValueChange._
 import org.kaloz.pi4j.common.messages.ClientMessages.PinValue._
 
 class RemoteServerActor extends Actor with ActorLogging {
@@ -42,7 +42,7 @@ class RemoteServerActor extends Actor with ActorLogging {
     case EnablePinStateChangeCallbackRequest(pin) => sender ! EnablePinStateChangeCallbackResponse(GpioInterrupt.enablePinStateChangeCallback(pin))
     case DisablePinStateChangeCallbackRequest(pin) => sender ! DisablePinStateChangeCallbackResponse(GpioInterrupt.disablePinStateChangeCallback(pin))
 
-    case message: InputPinStateChanged => mediator ! DistributedPubSubMediator.Publish(classOf[InputPinStateChanged].getClass.getSimpleName, message)
+    case message: DigitalInputPinValueChangedEvent => mediator ! DistributedPubSubMediator.Publish(classOf[DigitalInputPinValueChangedEvent].getClass.getSimpleName, message)
 
     case Shutdown =>
       log.info(s"Reinitializing pins ${pins.mkString("[", ",", "]")}")

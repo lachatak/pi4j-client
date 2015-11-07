@@ -1,6 +1,7 @@
 package org.kaloz.pi4j.common.messages
 
 import com.pi4j.wiringpi.{Gpio, GpioUtil}
+import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessages.{WiringPiSetupEvent, WiringPiSetupResponse}
 import org.kaloz.pi4j.common.messages.ClientMessages.PinDirection.PinDirection
 import org.kaloz.pi4j.common.messages.ClientMessages.PinEdge.PinEdge
 import org.kaloz.pi4j.common.messages.ClientMessages.PinMode.PinMode
@@ -11,6 +12,20 @@ import org.kaloz.pi4j.common.messages.ClientMessages._
 import org.scalatest.{FunSpec, Matchers}
 
 class ClientMessagesSpec extends FunSpec with Matchers {
+
+  describe("GpioResponse") {
+    it("should have implicit converter from GpioResponse to Option") {
+      val gpioResponse: Option[GpioResponse] = WiringPiSetupResponse(0)
+      gpioResponse should be(Some(WiringPiSetupResponse(0)))
+    }
+  }
+
+  describe("GpioEvent") {
+    it("should have implicit converter from GpioEvent to Option") {
+      val gpioEvent: Option[GpioEvent] = WiringPiSetupEvent
+      gpioEvent should be(Some(WiringPiSetupEvent))
+    }
+  }
 
   describe("PinMode") {
     it("should have implicit converter from Int to PinMode") {
