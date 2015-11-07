@@ -47,9 +47,7 @@ lazy val remoteClient = Project("remote-client", file("remote-client"))
 lazy val remoteServer = Project("remote-server", file("remote-server"))
   .dependsOn(api)
   .settings(BaseSettings.debugSettings: _*)
-  .settings(Dependencies.re
-
-    moteServer: _*)
+  .settings(Dependencies.remoteServer: _*)
   .settings(Testing.defaultSettings: _*)
   .settings(Assembly.remoteServerSettings: _*)
 
