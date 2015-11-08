@@ -3,6 +3,8 @@ import sbt._
 
 object BaseSettings {
 
+  lazy val javaagent = "-javaagent:" + System.getProperty("user.home") + "/.ivy2/cache/org.aspectj/aspectjweaver/jars/aspectjweaver-" + Version.aspectj + ".jar"
+
   lazy val defaultSettings =
     Seq(
       version := "0.1.0-SNAPSHOT",
@@ -39,7 +41,7 @@ object BaseSettings {
 
   //Required by Aspects
   lazy val exampleSettings = defaultSettings ++ Seq(
-    javaOptions in run ++= Seq("-javaagent:" + System.getProperty("user.home") + "/.ivy2/cache/org.aspectj/aspectjweaver/jars/aspectjweaver-" + Version.aspectj + ".jar"),
+    javaOptions in run ++= Seq(javaagent),
     fork in run := true
   )
 }

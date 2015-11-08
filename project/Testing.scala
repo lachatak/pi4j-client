@@ -15,7 +15,7 @@ object Testing {
   lazy val aspectSettings = Seq(
     fork in Test := true,
     testForkedParallel := true,
-    testGrouping in Test := TestPhases.oneForkedJvmPerTest((definedTests in Test).value)
+    testGrouping in Test := oneForkedJvmPerTest((definedTests in Test).value)
   )
 
   lazy val multiJmvSettings = defaultSettings ++ SbtMultiJvm.multiJvmSettings ++ Seq(
@@ -36,12 +36,9 @@ object Testing {
     }
   )
 
-}
-
-private object TestPhases {
-
   def oneForkedJvmPerTest(tests: Seq[TestDefinition]) =
     tests map {
-      test => new Group(test.name, Seq(test), SubProcess(ForkOptions(runJVMOptions = Seq("-javaagent:" + System.getProperty("user.home") + "/.ivy2/cache/org.aspectj/aspectjweaver/jars/aspectjweaver-" + Version.aspectj + ".jar"))))
+      test => new Group(test.name, Seq(test), SubProcess(ForkOptions(runJVMOptions = Seq("-Dtest.name=" + test.name, BaseSettings.javaagent))))
     }
 }
+

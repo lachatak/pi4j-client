@@ -1,5 +1,3 @@
-import com.typesafe.sbt.SbtMultiJvm.MultiJvmKeys
-
 lazy val root = Project("root", file("."))
   .aggregate(core, api, consoleClient, remoteClient, remoteServer, examples)
   .settings(Publish.noPublishing: _*)
@@ -42,7 +40,7 @@ lazy val remoteClient = Project("remote-client", file("remote-client"))
   .settings(BaseSettings.defaultSettings: _*)
   .settings(Dependencies.remoteClient: _*)
   .settings(Testing.multiJmvSettings: _*)
-  .configs(MultiJvmKeys.MultiJvm)
+  .configs(SbtMultiJvm.MultiJvmKeys.MultiJvm)
 
 lazy val remoteServer = Project("remote-server", file("remote-server"))
   .dependsOn(api)

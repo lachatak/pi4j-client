@@ -1,8 +1,8 @@
 package org.kaloz.pi4j.client.examples
 
-import org.scalatest.{FunSpec, Matchers, OneInstancePerTest}
+import org.scalatest.{FunSpec, Matchers}
 
-class ListenGpioExampleSpec extends FunSpec with Matchers with OneInstancePerTest {
+class ListenGpioExampleSpec extends FunSpec with Matchers {
 
   describe("ListenGpioExample") {
     it("should be finished without exception") {
