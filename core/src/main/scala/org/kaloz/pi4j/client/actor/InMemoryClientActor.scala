@@ -19,7 +19,7 @@ import org.kaloz.pi4j.common.messages.ClientMessages.{GpioEvent, GpioResponse}
 
 class InMemoryClientActor(pinStateChangeCallbackFactory: (ActorRefFactory, Int) => ActorRef) extends Actor with ActorLogging {
 
-  override def receive = handlePins()
+  override def receive = emptyBehavior
 
   context.become(handlePins())
 

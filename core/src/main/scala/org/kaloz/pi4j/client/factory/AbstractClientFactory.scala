@@ -39,12 +39,12 @@ private[factory] class AbstractClientFactory extends ClientFactory with StrictLo
         val requestedMode = Option(System.getProperty(AbstractClientFactory.pi4jClientMode))
         val mode: String = requestedMode.fold {
           logger.warn(s"Multiple client is available on the classpath and pi4j.client.mode is not provided. Trying to initialise with default 'console' mode!")
-          "web"
+          "console"
         }(identity)
 
         logger.info(s"Initialising client mode '$mode'")
 
-        factoriesMap.get("web").getOrElse {
+        factoriesMap.get(mode).getOrElse {
           logger.warn(s"Requested client mode '$mode' is not available! No client will be used!!")
           classOf[FallbackClientFactory]
         }.getMethod("instance").invoke(null).asInstanceOf[ClientFactory]
