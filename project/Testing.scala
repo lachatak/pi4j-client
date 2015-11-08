@@ -12,9 +12,15 @@ object Testing {
   )
 
   //Required by Aspects testing
-  lazy val aspectSettings = Seq(
+  lazy val coreSettings = Seq(
     fork in Test := true,
-    testForkedParallel := true,
+    javaOptions in Test ++= Seq(BaseSettings.javaagent)
+  )
+
+  //Required by Aspects testing
+  lazy val exampleSettings = Seq(
+    fork in Test := true,
+    testForkedParallel in Test := true,
     testGrouping in Test := oneForkedJvmPerTest((definedTests in Test).value)
   )
 
@@ -38,7 +44,7 @@ object Testing {
 
   def oneForkedJvmPerTest(tests: Seq[TestDefinition]) =
     tests map {
-      test => new Group(test.name, Seq(test), SubProcess(ForkOptions(runJVMOptions = Seq("-Dtest.name=" + test.name, BaseSettings.javaagent))))
+      test => new Group(test.name, Seq(test), SubProcess(ForkOptions(runJVMOptions = Seq("-Dtest.name=" + test.name, BaseSettings.javaagent, "-Dpi4j.client.mode=mock"))))
     }
 }
 
