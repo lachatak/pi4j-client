@@ -50,7 +50,7 @@ lazy val remoteServer = Project("remote-server", file("remote-server"))
   .settings(Assembly.remoteServerSettings: _*)
 
 lazy val examples = Project("examples", file("examples"))
-  .dependsOn(core, consoleClient, webClient, mockClient, remoteClient)
+  .dependsOn(core, consoleClient, mockClient)
   .settings(BaseSettings.exampleSettings: _*)
   .settings(Testing.exampleSettings: _*)
   .settings(Dependencies.examples: _*)

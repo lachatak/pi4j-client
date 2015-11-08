@@ -9,8 +9,11 @@ import akka.remote.testconductor.RoleName
 import akka.remote.testkit.MultiNodeSpec
 import akka.testkit.{EventFilter, ImplicitSender}
 import akka.util.Timeout
+import org.kaloz.pi4j.client.actor.PinStateChangeCallback
 import org.kaloz.pi4j.common.messages.ClientMessages.DigitalPinValueChange.DigitalInputPinValueChangedEvent
 import org.kaloz.pi4j.common.messages.ClientMessages.PinValue.PinDigitalValue
+import org.mockito.Mockito.verify
+import org.scalatest.mock.MockitoSugar
 
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -54,7 +57,7 @@ object RemoteInputPinStateChangedListenerActorSpec {
 }
 
 class RemoteInputPinStateChangedListenerActorSpec extends MultiNodeSpec(RemoteClientServerConfig)
-with STMultiNodeSpec with ImplicitSender {
+with STMultiNodeSpec with ImplicitSender with MockitoSugar {
 
   import RemoteClientServerConfig._
   import RemoteInputPinStateChangedListenerActorSpec._
@@ -86,13 +89,16 @@ with STMultiNodeSpec with ImplicitSender {
 
       runOn(client) {
         val serverActor = system.actorSelection(node(server) / "user" / "remoteServer")
-        system.actorOf(Props(classOf[RemoteInputPinStateChangedListenerActor]), "remoteInputPinStateChangedListenerActor")
+        val pinStateChangeCallback = mock[PinStateChangeCallback]
+        system.actorOf(RemoteInputPinStateChangedListenerActor.props(pinStateChangeCallback), "remoteInputPinStateChangedListenerActor")
 
         enterBarrier("deployed")
 
         EventFilter.debug(message = s"Listeners have been updated about pin state change --> 1 - High", occurrences = 1) intercept {
           serverActor ! Ping
         }
+
+        verify(pinStateChangeCallback).invoke(1, PinDigitalValue.High)
       }
 
       enterBarrier("finished")

@@ -13,7 +13,7 @@ class MockClientFactory extends ClientFactory with StrictLogging {
   private val system = ActorSystem("mock-actor-system")
   private val mockClientActor = system.actorOf(InMemoryClientActor.props(MockInputPinStateChangeListenerActor.factory), "mockClientActor")
 
-  system.actorOf(LocalInputPinStateChangedListenerActor.props, "pinStateChangeListenerActor")
+  system.actorOf(LocalInputPinStateChangedListenerActor.props(), "pinStateChangeListenerActor")
 
   val gpio = new GpioActorGateway(mockClientActor)
   val gpioUtil = new GpioUtilActorGateway(mockClientActor)

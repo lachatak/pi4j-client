@@ -20,7 +20,7 @@ class RemoteClientFactory extends ClientFactory with Configuration with StrictLo
   private val remoteServerActor = system.actorSelection(ActorPath.fromString(s"$seedNode/user/remoteServerActor"))
   private val remoteClientActor = system.actorOf(RemoteClientActor.props(remoteServerActor), "remoteClientActor")
 
-  system.actorOf(RemoteInputPinStateChangedListenerActor.props, "pinStateChangedListenerActor")
+  system.actorOf(RemoteInputPinStateChangedListenerActor.props(), "pinStateChangedListenerActor")
 
   val gpio = new GpioActorGateway(remoteClientActor)
   val gpioUtil = new GpioUtilActorGateway(remoteClientActor)
