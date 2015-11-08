@@ -2,11 +2,12 @@
 - Have you ever tried to **run** your Raspberry Pi pi4j based java application **on your own machine**? You cannot...
 - Have you ever tried to **test** your Raspberry Pi pi4j based java application **without having a Raspberry Pi**? You cannot...
 - Have you ever tried to **continuously deploy** new version of your Raspberry Pi pi4j based java application to your Raspberry **via wifi** or a **slow network**? It is a pain...
+
 If your answer is *yes* for any of the questions than you know that none of them is plain sail and this project if for you to ease your pain!
 
 ## Goal of this project
 This project is based on the [pi4j](http://pi4j.com/) java library. It is not a wrapper but an extension to over bridge some weak ares of pi4j since is not really gives answers for the above mentioned questions. 
-It uses [Aspectj](https://eclipse.org/aspectj/) and [Load-Time Weaving](https://eclipse.org/aspectj/doc/released/devguide/ltw.html) to capture low level native *Gpio, GpioUtil, GpioInterrupt* calls. Hijacked calls then can transparently be decorated, modified, forwarded to dedicated **clients** and fed back to pi4j callers as it were served by the native library beneath. 
+It uses [Aspectj](https://eclipse.org/aspectj/) and [Load-Time Weaving](https://eclipse.org/aspectj/doc/released/devguide/ltw.html) to capture low level native *Gpio, GpioUtil, GpioInterrupt, GpioController, NativeLibraryLoader* calls. Hijacked calls then can transparently be decorated, modified, forwarded to dedicated **clients** and fed back to pi4j callers as it were served by the native library beneath. 
 
 ## Used technology stack
 - [Aspectj](https://eclipse.org/aspectj/) to capture native calls and delegate them to clients

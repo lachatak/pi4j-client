@@ -10,7 +10,4 @@ object Coverage {
     coverageExcludedPackages := "org.kaloz.pi4j.client.fallback.*"
   )
 
-  lazy val exampleSettings = Seq(
-    coverageExcludedPackages := "org.kaloz.pi4j.client.examples.*"
-  )
 }
