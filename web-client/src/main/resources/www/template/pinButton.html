@@ -1,23 +1,21 @@
-<ng-switch on='pin.value'>
+<span>
+    <button type='button' ng-if="pin.value == 'high' && pin.mode == 'in'" class='btn btn-info active' ng-click='pinChanged(pin)'>
+        <span class='glyphicon glyphicon-plus-sign'></span>
+    </button>
 
-  <button type='button' ng-switch-when='in-high' class='btn btn-info'>
-    <span class='glyphicon glyphicon-plus-sign'></span>
-  </button>
+    <button type='button' ng-if="pin.value == 'low' && pin.mode == 'in'" class='btn btn-info' ng-click='pinChanged(pin)'>
+        <span class='glyphicon glyphicon-minus-sign'></span>
+    </button>
 
-  <button type='button' ng-switch-when='in-low' class='btn btn-info'>
-    <span class='glyphicon glyphicon-minus-sign'></span>
-  </button>
+    <button type='button' ng-if="pin.value == 'high' && pin.mode == 'out'" class='btn btn-warning active'>
+        <span class='glyphicon glyphicon-plus-sign'></span>
+    </button>
 
-  <button type='button' ng-switch-when='out-high' class='btn btn-warning'>
-    <span class='glyphicon glyphicon-plus-sign'></span>
-  </button>
+    <button type='button' ng-if="pin.value == 'low' && pin.mode == 'out'" class='btn btn-warning'>
+        <span class='glyphicon glyphicon-minus-sign'></span>
+    </button>
 
-  <button type='button' ng-switch-when='out-low' class='btn btn-warning'>
-    <span class='glyphicon glyphicon-minus-sign'></span>
-  </button>
-
-  <button type='button' ng-switch-default class='btn btn-default' disabled="true">
-    <span class='glyphicon glyphicon-minus-sign' disabled></span>
-  </button>
-
-</ng-switch>
+    <button type='button' ng-if="pin.mode == 'disabled'" class='btn btn-default' disabled="true">
+        <span class='glyphicon glyphicon-minus-sign' disabled></span>
+    </button>
+</span>

@@ -10,18 +10,36 @@
 
 </head>
 <body ng-controller="PinController">
+
 <div class="container">
     <h1>Web client for pi4j-client</h1>
-
     <p class="lead">This message is some bla bla for now.</p>
 </div>
+
 <div class="container">
-    <div class="row" style="margin-bottom: 4px">
-        <wc-pin pin="pin" ng-repeat="pin in pins | limitTo : 13"></wc-pin>
+    <div style="margin-bottom: 4px">
+        <wc-pin pin="pin" ng-repeat="pin in pins | limitTo : 16"></wc-pin>
     </div>
-    <div class="row">
-        <wc-pin pin="pin" ng-repeat="pin in pins | limitTo : 13 : 13"></wc-pin>
+    <div>
+        <wc-pin pin="pin" ng-repeat="pin in pins | limitTo : 16 : 16"></wc-pin>
     </div>
 </div>
+
+<div class="container" style="margin-top: 10px">
+    <div ng-show="!debugEnabled">
+        <button type="button" class="btn btn-success" ng-click="debugEnabled = true">Show message history</button>
+    </div>
+    <div ng-show="debugEnabled">
+        <button type="button" class="btn btn-success" ng-click="debugEnabled = false">Hide message history</button>
+        <ul class="list-group" style="margin-top: 10px">
+            <li class="list-group-item" ng-repeat="message in messages track by $index">
+                <span ng-if="message.direction == 'incoming'" class="glyphicon glyphicon-import"></span>
+                <span ng-if="message.direction == 'outgoing'" class="glyphicon glyphicon-export"></span>
+                <span style="margin-left: 10px">{{ message.data }}</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
 </body>
 </html>

@@ -35,7 +35,7 @@ class TriggerGpioExample {
       }
     }))
 
-    Thread.sleep(sleep)
+    Thread.sleep(sleep * 100)
 
     gpio.shutdown()
   }

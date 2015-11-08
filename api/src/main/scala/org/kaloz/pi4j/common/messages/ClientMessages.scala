@@ -122,6 +122,19 @@ object ClientMessages {
       case Output => Gpio.OUTPUT
       case PwmOutput => Gpio.PWM_OUTPUT
     }
+
+    implicit def stringToPinMode(pinMode: String): PinMode = pinMode match {
+      case "in" => Input
+      case "out" => Output
+      case "pwm-out" => PwmOutput
+      case x => throw new NotImplementedError(s"$x pinMode is not implemented!!")
+    }
+
+    implicit def pinModeToString(pinMode: PinMode): String = pinMode match {
+      case Input => "in"
+      case Output => "out"
+      case PwmOutput => "pwm-out"
+    }
   }
 
   object PinValue {
@@ -165,6 +178,16 @@ object ClientMessages {
     implicit def booleanToPinValue(pinValue: java.lang.Boolean): PinDigitalValue = pinValue match {
       case java.lang.Boolean.FALSE => Low
       case java.lang.Boolean.TRUE => High
+    }
+
+    implicit def pinValueToString(pinValue: PinDigitalValue): String = pinValue match {
+      case Low => "low"
+      case High => "high"
+    }
+
+    implicit def stringToPinValue(pinValue: String): PinDigitalValue = pinValue match {
+      case "low" => Low
+      case "high" => High
     }
   }
 
