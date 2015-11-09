@@ -1,6 +1,5 @@
 package org.kaloz.pi4j.client.remote
 
-
 import akka.actor.ActorSystem
 import akka.pattern.ask
 import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}

@@ -99,8 +99,8 @@ object Dependencies {
   val remoteClient = deps(
     config,
     akkaCluster,
-    akkaSlf4j,
     akkaClusterTools,
+    akkaSlf4j,
     pi4jCore,
     logBack,
     config,
@@ -117,11 +117,15 @@ object Dependencies {
     aspectjrt,
     akkaCluster,
     akkaClusterTools,
+    akkaSlf4j,
     scalaLogging,
     pi4jCore,
     logBack,
-    mockito       	% "test",
-    scalaTest     	% "test"
+    akkaTestkit % "test",
+    akkaMultiNodeTest % "test",
+    mockito % "test",
+    scalaTest % "test",
+    scoverage % "test"
   )
 
   val examples = deps(

@@ -44,7 +44,7 @@ libraryDependencies += "org.kaloz.pi4j.client" %% "remote-client" % "0.1.0-SNAPS
 ```
 The server could be started with the following command:
 ```
-sudo java -javaagent:aspectjweaver.jar -jar -Dakka.cluster.seed-nodes.0="akka.tcp://pi4j-remoting@RASPBERRY_IP:2552" -Dakka.remote.netty.tcp.hostname="RASPBERRY_IP" pi4j-remote-server-0.1.0-SNAPSHOassembly.jar   
+sudo java -javaagent:aspectjweaver.jar -jar -Dakka.cluster.seed-nodes.0="akka.tcp://pi4j-remoting@RASPBERRY_IP:2552" -Dakka.remote.netty.tcp.hostname="RASPBERRY_IP" pi4j-remote-server-0.1.0-SNAPSHOT-assembly.jar   
 ```
 aspectjweaver should be available at runtime and also change the IP address to point to your raspberry's ip.
 
