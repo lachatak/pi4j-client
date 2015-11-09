@@ -41,7 +41,7 @@ webClient.controller('PinController', function ($scope) {
     init();
 
     $scope.pinChanged = function(pin) {
-        var newValue = pin.value == "high" ? "low" : "high";
+        var newValue = pin.value == "High" ? "Low" : "High";
         var data = JSON.stringify({type: "pinChangeRequest",pin: {id: pin.id, mode: pin.mode, value: newValue}});
         $scope.webSocket.send(data);
         $scope.messages.push({direction: 'outgoing', data: data});
