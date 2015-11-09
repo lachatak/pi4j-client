@@ -93,8 +93,8 @@ with STMultiNodeSpec with ImplicitSender with MockitoSugar with Eventually {
         enterBarrier("deployed")
 
         eventually {
-          EventFilter.debug(message = s"Listeners have been updated about pin state change --> 1 - High", occurrences = 1)
           verify(pinStateChangeCallback).invoke(1, PinDigitalValue.High)
+          EventFilter.debug(message = s"Listeners have been updated about pin state change --> 1 - High", occurrences = 1)
         }
         enterBarrier("verify")
       }
