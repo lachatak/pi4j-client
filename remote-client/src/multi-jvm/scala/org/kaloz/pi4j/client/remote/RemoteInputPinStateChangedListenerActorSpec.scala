@@ -4,10 +4,17 @@ import akka.cluster.Cluster
 import akka.cluster.pubsub.DistributedPubSubMediator.Count
 import akka.cluster.pubsub.{DistributedPubSub, DistributedPubSubMediator}
 import akka.pattern.ask
+import akka.remote.testconductor.RoleName
+import akka.remote.testkit.MultiNodeSpec
+import akka.testkit.{EventFilter, ImplicitSender}
 import akka.util.Timeout
 import org.kaloz.pi4j.client.actor.PinStateChangeCallback
 import org.kaloz.pi4j.common.messages.ClientMessages.DigitalPinValueChange.DigitalInputPinValueChangedEvent
 import org.kaloz.pi4j.common.messages.ClientMessages.PinValue.PinDigitalValue
+import org.mockito.Mockito.verify
+import org.scalatest.concurrent.Eventually
+import org.scalatest.mock.MockitoSugar
+import org.scalatest.time.{Millis, Span}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -19,6 +26,8 @@ class RemoteInputPinStateChangedListenerActorSpecMultiJvmClient extends RemoteIn
 class RemoteInputPinStateChangedListenerActorSpec extends MultiNodeSpec(RemoteClientServerConfig)
 with STMultiNodeSpec with ImplicitSender with MockitoSugar with Eventually {
 
+  import RemoteClientServerConfig._
+  
   def initialParticipants = roles.size
 
   def join(from: RoleName, to: RoleName): Unit = {
