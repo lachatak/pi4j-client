@@ -4,17 +4,10 @@ import akka.cluster.Cluster
 import akka.cluster.pubsub.DistributedPubSubMediator.Count
 import akka.cluster.pubsub.{DistributedPubSub, DistributedPubSubMediator}
 import akka.pattern.ask
-import akka.remote.testconductor.RoleName
-import akka.remote.testkit.MultiNodeSpec
-import akka.testkit.{EventFilter, ImplicitSender}
 import akka.util.Timeout
 import org.kaloz.pi4j.client.actor.PinStateChangeCallback
 import org.kaloz.pi4j.common.messages.ClientMessages.DigitalPinValueChange.DigitalInputPinValueChangedEvent
 import org.kaloz.pi4j.common.messages.ClientMessages.PinValue.PinDigitalValue
-import org.mockito.Mockito.verify
-import org.scalatest.concurrent.Eventually
-import org.scalatest.mock.MockitoSugar
-import org.scalatest.time.{Millis, Span}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -23,45 +16,8 @@ class RemoteInputPinStateChangedListenerActorSpecMultiJvmServer extends RemoteIn
 
 class RemoteInputPinStateChangedListenerActorSpecMultiJvmClient extends RemoteInputPinStateChangedListenerActorSpec
 
-//object RemoteInputPinStateChangedListenerActorSpec {
-//
-//  case object Ping
-//
-//  case object Test
-//
-//  class RemoteServer extends Actor with ActorLogging {
-//
-//    implicit val timeout = Timeout(5 second)
-//
-//    val mediator = DistributedPubSub(context.system).mediator
-//
-//    override def receive: Receive = Actor.emptyBehavior
-//
-//    context.become(trigger())
-//
-//    def trigger(cancellable: Option[Cancellable] = None): Receive = {
-//      case Ping =>
-//        context.become(trigger(Some(context.system.scheduler.schedule(100 millis, 100 millis) {
-//          self ! Test
-//        })))
-//
-//      case Test =>
-//        val count = Await.result((mediator ? Count).mapTo[Int], 5 second)
-//        if (count == 1) {
-//          cancellable.foreach(_.cancel())
-//          mediator ! DistributedPubSubMediator.Publish(classOf[DigitalInputPinValueChangedEvent].getClass.getSimpleName, DigitalInputPinValueChangedEvent(1, PinDigitalValue.High))
-//        }
-//    }
-//  }
-//
-//}
-
 class RemoteInputPinStateChangedListenerActorSpec extends MultiNodeSpec(RemoteClientServerConfig)
 with STMultiNodeSpec with ImplicitSender with MockitoSugar with Eventually {
-
-  import RemoteClientServerConfig._
-
-  //  import RemoteInputPinStateChangedListenerActorSpec._
 
   def initialParticipants = roles.size
 
