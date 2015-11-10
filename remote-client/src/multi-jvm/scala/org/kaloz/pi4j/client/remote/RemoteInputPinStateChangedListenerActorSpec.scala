@@ -73,15 +73,12 @@ with STMultiNodeSpec with ImplicitSender with MockitoSugar with Eventually {
 
         eventually {
           val count = Await.result((mediator ? Count).mapTo[Int], 5 second)
-          log.info(s"============= COUNT $count")
           count should be(1)
         }
 
         enterBarrier("deployed")
 
         mediator ! DistributedPubSubMediator.Publish(classOf[DigitalInputPinValueChangedEvent].getClass.getSimpleName, DigitalInputPinValueChangedEvent(1, PinDigitalValue.High))
-
-        log.info("============= SENT")
 
         enterBarrier("verify")
       }
