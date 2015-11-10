@@ -22,25 +22,25 @@ There are couple of artifacts you could add to your application as a dependency.
 It contains the meat of the framework. It loads the selected client mode based on the **pi4j.client.mode** environment variable. If it is not provided than the **console** mode is used by default.
 Core should be always part of your dependency list if you would like to use the framework.
 ```
-libraryDependencies += "org.kaloz.pi4j.client" %% "core" % "0.1.0-SNAPSHOT"
+libraryDependencies += "org.kaloz.pi4j.client" % "core" % "0.1.0-SNAPSHOT"
 ```
 
 ### console 
 It contains the **console** client implementation.
 ```
-libraryDependencies += "org.kaloz.pi4j.client" %% "console-client" % "0.1.0-SNAPSHOT"
+libraryDependencies += "org.kaloz.pi4j.client" % "console-client" % "0.1.0-SNAPSHOT"
 ```
 
 ### web 
 It contains the **web** client implementation.
 ```
-libraryDependencies += "org.kaloz.pi4j.client" %% "web-client" % "0.1.0-SNAPSHOT"
+libraryDependencies += "org.kaloz.pi4j.client" % "web-client" % "0.1.0-SNAPSHOT"
 ```
 
 ### remote 
 It has 2 major elements. A **remote-client** which should be added to your project and the **remote-server** which should be deployed to your Raspberry Pi. 
 ```
-libraryDependencies += "org.kaloz.pi4j.client" %% "remote-client" % "0.1.0-SNAPSHOT"
+libraryDependencies += "org.kaloz.pi4j.client" % "remote-client" % "0.1.0-SNAPSHOT"
 ```
 The server could be started with the following command:
 ```
