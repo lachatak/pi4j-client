@@ -12,6 +12,7 @@ abstract class InputPinStateChangedListenerActor(pinStateChangeCallback: PinStat
 
   override def receive: Receive = LoggingReceive {
     case DigitalInputPinValueChangedEvent(pin, value) =>
+      log.info("============= ARRIVED !!")
       pinStateChangeCallback.invoke(pin, value)
       log.debug(s"Listeners have been updated about pin state change --> $pin - $value")
   }

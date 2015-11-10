@@ -27,7 +27,7 @@ class RemoteInputPinStateChangedListenerActorSpec extends MultiNodeSpec(RemoteCl
 with STMultiNodeSpec with ImplicitSender with MockitoSugar with Eventually {
 
   import RemoteClientServerConfig._
-  
+
   def initialParticipants = roles.size
 
   def join(from: RoleName, to: RoleName): Unit = {
@@ -40,6 +40,11 @@ with STMultiNodeSpec with ImplicitSender with MockitoSugar with Eventually {
   val mediator = DistributedPubSub(system).mediator
 
   implicit val timeout = Timeout(5 second)
+
+  override implicit val patienceConfig = PatienceConfig(
+    timeout = scaled(Span(5000, Millis)),
+    interval = scaled(Span(10, Millis))
+  )
 
   "A RemoteInputPinStateChangedListenerActor" must {
 
@@ -66,18 +71,17 @@ with STMultiNodeSpec with ImplicitSender with MockitoSugar with Eventually {
 
       runOn(server) {
 
-        implicit val patienceConfig = PatienceConfig(
-          timeout = scaled(Span(5000, Millis)),
-          interval = scaled(Span(10, Millis))
-        )
-
         eventually {
-          Await.result((mediator ? Count).mapTo[Int], 5 second) should be(1)
+          val count = Await.result((mediator ? Count).mapTo[Int], 5 second)
+          log.info(s"============= COUNT $count")
+          count should be(1)
         }
 
         enterBarrier("deployed")
 
         mediator ! DistributedPubSubMediator.Publish(classOf[DigitalInputPinValueChangedEvent].getClass.getSimpleName, DigitalInputPinValueChangedEvent(1, PinDigitalValue.High))
+
+        log.info("============= SENT")
 
         enterBarrier("verify")
       }
