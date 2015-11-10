@@ -42,6 +42,11 @@ with STMultiNodeSpec with ImplicitSender with Eventually {
 
   implicit val timeout = Timeout(5 second)
 
+  override implicit val patienceConfig = PatienceConfig(
+    timeout = scaled(Span(5000, Millis)),
+    interval = scaled(Span(10, Millis))
+  )
+
   "A RemoteServerActor test" must {
 
     "have 2 nodes in the cluster" in within(15 seconds) {
@@ -65,11 +70,6 @@ with STMultiNodeSpec with ImplicitSender with Eventually {
       runOn(server) {
 
         val remoteServer = system.actorOf(Props[RemoteServerActor], "remoteServer")
-
-        implicit val patienceConfig = PatienceConfig(
-          timeout = scaled(Span(5000, Millis)),
-          interval = scaled(Span(10, Millis))
-        )
 
         eventually {
           Await.result((mediator ? Count).mapTo[Int], 5 second) should be(2)
