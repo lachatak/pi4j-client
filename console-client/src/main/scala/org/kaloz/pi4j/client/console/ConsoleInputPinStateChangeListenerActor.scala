@@ -86,7 +86,6 @@ class ConsoleInputPinStateChangeListenerActorFactory(actorRefFactory: ActorRefFa
       }
     case Terminated(terminatedListener) =>
       context.become(manageListeners(listeners.filterNot(entry => entry._2 == terminatedListener)))
-      println(s"Listener actor deleted from the registry $terminatedListener")
       log.debug(s"Listener actor deleted from the registry $terminatedListener")
   }
 }

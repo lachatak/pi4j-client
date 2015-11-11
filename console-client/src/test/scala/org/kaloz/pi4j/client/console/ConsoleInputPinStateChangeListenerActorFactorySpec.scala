@@ -28,6 +28,13 @@ with MockitoSugar {
       expectMsg(testProbe.ref)
     }
 
+    "return the already created actor if we call the factory after the first a CreatePinStateChangeCallback message was processed" in new scope {
+      consoleInputPinStateChangeListenerActorFactory ! CreatePinStateChangeCallback(1, self)
+      expectMsg(testProbe.ref)
+      consoleInputPinStateChangeListenerActorFactory ! CreatePinStateChangeCallback(1, self)
+      expectMsg(testProbe.ref)
+    }
+
     "remove actor if it is terminated" in new scope {
       consoleInputPinStateChangeListenerActorFactory ! CreatePinStateChangeCallback(1, self)
       expectMsg(testProbe.ref)
