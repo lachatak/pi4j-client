@@ -2,6 +2,7 @@ package org.kaloz.pi4j.client.actor
 
 import akka.actor._
 import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}
+import org.kaloz.pi4j.client.actor.InMemoryClientActor.CreatePinStateChangeCallback
 import org.kaloz.pi4j.client.actor.InMemoryClientActor.ServiceMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.DigitalPinValueChange._
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioInterruptMessages._
@@ -10,6 +11,9 @@ import org.kaloz.pi4j.common.messages.ClientMessages.GpioUtilMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.PinValue._
 import org.kaloz.pi4j.common.messages.ClientMessages._
 import org.scalatest.{Matchers, WordSpecLike}
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class InMemoryClientActorSpec extends TestKit(ActorSystem("core-test-system"))
 with WordSpecLike
@@ -109,12 +113,21 @@ with ImplicitSender {
 
     "be able to handle EnablePinStateChangeCallbackRequest" in new scope {
       system.eventStream.subscribe(self, classOf[PinStateChangeCallbackEnabledEvent])
+
+      Future {
+        pinStateChangeCallbackActorFactory.expectMsg(CreatePinStateChangeCallback(13,inMemoryClientActor ))
+        pinStateChangeCallbackActorFactory.reply(pinStateChangeCallbackActor.ref)
+      }
       inMemoryClientActor ! EnablePinStateChangeCallbackRequest(13)
       expectMsg(PinStateChangeCallbackEnabledEvent(13))
       expectMsg(EnablePinStateChangeCallbackResponse(1))
       inMemoryClientActor ! PinStatesRequest
       expectMsg(PinStatesResponse(Map(13 -> Pin(enableCallback = Some(pinStateChangeCallbackActor.ref)))))
 
+      Future {
+        pinStateChangeCallbackActorFactory.expectMsg(CreatePinStateChangeCallback(13,inMemoryClientActor ))
+        pinStateChangeCallbackActorFactory.reply(pinStateChangeCallbackActor.ref)
+      }
       inMemoryClientActor ! EnablePinStateChangeCallbackRequest(13)
       expectMsg(PinStateChangeCallbackEnabledEvent(13))
       expectMsg(EnablePinStateChangeCallbackResponse(0))
@@ -128,6 +141,10 @@ with ImplicitSender {
       expectMsg(PinStateChangeCallbackDisabledEvent(14))
       expectMsg(DisablePinStateChangeCallbackResponse(0))
 
+      Future {
+        pinStateChangeCallbackActorFactory.expectMsg(CreatePinStateChangeCallback(14,inMemoryClientActor ))
+        pinStateChangeCallbackActorFactory.reply(pinStateChangeCallbackActor.ref)
+      }
       inMemoryClientActor ! EnablePinStateChangeCallbackRequest(14)
       expectMsg(PinStateChangeCallbackEnabledEvent(14))
       expectMsg(EnablePinStateChangeCallbackResponse(1))
@@ -157,6 +174,10 @@ with ImplicitSender {
       inMemoryClientActor ! DigitalWriteCommand(1, PinDigitalValue.High)
       inMemoryClientActor ! ExportCommand(1, PinDirection.DirectionHigh)
       inMemoryClientActor ! SetEdgeDetectionRequest(1, PinEdge.EdgeRising)
+      Future {
+        pinStateChangeCallbackActorFactory.expectMsg(CreatePinStateChangeCallback(1,inMemoryClientActor ))
+        pinStateChangeCallbackActorFactory.reply(pinStateChangeCallbackActor.ref)
+      }
       inMemoryClientActor ! EnablePinStateChangeCallbackRequest(1)
 
       inMemoryClientActor ! PinStatesRequest
@@ -170,11 +191,11 @@ with ImplicitSender {
 
   private trait scope {
 
+    val pinStateChangeCallbackActorFactory = TestProbe()
     val pinStateChangeCallbackActor = TestProbe()
     val watcher = TestProbe()
     watcher.watch(pinStateChangeCallbackActor.ref)
-    val pinStateChangeCallbackFactory: (ActorRefFactory, Int) => ActorRef = (factory, pin) => pinStateChangeCallbackActor.ref
-    val inMemoryClientActor = TestActorRef(new InMemoryClientActor(pinStateChangeCallbackFactory))
+    val inMemoryClientActor = TestActorRef(new InMemoryClientActor(pinStateChangeCallbackActorFactory.ref))
   }
 
 }

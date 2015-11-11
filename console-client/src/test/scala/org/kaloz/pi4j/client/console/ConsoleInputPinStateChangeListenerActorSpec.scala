@@ -13,12 +13,11 @@ import scala.concurrent.duration._
 class ConsoleInputPinStateChangeListenerActorSpec extends TestKit(ActorSystem("console-test-system"))
 with WordSpecLike
 with Matchers
-with ImplicitSender with OneInstancePerTest with BeforeAndAfterAll {
+with ImplicitSender
+with OneInstancePerTest
+with BeforeAndAfterAll {
 
-  override def afterAll() = {
-    Await.ready(system.terminate(), 5 seconds)
-    ConsoleInputPinStateChangeListenerActor.shutdown()
-  }
+  override def afterAll() = Await.ready(system.terminate(), 5 seconds)
 
   "ConsoleInputPinStateChangeListenerActor" should {
     "inform parent if the key was pressed" in new scope {
@@ -56,7 +55,7 @@ with ImplicitSender with OneInstancePerTest with BeforeAndAfterAll {
 
   private trait scope {
     val parent = TestProbe()
-    val consoleInputPinStateChangeListenerActor = TestActorRef[ConsoleInputPinStateChangeListenerActor](Props(classOf[ConsoleInputPinStateChangeListenerActor], 1, 'A'), parent.ref, "listener")
+    val consoleInputPinStateChangeListenerActor = TestActorRef[ConsoleInputPinStateChangeListenerActor](Props(classOf[ConsoleInputPinStateChangeListenerActor], 1, 'A', parent.ref), "listener")
   }
 
 }

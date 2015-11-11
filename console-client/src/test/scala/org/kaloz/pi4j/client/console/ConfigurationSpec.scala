@@ -7,7 +7,7 @@ class ConfigurationSpec extends FunSpec with Matchers {
   describe("Configuration") {
     it("should give back the upper case char belongs to the input pin number from the configuration") {
       val configuration = new Configuration {}
-      configuration.keyMap(1) should be('Q')
+      configuration.keyMap(1) should be('A')
     }
   }
 }

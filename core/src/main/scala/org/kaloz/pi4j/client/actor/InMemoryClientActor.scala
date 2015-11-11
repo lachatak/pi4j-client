@@ -3,8 +3,11 @@ package org.kaloz.pi4j.client.actor
 import akka.actor.Actor.emptyBehavior
 import akka.actor._
 import akka.event.LoggingReceive
-import org.kaloz.pi4j.client.actor.InMemoryClientActor.PinStates
+import akka.pattern.ask
+import akka.util.Timeout
 import org.kaloz.pi4j.client.actor.InMemoryClientActor.ServiceMessages._
+import org.kaloz.pi4j.client.actor.InMemoryClientActor.{CreatePinStateChangeCallback, PinStates}
+import org.kaloz.pi4j.common.messages.ClientMessages.DigitalPinValueChange._
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioInterruptMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioUtilMessages._
@@ -13,11 +16,13 @@ import org.kaloz.pi4j.common.messages.ClientMessages.PinEdge._
 import org.kaloz.pi4j.common.messages.ClientMessages.PinMode._
 import org.kaloz.pi4j.common.messages.ClientMessages.PinValue.PinDigitalValue._
 import org.kaloz.pi4j.common.messages.ClientMessages.PinValue._
-import org.kaloz.pi4j.common.messages.ClientMessages.DigitalPinValueChange._
 import org.kaloz.pi4j.common.messages.ClientMessages.PudMode._
 import org.kaloz.pi4j.common.messages.ClientMessages.{GpioEvent, GpioResponse}
 
-class InMemoryClientActor(pinStateChangeCallbackFactory: (ActorRefFactory, Int) => ActorRef) extends Actor with ActorLogging {
+import scala.concurrent.Await
+import scala.concurrent.duration._
+
+class InMemoryClientActor(pinStateChangeListenerActorFactory: ActorRef) extends Actor with ActorLogging {
 
   override def receive = emptyBehavior
 
@@ -39,10 +44,10 @@ class InMemoryClientActor(pinStateChangeCallbackFactory: (ActorRefFactory, Int) 
       case PullUpDnControlCommand(pin, pud) =>
         pinStateChanged(pins => pins + (pin -> pins.getOrElse(pin, Pin()).copy(pud = pud)), PullUpDnControlChangedEvent(pin, pud))
       case PwmWriteCommand(pin, value) =>
-        log.info(s"pwm pin $pin value has changed to $value")
+        log.info(s"=====>>>>> PWM pin $pin value has changed --> $value")
         pinStateChanged(pins => pins + (pin -> pins.getOrElse(pin, Pin()).copy(value = value)), PwmValueChangedEvent(pin, value))
       case DigitalWriteCommand(pin, value) =>
-        log.info(s"digital pin $pin value has changed to $value")
+        log.info(s"----->>>>> digital OUTPUT pin $pin value has changed $value")
         pinStateChanged(pins => pins + (pin -> pins.getOrElse(pin, Pin()).copy(value = value)), DigitalOutputPinValueChangedEvent(pin, value))
       case DigitalReadRequest(pin) =>
         sender ! DigitalReadResponse(pins.getOrElse(pin, Pin()).value)
@@ -61,8 +66,9 @@ class InMemoryClientActor(pinStateChangeCallbackFactory: (ActorRefFactory, Int) 
 
 
       case EnablePinStateChangeCallbackRequest(pin) =>
+        implicit val timeout = Timeout(5 seconds)
         val before = pins.getOrElse(pin, Pin()).enableCallback
-        val inputPinStateChangeListenerActor = pinStateChangeCallbackFactory(context, pin)
+        val inputPinStateChangeListenerActor = Await.result((pinStateChangeListenerActorFactory ? CreatePinStateChangeCallback(pin, self)).mapTo[ActorRef], 5 seconds)
         pinStateChanged(pins => pins + (pin -> pins.getOrElse(pin, Pin()).copy(enableCallback = Some(inputPinStateChangeListenerActor))),
           PinStateChangeCallbackEnabledEvent(pin), EnablePinStateChangeCallbackResponse(if (before != None) 0 else 1))
       case DisablePinStateChangeCallbackRequest(pin) =>
@@ -72,6 +78,7 @@ class InMemoryClientActor(pinStateChangeCallbackFactory: (ActorRefFactory, Int) 
           PinStateChangeCallbackDisabledEvent(pin), DisablePinStateChangeCallbackResponse(if (before == None) 0 else 1))
 
       case ChangeDigitalInputPinValue(pin, value) =>
+        log.info(s"<<<<<<<----- digital INPUT pin $pin value has changed <-- $value")
         pinStateChanged(pins => pins + (pin -> pins.getOrElse(pin, Pin()).copy(value = value)), DigitalInputPinValueChangedEvent(pin, value))
 
       case PinStatesRequest => sender ! PinStatesResponse(pins)
@@ -84,7 +91,10 @@ object InMemoryClientActor {
 
   type PinStates = Map[Int, Pin]
 
-  def props(pinStateChangeCallbackFactory: (ActorRefFactory, Int) => ActorRef) = Props(classOf[InMemoryClientActor], pinStateChangeCallbackFactory)
+
+  def props(pinStateChangeListenerActorFactory: ActorRef) = Props(classOf[InMemoryClientActor], pinStateChangeListenerActorFactory)
+
+  case class CreatePinStateChangeCallback(pin: Int, sender: ActorRef)
 
   object ServiceMessages {
 

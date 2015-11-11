@@ -1,6 +1,6 @@
 <configuration>
 
-    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <!-- See http://logback.qos.ch/manual/layouts.html -->
             <!-- See http://doc.akka.io/docs/akka/2.0/scala/logging.html -->
@@ -8,8 +8,17 @@
         </encoder>
     </appender>
 
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>pi4j-remote-server.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <root level="INFO">
-        <appender-ref ref="console"/>
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
     </root>
 
 </configuration>
