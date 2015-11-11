@@ -11,7 +11,9 @@ class MockClientFactory extends ClientFactory with StrictLogging {
   logger.info("Initializing...")
 
   private val system = ActorSystem("mock-actor-system")
-  private val mockClientActor = system.actorOf(InMemoryClientActor.props(MockInputPinStateChangeListenerActor.factory), "mockClientActor")
+
+  private val mockInputPinStateChangeListenerActorFactory = system.actorOf(MockInputPinStateChangeListenerActorFactory.props, "mockInputPinStateChangeListenerActorFactory")
+  private val mockClientActor = system.actorOf(InMemoryClientActor.props(mockInputPinStateChangeListenerActorFactory), "mockClientActor")
 
   system.actorOf(LocalInputPinStateChangedListenerActor.props(), "pinStateChangeListenerActor")
 
