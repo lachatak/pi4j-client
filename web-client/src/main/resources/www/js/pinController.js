@@ -17,7 +17,7 @@ webClient.controller('PinController', function ($scope) {
         for (i = 0; i != 32; i++) {
             $scope.pins[i] = {id: i, mode: "disabled", value: null};
         }
-        $scope.webSocket = new WebSocket("ws://localhost:8080/ws-echo");
+        $scope.webSocket = new WebSocket("ws://localhost:8080/pi4jWebSocket");
         $scope.webSocket.onmessage = function(message) {
             $scope.$apply(function() {
                 var data = JSON.parse(message.data);

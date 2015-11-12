@@ -6,5 +6,5 @@ trait Configuration {
 
   private lazy val config = ConfigFactory.load("pi4j-client-web")
 
-  lazy val port = config.getInt("port")
+  lazy val webClientPort = config.getInt("webClient.port")
 }

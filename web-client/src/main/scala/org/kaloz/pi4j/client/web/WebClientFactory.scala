@@ -24,7 +24,7 @@ class WebClientFactory extends ClientFactory with StrictLogging with Configurati
   private val webClientActor = system.actorOf(InMemoryClientActor.props(WebSocketActor.f(webSocketActor)), "webClientActor")
 
   private val route = {
-    path("ws-echo") {
+    path("pi4jWebSocket") {
       get {
         handleWebsocketMessages(webSocketActorFlow(webSocketActor, webClientActor))
       }
@@ -33,7 +33,7 @@ class WebClientFactory extends ClientFactory with StrictLogging with Configurati
     }
   }
 
-  private val binding = Http().bindAndHandle(route, "0.0.0.0", port)
+  private val binding = Http().bindAndHandle(route, "0.0.0.0", webClientPort)
 
   binding.foreach { address =>
     logger.info(s"Initialised on $address...")
