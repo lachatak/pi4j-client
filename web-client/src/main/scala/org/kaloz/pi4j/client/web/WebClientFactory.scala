@@ -21,14 +21,17 @@ class WebClientFactory extends ClientFactory with StrictLogging with Configurati
   private implicit val flowMaterializer = ActorMaterializer()
 
   private val webSocketActor = system.actorOf(Props[WebSocketActor], "webSocketActor")
-  private val webClientActor = system.actorOf(InMemoryClientActor.props(WebSocketActor.f(webSocketActor)), "webClientActor")
+  private val webInputPinStateChangeListenerActorFactory = system.actorOf(WebInputPinStateChangeListenerActorFactory.props(webSocketActor), "webInputPinStateChangeListenerActorFactory")
+  private val webClientActor = system.actorOf(InMemoryClientActor.props(webInputPinStateChangeListenerActorFactory), "webClientActor")
 
   private val route = {
     path("pi4jWebSocket") {
       get {
         handleWebsocketMessages(webSocketActorFlow(webSocketActor, webClientActor))
       }
-    } ~ pathPrefix("www") {
+    } ~ pathEndOrSingleSlash {
+      getFromResource("www/index.html")
+    } ~ pathPrefix("") {
       getFromResourceDirectory("www")
     }
   }
