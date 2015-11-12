@@ -166,6 +166,11 @@ object ClientMessages {
       case java.lang.Boolean.FALSE => Low
       case java.lang.Boolean.TRUE => High
     }
+
+    implicit def stringToPinValue(pinValue: String): PinDigitalValue = pinValue match {
+      case "Low" => Low
+      case "High" => High
+    }
   }
 
   object PudMode {
