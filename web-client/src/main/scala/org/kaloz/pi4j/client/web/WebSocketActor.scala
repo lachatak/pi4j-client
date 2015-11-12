@@ -46,10 +46,6 @@ class WebSocketActor extends Actor with StrictLogging {
 
 object WebSocketActor {
 
-  def f(webSocketActor: ActorRef)(x: ActorRefFactory, y: Int): ActorRef = {
-    webSocketActor
-  }
-
   def webSocketActorFlow(webSocketActor: ActorRef, webClientActor: ActorRef): Flow[Message, Message, _] = {
     val in = Flow[Message].to(Sink.actorRef(webSocketActor, PoisonPill))
 
