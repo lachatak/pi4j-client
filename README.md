@@ -16,7 +16,6 @@ It uses [Aspectj](https://eclipse.org/aspectj/) and [Load-Time Weaving](https://
 - [Spray](http://spray.io) for the *web* client to represent GPIO changes using websockets 
 
 ## Dependencies 
-Latest `version`: [![Maven][mavenImg]][mavenLink]
 There are couple of artifacts you could add to your application as a dependency. 
 
 ### core 
