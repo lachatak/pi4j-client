@@ -15,7 +15,8 @@ It uses [Aspectj](https://eclipse.org/aspectj/) and [Load-Time Weaving](https://
 - [JNativeHook](https://github.com/kwhat/jnativehook) for the *console* client to handle keyboard events for GPIO inputs
 - [Spray](http://spray.io) for the *web* client to represent GPIO changes using websockets 
 
-## Dependencies
+## Dependencies 
+Latest `version`: [![Maven][mavenImg]][mavenLink]
 There are couple of artifacts you could add to your application as a dependency. 
 
 ### core 
