@@ -14,7 +14,7 @@ webClient.controller('PinController', function ($scope) {
         $scope.pins = [];
         $scope.debugEnabled = false;
         $scope.messages = [];
-        for (i = 0; i != 32; i++) {
+        for (var i = 0; i !== 32; i++) {
             $scope.pins[i] = {id: i, mode: "disabled", value: null};
         }
         $scope.webSocket = new WebSocket("ws://localhost:8080/pi4jWebSocket");
@@ -41,7 +41,7 @@ webClient.controller('PinController', function ($scope) {
     init();
 
     $scope.pinChanged = function(pin) {
-        var newValue = pin.value == "High" ? "Low" : "High";
+        var newValue = pin.value === "High" ? "Low" : "High";
         var data = JSON.stringify({type: "pinChangeRequest",pin: {id: pin.id, mode: pin.mode, value: newValue}});
         $scope.webSocket.send(data);
         $scope.messages.push({direction: 'outgoing', data: data});

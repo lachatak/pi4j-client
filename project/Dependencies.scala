@@ -94,6 +94,7 @@ object Dependencies {
     akkaActor,
     akkaHttp,
     json4s,
+    akkaTestkit     % "test",
     mockito       	% "test",
     scalaTest     	% "test"
   )

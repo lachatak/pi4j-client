@@ -7,12 +7,11 @@ import org.kaloz.pi4j.client.actor.InMemoryClientActor.CreatePinStateChangeCallb
 class WebInputPinStateChangeListenerActorFactory(webSocketActor: ActorRef) extends Actor with ActorLogging with Configuration {
 
   override def receive: Actor.Receive = LoggingReceive {
-    case CreatePinStateChangeCallback(_, parent) => sender ! webSocketActor
+    case CreatePinStateChangeCallback(_, _) => sender ! webSocketActor
   }
 }
 
 object WebInputPinStateChangeListenerActorFactory {
-
   def props(webSocketActor: ActorRef) = Props(classOf[WebInputPinStateChangeListenerActorFactory], webSocketActor)
 }
 
