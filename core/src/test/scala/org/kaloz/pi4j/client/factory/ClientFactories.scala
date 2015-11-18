@@ -12,7 +12,6 @@ class ConsoleClientFactory extends ClientFactory with MockitoSugar {
   val gpioController = mock[GpioController]
 
   def shutdown(): Unit = gpioController.shutdown()
-
 }
 
 object ConsoleClientFactory {
@@ -27,7 +26,6 @@ class OtherClientFactory extends ClientFactory with MockitoSugar {
   val gpioController = mock[GpioController]
 
   def shutdown(): Unit = gpioController.shutdown()
-
 }
 
 object OtherClientFactory {

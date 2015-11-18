@@ -1,4 +1,4 @@
-# Pi4j Client [![Circle CI](https://circleci.com/gh/lachatak/pi4j-client/tree/master.svg?style=svg)](https://circleci.com/gh/lachatak/pi4j-client/tree/master) [![Coverage Status](https://coveralls.io/repos/lachatak/pi4j-client/badge.svg?service=github)](https://coveralls.io/github/lachatak/pi4j-client?branch=master)
+# Pi4j Client [![Circle CI](https://circleci.com/gh/lachatak/pi4j-client/tree/master.svg?style=svg)](https://circleci.com/gh/lachatak/pi4j-client/tree/master) [![Coverage Status](https://coveralls.io/repos/lachatak/pi4j-client/badge.svg?service=github)](https://coveralls.io/github/lachatak/pi4j-client?branch=master) [![Codacy Badge](https://api.codacy.com/project/badge/grade/bcc3a50f61de4959bebd1c52a147df17)](https://www.codacy.com/app/krisztian-lachata/pi4j-client)
 - Have you ever tried to **run** your Raspberry Pi pi4j based java application **on your own machine**? You cannot...
 - Have you ever tried to **test** your Raspberry Pi pi4j based java application **without having a Raspberry Pi**? You cannot...
 - Have you ever tried to **continuously deploy** new version of your Raspberry Pi pi4j based java application to your Raspberry **via wifi** or a **slow network**? It is a pain...
@@ -15,7 +15,7 @@ It uses [Aspectj](https://eclipse.org/aspectj/) and [Load-Time Weaving](https://
 - [JNativeHook](https://github.com/kwhat/jnativehook) for the *console* client to handle keyboard events for GPIO inputs
 - [Spray](http://spray.io) for the *web* client to represent GPIO changes using websockets 
 
-## Dependencies
+## Dependencies 
 There are couple of artifacts you could add to your application as a dependency. 
 
 ### core 
