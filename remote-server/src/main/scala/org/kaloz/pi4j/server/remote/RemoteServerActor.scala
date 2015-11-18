@@ -5,12 +5,14 @@ import akka.cluster.pubsub.{DistributedPubSub, DistributedPubSubMediator}
 import akka.event.LoggingReceive
 import com.pi4j.wiringpi.{Gpio, GpioInterrupt, GpioUtil}
 import org.kaloz.pi4j.common.messages.ClientMessages.ControlMessages.Shutdown
+import org.kaloz.pi4j.common.messages.ClientMessages.DigitalPinValueChange._
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioInterruptMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessage
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioUtilMessages._
-import org.kaloz.pi4j.common.messages.ClientMessages.DigitalPinValueChange._
 import org.kaloz.pi4j.common.messages.ClientMessages.PinValue._
+
+import scala.util.Try
 
 class RemoteServerActor extends Actor with ActorLogging {
 
@@ -44,9 +46,14 @@ class RemoteServerActor extends Actor with ActorLogging {
 
     case message: DigitalInputPinValueChangedEvent => mediator ! DistributedPubSubMediator.Publish(classOf[DigitalInputPinValueChangedEvent].getClass.getSimpleName, message)
 
+    //TODO add Member listener and unexport every pin if a member leaves
     case Shutdown =>
       log.info(s"Reinitializing pins ${pins.mkString("[", ",", "]")}")
-      pins.foreach(pin => GpioUtil.unexport(pin))
+      pins.foreach { pin => Try {
+        GpioInterrupt.disablePinStateChangeCallback(pin)
+        GpioUtil.unexport(pin)
+      }.failed.foreach(e => log.warning(s"Un-export was unsuccessful for $pin"))
+      }
       context.become(handle())
 
     case message: GpioMessage => throw new NotImplementedError(s"$message is not handled!!")
