@@ -5,7 +5,6 @@ import akka.cluster.Cluster
 import com.typesafe.scalalogging.StrictLogging
 import org.kaloz.pi4j.client.factory.ClientFactory
 import org.kaloz.pi4j.client.{GpioActorGateway, GpioInterruptActorGateway, GpioUtilActorGateway}
-import org.kaloz.pi4j.common.messages.ClientMessages.ControlMessages.Shutdown
 
 import scala.collection.JavaConversions._
 
@@ -27,7 +26,6 @@ class RemoteClientFactory extends ClientFactory with Configuration with StrictLo
   val gpioInterrupt = new GpioInterruptActorGateway(remoteClientActor)
 
   def shutdown: Unit = {
-    remoteServerActor ! Shutdown
     val cluster = Cluster(system)
     cluster.leave(cluster.selfAddress)
     system.terminate()

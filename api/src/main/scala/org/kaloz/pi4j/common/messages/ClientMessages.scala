@@ -263,10 +263,4 @@ object ClientMessages {
 
   }
 
-  object ControlMessages {
-
-    case object Shutdown
-
-  }
-
 }

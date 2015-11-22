@@ -1,10 +1,11 @@
 package org.kaloz.pi4j.server.remote
 
 import akka.actor.{Actor, ActorLogging, Props}
+import akka.cluster.Cluster
+import akka.cluster.ClusterEvent.MemberRemoved
 import akka.cluster.pubsub.{DistributedPubSub, DistributedPubSubMediator}
 import akka.event.LoggingReceive
 import com.pi4j.wiringpi.{Gpio, GpioInterrupt, GpioUtil}
-import org.kaloz.pi4j.common.messages.ClientMessages.ControlMessages.Shutdown
 import org.kaloz.pi4j.common.messages.ClientMessages.DigitalPinValueChange._
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioInterruptMessages._
 import org.kaloz.pi4j.common.messages.ClientMessages.GpioMessage
@@ -17,6 +18,9 @@ import scala.util.Try
 class RemoteServerActor extends Actor with ActorLogging {
 
   val mediator = DistributedPubSub(context.system).mediator
+
+  val cluster = Cluster(context.system)
+  cluster.subscribe(self, classOf[MemberRemoved])
 
   context.become(handle())
 
@@ -46,8 +50,7 @@ class RemoteServerActor extends Actor with ActorLogging {
 
     case message: DigitalInputPinValueChangedEvent => mediator ! DistributedPubSubMediator.Publish(classOf[DigitalInputPinValueChangedEvent].getClass.getSimpleName, message)
 
-    //TODO add Member listener and unexport every pin if a member leaves
-    case Shutdown =>
+    case MemberRemoved(_, _) =>
       log.info(s"Reinitializing pins ${pins.mkString("[", ",", "]")}")
       pins.foreach { pin => Try {
         GpioInterrupt.disablePinStateChangeCallback(pin)
