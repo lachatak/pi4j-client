@@ -102,6 +102,9 @@ The framework was designed the way it is easy to extend and add new clients. All
 - If there are more client types on the classpath then you have to provide **pi4j.client.mode** environment variable to select what you need
   
 ## Design
-TBD
+In normal case all you have to do is just add pi4j as a dependency to your project and start using it. 
+![Alt text](docs/pi4j_architecture.png?raw=true "As-Is")
+Running pi4j with client library injects an extra layer between your code and pi4j to support different client types. 
+![Alt text](docs/pi4j-client_architecture.png?raw=true "With Pi4j Client")
 
 

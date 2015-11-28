@@ -1,0 +1,1 @@
+sudo java -javaagent:aspectjweaver-1.8.7.jar -jar -Dakka.cluster.seed-nodes.0="akka.tcp://pi4j-remoting@RASPBERRY_IP:2552" -Dakka.remote.netty.tcp.hostname="RASPBERRY_IP" pi4j-remote-server-0.1.0-SNAPSHOT-assembly.jar
