@@ -12,8 +12,7 @@ object Assembly {
       artifact in(Compile, assembly) := {
         val art = (artifact in(Compile, assembly)).value
         art.copy(`classifier` = Some("assembly"))
-      },
-      publishArtifact in(Compile, packageBin) := false
+      }
     ) ++
       addArtifact(Artifact("pi4j-remote-server", "assembly"), sbtassembly.AssemblyKeys.assembly)
 
