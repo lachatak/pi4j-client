@@ -29,6 +29,8 @@ object Library {
   val akkaSlf4j         = "com.typesafe.akka"           %% "akka-slf4j"                    % Version.akka
   val akkaMultiNodeTest = "com.typesafe.akka"           %% "akka-multi-node-testkit"       % Version.akka
   val akkaTestkit       = "com.typesafe.akka"           %% "akka-testkit"                  % Version.akka
+  val akkaHttp = "com.typesafe.akka" %% "akka-http-experimental" % Version.akkaHttp
+  val json4s = "org.json4s" %% "json4s-native" % Version.json4s
   val jodaTime          = "joda-time"                   %  "joda-time"                     % Version.jodaTime
   val config            = "com.typesafe" 	              %  "config"                        % Version.config
   val scalazCore        = "org.scalaz"           	      %% "scalaz-core"                   % Version.scalazCore
@@ -42,8 +44,6 @@ object Library {
   val aspectjrt         = "org.aspectj"                 %  "aspectjrt"                     % Version.aspectj
   val jnativehook       = "com.1stleg"                  %  "jnativehook"                   % Version.jnativehook
   val reflections       = "org.reflections"             %  "reflections"                   % Version.reflections
-  val akkaHttp        = "com.typesafe.akka"           %% "akka-http-experimental"        % Version.akkaHttp
-  val json4s          = "org.json4s"                  %% "json4s-native"                 % Version.json4s
   //FIXME multi node test + coverage failure without it on circleci
   val scoverage         = "org.scoverage"               %% "scalac-scoverage-runtime"      % Version.scoverage
 }

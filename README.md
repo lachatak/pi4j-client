@@ -11,9 +11,8 @@ It uses [Aspectj](https://eclipse.org/aspectj/) and [Load-Time Weaving](https://
 
 ## Used technology stack
 - [Aspectj](https://eclipse.org/aspectj/) to capture native calls and delegate them to clients
-- [Akka](http://akka.io) to provide a reactive platform for clients 
+- [Akka](http://akka.io) to provide a reactive platform for clients (Cluster, FSM, Http)
 - [JNativeHook](https://github.com/kwhat/jnativehook) for the *console* client to handle keyboard events for GPIO inputs
-- [Spray](http://spray.io) for the *web* client to represent GPIO changes using websockets 
 
 ## Dependencies 
 There are couple of artifacts you could add to your application as a dependency. 
@@ -103,8 +102,11 @@ The framework was designed the way it is easy to extend and add new clients. All
   
 ## Design
 In normal case all you have to do is just add pi4j as a dependency to your project and start using it. 
+
 ![Alt text](docs/pi4j_architecture.png?raw=true "As-Is")
+
 Running pi4j with client library injects an extra layer between your code and pi4j to support different client types. 
+
 ![Alt text](docs/pi4j-client_architecture.png?raw=true "With Pi4j Client")
 
 
