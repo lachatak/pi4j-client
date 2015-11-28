@@ -7,7 +7,6 @@ object BaseSettings {
 
   lazy val defaultSettings =
     Seq(
-      version := "0.1.0-SNAPSHOT",
       organization := "org.kaloz.pi4j.client",
       description := "Pi4j Client Project",
       scalaVersion := "2.11.7",
