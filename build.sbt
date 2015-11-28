@@ -1,5 +1,6 @@
 lazy val root = Project("root", file("."))
   .aggregate(core, api, consoleClient, remoteClient, remoteServer, examples)
+  .settings(BaseSettings.defaultSettings: _*)
   .settings(Publish.noPublishing: _*)
 
 lazy val api = Project("api", file("api"))
