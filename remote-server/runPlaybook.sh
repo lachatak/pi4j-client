@@ -1,1 +1,1 @@
-ansible-playbook ansible/playbook.yml -i ansible/hosts
+ansible-playbook ansible/playbook.yml -i ansible/hosts -u pi --ask-pass
