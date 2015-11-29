@@ -47,6 +47,8 @@ sudo java -javaagent:aspectjweaver.jar -jar -Dakka.cluster.seed-nodes.0="akka.tc
 ```
 aspectjweaver should be available at runtime and also change the IP address to point to your raspberry's ip.
 
+You could also use *ansible* inside the *remote-server* module to deploy the latest server to your raspberry.
+
 ## How to run
 *After you have added all the dependency you need* to your pi4j project you are ready to run your application using any of the client modes.
 Since it is using Aspectj to be able to capture native calls you have to use **javaagent** to run your application.
