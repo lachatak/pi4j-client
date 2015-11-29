@@ -1,0 +1,4 @@
+- hosts: home
+  remote_user: pi
+  roles:
+    - raspberry

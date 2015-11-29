@@ -1,0 +1,2 @@
+#!/bin/sh
+sudo java -javaagent:aspectjweaver.jar -jar -Dakka.cluster.seed-nodes.0="akka.tcp://pi4j-remoting@{{ ansible_wlan0["ipv4"]["address"]  }}:2552" -Dakka.remote.netty.tcp.hostname="{{ ansible_wlan0["ipv4"]["address"] }}" pi4j-remote-server-assembly.jar

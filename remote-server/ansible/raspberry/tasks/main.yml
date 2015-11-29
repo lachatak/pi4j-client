@@ -1,0 +1,12 @@
+---
+- name: Create directory
+  file: path=/home/pi/Development/pi4j-remote-server state=directory mode=0755
+
+- name: Download latest stable pi4j-remote-server
+  get_url: url=http://oss.sonatype.org/service/local/artifact/maven/redirect?r=releases&g=org.kaloz.pi4j.client&a=pi4j-remote-server&v=LATEST&c=assembly dest=/home/pi/Development/pi4j-remote-server/pi4j-remote-server-assembly.jar mode=0440
+
+- name: Download aspectj lib
+  get_url: url=http://oss.sonatype.org/service/local/artifact/maven/redirect?r=releases&g=org.aspectj&a=aspectjweaver&v=LATEST dest=/home/pi/Development/pi4j-remote-server/aspectjweaver.jar mode=0440
+
+- name: Copy start script
+  template: src=start.sh dest=/home/pi/Development/pi4j-remote-server/start.sh mode=0744
