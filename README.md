@@ -1,4 +1,5 @@
-# Pi4j Client [![Circle CI](https://circleci.com/gh/lachatak/pi4j-client/tree/master.svg?style=svg)](https://circleci.com/gh/lachatak/pi4j-client/tree/master) [![Coverage Status](https://coveralls.io/repos/lachatak/pi4j-client/badge.svg?service=github)](https://coveralls.io/github/lachatak/pi4j-client?branch=master) [![Codacy Badge](https://api.codacy.com/project/badge/grade/bcc3a50f61de4959bebd1c52a147df17)](https://www.codacy.com/app/krisztian-lachata/pi4j-client)
+# Pi4j Client [![Circle CI](https://circleci.com/gh/lachatak/pi4j-client/tree/master.svg?style=svg)](https://circleci.com/gh/lachatak/pi4j-client/tree/master) [![Coverage Status](https://coveralls.io/repos/lachatak/pi4j-client/badge.svg?service=github)](https://coveralls.io/github/lachatak/pi4j-client?branch=master) [![Codacy Badge](https://api.codacy.com/project/badge/grade/bcc3a50f61de4959bebd1c52a147df17)](https://www.codacy.com/app/krisztian-lachata/pi4j-client) 
+Latest `version`: [![Maven][mavenImg]][mavenLink]
 - Have you ever tried to **run** your Raspberry Pi pi4j based java application **on your own machine**? You cannot...
 - Have you ever tried to **test** your Raspberry Pi pi4j based java application **without having a Raspberry Pi**? You cannot...
 - Have you ever tried to **continuously deploy** new version of your Raspberry Pi pi4j based java application to your Raspberry **via wifi** or a **slow network**? It is a pain...
@@ -110,5 +111,9 @@ In normal case all you have to do is just add pi4j as a dependency to your proje
 Running pi4j with client library injects an extra layer between your code and pi4j to support different client types. 
 
 ![Alt text](docs/pi4j-client_architecture.png?raw=true "With Pi4j Client")
+
+[mavenImg]: https://img.shields.io/maven-central/v/org.kaloz.pi4j.client/root.svg
+[mavenLink]: http://search.maven.org/#search%7Cga%7C1%7Corg.kaloz.pi4j.client
+
 
 
