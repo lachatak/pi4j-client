@@ -1,4 +1,5 @@
 - hosts: home
+  sudo: yes
   remote_user: pi
   roles:
     - raspberry

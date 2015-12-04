@@ -10,3 +10,15 @@
 
 - name: Copy start script
   template: src=start.sh dest=/home/pi/Development/pi4j-remote-server/start.sh mode=0744
+
+- name: Install pleaserun
+  gem: name=pleaserun state=latest
+
+- name: Install ohai
+  apt: name=ohai update_cache=yes
+
+- name: Create pi4j-remote-server service
+  shell: pleaserun --install --overwrite --name pi4j-remote-server /home/pi/Development/pi4j-remote-server/start.sh
+
+- name: Start service
+  service: name=pi4j-remote-server state=started
