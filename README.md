@@ -1,4 +1,4 @@
-# Pi4j Client [![CircleCI][circleCiImg]][circleCiLink] [![Coverage Status](https://coveralls.io/repos/lachatak/pi4j-client/badge.svg?service=github)](https://coveralls.io/github/lachatak/pi4j-client?branch=master) [![Codacy Badge](https://api.codacy.com/project/badge/grade/bcc3a50f61de4959bebd1c52a147df17)](https://www.codacy.com/app/krisztian-lachata/pi4j-client) [![Maven][mavenImg]][mavenLink] 
+# Pi4j Client [![CircleCI][circleCiImg]][circleCiLink] [![codecov][codecovImg]][codecovLink] [![Codacy][codacyImg]][codacyLink] [![Maven][mavenImg]][mavenLink] 
 - Have you ever tried to **run** your Raspberry Pi pi4j based java application **on your own machine**? You cannot...
 - Have you ever tried to **test** your Raspberry Pi pi4j based java application **without having a Raspberry Pi**? You cannot...
 - Have you ever tried to **continuously deploy** new version of your Raspberry Pi pi4j based java application to your Raspberry **via wifi** or a **slow network**? It is a pain...
@@ -117,4 +117,9 @@ Running pi4j with client library injects an extra layer between your code and pi
 [circleCiImg]: https://img.shields.io/circleci/project/lachatak/pi4j-client/master.svg
 [circleCiLink]: https://circleci.com/gh/lachatak/pi4j-client
 
+[codecovImg]: https://img.shields.io/coveralls/lachatak/pi4j-client/master.svg
+[codecovLink]: https://coveralls.io/github/lachatak/pi4j-client?branch=master
+
+[codacyImg]: https://img.shields.io/codacy/bcc3a50f61de4959bebd1c52a147df17.svg
+[codacyLink]: https://www.codacy.com/app/krisztian-lachata/pi4j-client/dashboard
 
